@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head>
+<head><link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Sunset Rush">
+<meta name="mobile-web-app-capable" content="yes">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#171a30">
 <title>سباق الغروب</title>
@@ -83,7 +86,14 @@ html,body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
+<body><script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .catch(console.error);
+  });
+}
+</script>
 <canvas id="c"></canvas>
 <div id="cnt"></div><div id="fx"></div><div id="vg"></div>
 
