@@ -73,6 +73,8 @@ docs/RELEASING.md           Release procedures
 
 ## License · الرخصة
 
-[MIT License](LICENSE). **Before publishing an official release, update the `YOUR NAME` placeholder in `LICENSE` with the confirmed copyright holder.** Do not change it without checking who owns the rights to the game and its assets.
+This project is licensed under the [MIT License](LICENSE).
 
-قبل نشر الإصدار الرسمي، صحّح اسم صاحب حقوق النشر في ملف `LICENSE` بعد التحقق من الملكية.
+© 2026 MURAD135.
+
+هذا المشروع مرخّص بموجب رخصة MIT. راجع ملف [LICENSE](LICENSE) للتفاصيل.
