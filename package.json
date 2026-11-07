@@ -1,0 +1,15 @@
+{
+  "name": "sunset-rush",
+  "version": "1.1.0-dev",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build && node scripts/build-sw.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test tests/*.test.js",
+    "test:browser": "node tests/browser.mjs"
+  },
+  "dependencies": { "three": "0.128.0", "cannon-es": "0.20.0" },
+  "devDependencies": { "vite": "6.4.1", "playwright": "1.56.1" }
+}
