@@ -1,0 +1,11 @@
+import {chromium} from 'playwright';
+import {mkdir} from 'node:fs/promises';
+await mkdir('artifacts',{recursive:true});
+const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader']});
+const page=await browser.newPage({viewport:{width:1280,height:800}});const errors=[];
+page.on('pageerror',e=>{errors.push(e.message);console.log('PAGE ERROR',e.message)});
+page.on('console',m=>{if(m.type()==='error')console.log('CONSOLE',m.text())});
+await page.goto(process.env.GAME_URL||'http://localhost:5173');await page.waitForTimeout(1800);
+await page.screenshot({path:'artifacts/menu.png'});
+await page.locator('#mPlay').click();await page.waitForTimeout(1000);await page.screenshot({path:'artifacts/coast.png'});
+console.log(JSON.stringify({errors}));await browser.close();

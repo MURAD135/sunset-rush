@@ -6,6 +6,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#171a30">
+<link rel="icon" href="./icons/icon-192.png">
 <title>سباق الغروب</title>
 
 
@@ -27,6 +28,7 @@
   <div class="bar"><div class="chips"><div class="chip big"><small>المركز</small><b id="pos">1/5</b></div><div class="chip"><small>اللفة</small><b id="lap">1/3</b></div><div class="chip"><small>النقاط <i id="cbx"></i></small><b id="sc">0</b></div></div><div class="chip" style="position:absolute;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 12px)"><small>الوقت</small><b id="tm">0:00.0</b></div></div><div class="spd"><b id="spd">0</b><small>كم/س</small><div class="nbar"><i id="nbi"></i></div><span id="nt">100%</span></div>
   <div class="ib" style="position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:14px;direction:ltr"><button class="ibtn" id="back" aria-label="المرآب"></button><button class="ibtn" id="cmb" aria-label="الكاميرا"></button><button class="ibtn" id="snd" aria-label="الصوت"></button><button class="ibtn" id="psb" aria-label="إيقاف مؤقت"></button></div>
 </div>
+<div id="raceTitle" hidden><span>SUNSET RUSH</span><b>GOLDEN COAST / CIRCUIT 01</b></div><div id="keysHelp" hidden>W A S D <span>DRIVE</span> · SPACE <span>DRIFT</span> · SHIFT <span>NITRO</span> · R <span>RECOVER</span> · ESC <span>PAUSE</span></div>
 <canvas id="mm" width="192" height="192" hidden></canvas>
 <div class="ui bot" id="ctl" hidden dir="ltr"><div class="row">
   <div class="grp"><button data-k="l">يسار</button><button data-k="r">يمين</button></div>
@@ -34,8 +36,14 @@
 </div></div>
 <div class="ui mid" id="end" hidden><div class="p"><h2 id="eT"></h2><p id="eS"></p><div class="row"><button class="go" id="again">سباق جديد</button><button id="shr">مشاركة</button><button id="toG">المرآب</button></div></div></div>
 
-<div class="scr" id="menu" hidden><div class="logo"><span>سباق</span><b>الغروب</b><small>SUNSET RUSH</small><div class="lvb"><span id="lv"></span><i id="lvi"></i></div></div>
-<div class="mb"><button class="go" id="mPlay">العب الآن</button><button class="gh" id="mDay">تحدي اليوم · عملات ×2</button><button class="gh" id="mGar">المرآب والتخصيص</button><button class="gh" id="mAch">الإنجازات</button><button class="gh" id="mSet">الإعدادات</button><button class="gh" id="mHow">طريقة اللعب</button></div><div class="ver">الإصدار 1.0</div></div>
+<div class="scr" id="menu" hidden>
+  <header class="menu-header"><div class="wordmark"><i>SR</i><span>SUNSET RUSH<small>COASTAL RACING CLUB</small></span></div><span class="edition">VOL. 01 <b> / </b> THE GOLDEN COAST</span></header>
+  <div class="hero"><div class="eyebrow"><i></i> SAN FRANCISCO INSPIRED CIRCUIT</div><h1>CHASE THE<br><em>GOLDEN HOUR.</em></h1><p>ساحل الغروب <span> / </span> 3 LAPS · 5 DRIVERS · ONE FINISH LINE</p>
+    <div class="mb"><button class="go" id="mPlay">العب الآن <span aria-hidden="true">↗</span></button><button class="gh" id="mGar">المرآب والتخصيص</button></div>
+    <div class="menu-links"><button id="mDay">تحدي اليوم · عملات ×2</button><button id="mAch">الإنجازات</button><button id="mSet">الإعدادات</button><button id="mHow">طريقة اللعب</button></div>
+  </div>
+  <footer class="menu-footer"><span><i class="status-dot"></i> THREE.JS / ARCADE RACING</span><div class="lvb"><span id="lv"></span><i id="lvi"></i></div><span>BUILT FOR THE DRIVE <b>↗</b></span></footer>
+</div>
 <div class="sheet" id="sSet" hidden><div class="p"><h3>الإعدادات</h3>
 <div class="rw2"><span>الصوت</span><button class="tg" id="tgS" role="switch" aria-checked="true" aria-label="الصوت"></button></div>
 <div class="rw2"><span>الاهتزاز</span><button class="tg" id="tgV" role="switch" aria-checked="true" aria-label="الاهتزاز"></button></div>
