@@ -12,6 +12,7 @@
 
 </head>
 <body>
+<div id="graphicsError" hidden role="alert"><h2>Graphics unavailable / الرسوميات غير متاحة</h2><p>WebGL is unavailable or the graphics context was lost. Reload in a WebGL-capable browser.<br>أعد التحميل في متصفح يدعم WebGL.</p><button onclick="location.reload()">Reload / إعادة التحميل</button></div>
 <canvas id="c"></canvas>
 <div id="cnt"></div><div id="fx"></div><div id="vg"></div>
 
@@ -32,17 +33,17 @@
 <canvas id="mm" width="192" height="192" hidden></canvas>
 <div class="ui bot" id="ctl" hidden dir="ltr"><div class="row">
   <div class="grp"><button data-k="l">يسار</button><button data-k="r">يمين</button></div>
-  <div class="grp" style="flex-direction:column;align-items:flex-end"><button data-k="n" class="nos" id="nb">نيترو</button><div class="grp"><button data-k="b">فرامل</button><button data-k="g" class="gas">تسريع</button></div></div>
+  <div class="grp" style="flex-direction:column;align-items:flex-end"><button data-k="n" class="nos" id="nb">نيترو</button><div class="grp"><button data-k="h">انجراف يدوي</button><button data-k="b">فرامل</button><button data-k="g" class="gas">تسريع</button></div></div>
 </div></div>
-<div class="ui mid" id="end" hidden><div class="p"><h2 id="eT"></h2><p id="eS"></p><div class="row"><button class="go" id="again">سباق جديد</button><button id="shr">مشاركة</button><button id="toG">المرآب</button></div></div></div>
+<div class="ui mid" id="end" hidden><div class="p"><h2 id="eT"></h2><p id="eS"></p><table id="resultsTable" aria-label="Race results"></table><div class="row"><button class="go" id="again">سباق جديد</button><button id="shr">مشاركة</button><button id="toG">المرآب</button></div></div></div>
 
 <div class="scr" id="menu" hidden>
   <header class="menu-header"><div class="wordmark"><i>SR</i><span>SUNSET RUSH<small>COASTAL RACING CLUB</small></span></div><span class="edition">VOL. 01 <b> / </b> THE GOLDEN COAST</span></header>
   <div class="hero"><div class="eyebrow"><i></i> SAN FRANCISCO INSPIRED CIRCUIT</div><h1>CHASE THE<br><em>GOLDEN HOUR.</em></h1><p>ساحل الغروب <span> / </span> 3 LAPS · 5 DRIVERS · ONE FINISH LINE</p>
-    <div class="mb"><button class="go" id="mPlay">العب الآن <span aria-hidden="true">↗</span></button><button class="gh" id="mGar">المرآب والتخصيص</button></div>
+    <div class="mb"><button class="go" id="mPlay">العب الآن <span aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 19L19 5M5 5H19V19" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button><button class="gh" id="mGar">المرآب والتخصيص</button></div>
     <div class="menu-links"><button id="mDay">تحدي اليوم · عملات ×2</button><button id="mAch">الإنجازات</button><button id="mSet">الإعدادات</button><button id="mHow">طريقة اللعب</button></div>
   </div>
-  <footer class="menu-footer"><span><i class="status-dot"></i> THREE.JS / ARCADE RACING</span><div class="lvb"><span id="lv"></span><i id="lvi"></i></div><span>BUILT FOR THE DRIVE <b>↗</b></span></footer>
+  <footer class="menu-footer"><span><i class="status-dot"></i> THREE.JS / ARCADE RACING</span><div class="lvb"><span id="lv"></span><i id="lvi"></i></div><span>BUILT FOR THE DRIVE <b>/</b></span></footer>
 </div>
 <div class="sheet" id="sSet" hidden><div class="p"><h3>الإعدادات</h3>
 <div class="rw2"><span>الصوت</span><button class="tg" id="tgS" role="switch" aria-checked="true" aria-label="الصوت"></button></div>
@@ -59,7 +60,7 @@
 <div id="pp"></div><div id="fp" hidden></div>
 <div class="sheet" id="sAch" hidden><div class="p"><h3>الإنجازات</h3><div class="s" style="margin-top:6px"><b>مهام اليوم</b></div><div id="msn"></div><div id="stg" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0"></div><div id="acl"></div><button class="go" id="cA" style="margin-top:14px">حسنًا</button></div></div>
 <div class="sheet" id="sHow" hidden><div class="p"><h3>طريقة اللعب</h3><ol class="hw"><li>اضغط «تسريع» وحرّك السيارة بأزرار اليسار واليمين.</li><li>زر النيترو يعطيك دفعة سرعة، ويتعبّأ بالانجراف وبالمرور على المربعات الزرقاء.</li><li>على الحلبة الطويلة اختر طريق النفق المختصر أو الطريق الخارجي.</li><li>المطر والوحل يقللان التماسك، فخفّف السرعة قبل المنعطفات.</li><li>اكسب العملات من كل سباق وطوّر سيارتك في الورشة.</li></ol><button class="go" id="cH">فهمت</button></div></div>
-<div class="sheet c" id="pz" hidden><div class="p"><h3>إيقاف مؤقت</h3><button class="go" id="pzR">متابعة</button><button class="gh2" id="pzA">إعادة السباق</button><button class="gh2" id="pzG">المرآب</button></div></div>
+<div class="sheet c" id="pz" hidden><div class="p"><h3>إيقاف مؤقت</h3><button class="go" id="pzR">متابعة</button><button class="gh2" id="pzRecover">إعادة السيارة للطريق</button><button class="gh2" id="pzA">إعادة السباق</button><button class="gh2" id="pzG">المرآب</button></div></div>
 <script type="module" src="/src/game.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@ export function disposeGroup(group, sharedTextures = new Set()) {
 export function batchCar(group) {
   const batches=new Map();
   for(const mesh of [...group.children]) {
-    if(!mesh.isMesh || !mesh.castShadow || !mesh.visible || mesh.material.type==='MeshBasicMaterial')continue;
+    if(!mesh.isMesh || !mesh.castShadow || !mesh.visible || group.userData.fl?.includes(mesh))continue;
     if(!batches.has(mesh.material))batches.set(mesh.material,[]);
     batches.get(mesh.material).push(mesh);
   }

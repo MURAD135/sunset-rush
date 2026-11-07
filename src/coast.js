@@ -94,7 +94,7 @@ export function buildCoast(group, { radius, width, point, radial }) {
       beam([side*12,11,z],[side*12,cableY(z),z],.09,steel,5);
     }
   }
-  const transform=new THREE.Matrix4().makeRotationY(-.34);transform.setPosition(220,0,440);
+  const transform=new THREE.Matrix4().makeRotationY(-.34);transform.setPosition(100,0,440);
   for(const [m,list] of batches) for(let i=before.get(m)||0;i<list.length;i++)list[i].applyMatrix4(transform);
   // Stylized peninsula skyline, with baked windows instead of individual lit meshes.
   const canvas=document.createElement('canvas');canvas.width=64;canvas.height=128;
