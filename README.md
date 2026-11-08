@@ -1,80 +1,73 @@
 # Sunset Rush · سباق الغروب
 
-**A browser-based 3D arcade racing game** powered by vanilla JavaScript and [Three.js](https://threejs.org/).  
-**لعبة سباق سيارات ثلاثية الأبعاد** تعمل من المتصفح على الهاتف والكمبيوتر.
+A playable Three.js arcade racer with an original sunset coastal circuit, four AI rivals and three-lap races. The coastal upgrade is **review work, not a deployed release**. It retains the original eight-car garage, ten legacy tracks, progression and four interface languages.
 
-[Play online · العب الآن](https://murad135.github.io/sunset-rush/) · [Report a bug · بلّغ عن مشكلة](https://github.com/MURAD135/sunset-rush/issues/new/choose) · [Changelog · سجل التغييرات](CHANGELOG.md)
+## Run locally · التشغيل
 
-> The Play link is available only after GitHub Pages deployment succeeds. / يعمل رابط اللعب بعد تفعيل GitHub Pages واكتمال النشر.
-
-## Features · الميزات
-
-- 8 cars with orbit/zoom garage and paint, finish, wing, stripes, rims and underglow.
-- 10 tracks, including a forked road with a lit tunnel; daily challenges.
-- Weather and environments: rain, storms, mud, night, desert and snow.
-- Drifting, nitro, AI rivals, best-run ghost car and scoring combos.
-- Coins, car upgrades, XP, 12 achievements and daily missions.
-- Keyboard, touch controls and optional tilt steering.
-- Languages: العربية، English, Français, Español.
-- Graphics settings including shadows, crowds and FPS display.
-
-## Run locally · التشغيل المحلي
-
-Open `index.html` in a modern WebGL-capable browser, or start a local server from the project folder:
+Requires Node.js 24+ and npm. The renderer needs a WebGL-capable browser.
 
 ```bash
-python -m http.server 8000
+npm ci
+npm run dev
 ```
 
-Then open <http://localhost:8000/>.
+Open the URL printed by Vite, normally http://localhost:5173. Choose **Play now / العب الآن** for the coastal race, or **Garage / المرآب** to select a car, customize it, or choose a legacy track. The first six cars are available without unlocking. A real 3D circuit appears immediately in the main menu.
 
-**Network required:** Three.js r128 and the Tajawal font load from public CDNs. The game is **not yet fully offline**.
+```bash
+npm test                 # seven simulation/input tests
+npm run build           # production bundle + versioned offline cache
+npm run preview         # serve dist locally
+npm run test:browser     # run while the dev server is running
+```
+
+Browser tests use `CHROMIUM_PATH` (default `/usr/bin/chromium`). Tests and screenshots are written to `artifacts/`, which is not committed. See [testing](docs/TESTING.md), the [QA report](docs/QA_REPORT.md), [progress checkpoint](PROGRESS.md) and the [implementation plan](docs/IMPLEMENTATION.md). Opening source `index.html` directly or serving the repository with Python no longer works: Vite resolves the locally installed ES modules. To serve a built copy, serve **dist/**.
 
 ## Controls · التحكم
 
-| Action | Desktop | Mobile |
-| --- | --- | --- |
-| Steering · التوجيه | Arrow keys or A / D | Left / right buttons; optional tilt |
-| Acceleration · التسريع | Up arrow or W | Gas |
-| Braking · الفرامل | Down arrow, S or Space | Brake |
-| Nitro | Shift or E | Nitro |
+| Action | Keyboard | Standard gamepad | Touch |
+| --- | --- | --- | --- |
+| Steer | A/D or ←/→ | Left stick / D-pad | Left/right |
+| Accelerate | W / ↑ | RT or A | Gas |
+| Brake | S / ↓ | LT | Brake |
+| Drift / handbrake | Space | B | Handbrake |
+| Nitro | Shift / E | X | Nitro |
+| Recover onto road | R | Back / View | Pause → recover |
+| Pause | Esc | Start | Pause icon |
+| Camera | C | Y | Camera icon |
 
-## Publish on GitHub Pages · النشر
+Hold steering and handbrake together at speed to drift and recharge nitro. Nitro also recovers slowly while unused. Recovering stops the car, costs 15 nitro and never advances lap progress. Losing focus automatically pauses and clears inputs. Touch supports simultaneous fingers; tilt and auto acceleration remain in Settings.
 
-1. Open **Settings → Pages**.
-2. Select **Deploy from a branch**.
-3. Choose **`main` → `/(root)`**, then **Save**.
-4. After deployment, use the **Play online** link at the top.
+## What's implemented
 
-The game's entry point is **`index.html` at the repository root**. No build step or backend is required.
+- An original procedural island circuit, bay, suspension bridge, palms, skyline, sailboats and warm sky. No copied commercial assets or remotely loaded models.
+- Glossy sports-car paint, dark reflective glazing, animated wheels, dynamic chase/close/hood cameras, nitro trails, drift smoke and tire marks.
+- Fixed 60 Hz arcade simulation with Cannon-es planar vehicle contacts and analytical track boundaries. This is **not** a realistic suspension or tire simulator.
+- Four path-following rivals with lane changes, overtaking, bounded catch-up and frozen finish order; twelve ordered checkpoints per lap prevent reverse/line-crossing exploits.
+- Countdown, laps, timing, position, mini-map, nitro, results, restart and car selection.
+- High / medium / low / automatic graphics levels, bounded particle pools, merged scenery and explicit GPU resource disposal on rebuild.
+- Existing achievements, coins, upgrades, daily challenges, ghost runs and Arabic/English/French/Spanish interface support retained.
+- Production bundles need no CDN. After one complete online installation, the service worker caches the game for offline play. Development does not register a service worker.
 
-## Project structure · هيكل المستودع
+## Project structure
 
 ```text
-index.html                  Game source (unchanged by documentation upgrades)
-README.md                   Project guide
-LICENSE                     MIT license
-CHANGELOG.md                Version history
-CONTRIBUTING.md             Contribution rules
-docs/TESTING.md             Pre-release test checklist
-docs/RELEASING.md           Release procedures
-.github/ISSUE_TEMPLATE/     Bug and feature request forms
-.github/PULL_REQUEST_TEMPLATE.md
-.github/workflows/checks.yml  Automated smoke checks
-.gitignore                  Local files excluded from commits
+index.html              Existing UI markup with new menu/HUD
+src/game.js             Extracted original game, integration and presentation
+src/coast.js            Original batched coastal environment
+src/physics.js          Cannon contacts and fixed-step clock
+src/progress.js         Checkpoint/lap and finish-order logic
+src/input.js            Keyboard, gamepad and multi-touch
+src/resources.js        Mesh batching, color management and disposal
+src/style.css           Original garage/UI styles
+src/coast.css           Coastal presentation and responsive overrides
+public/                 Original PWA icons, manifest and cache worker source
+scripts/build-sw.mjs     Hashed production asset pre-cache generator
+tests/                  Unit, browser, mobile and production checks
+docs/                   Inspection, plan, QA results and asset licenses
 ```
 
-## Development and releases · التطوير والإصدارات
+## Review and deployment
 
-- The current game interface displays **version 1.0**, which is **not** the same thing as a tagged GitHub Release.
-- Use [Issues](https://github.com/MURAD135/sunset-rush/issues) for bugs and new features.
-- Read [CONTRIBUTING.md](CONTRIBUTING.md), then run the [testing checklist](docs/TESTING.md) before merging changes.
-- See [CHANGELOG.md](CHANGELOG.md) and [RELEASING.md](docs/RELEASING.md) for the versioning workflow.
+Work lives on `feat/coastal-arcade-racing`. **Do not merge or deploy without the owner's approval.** No release tag or live deployment was created. An eventual deployment must upload the contents of `dist/`, rather than publish the repository source root. Relative asset URLs support a `/sunset-rush/` subpath.
 
-## License · الرخصة
-
-This project is licensed under the [MIT License](LICENSE).
-
-© 2026 MURAD135.
-
-هذا المشروع مرخّص بموجب رخصة MIT. راجع ملف [LICENSE](LICENSE) للتفاصيل.
+[MIT License](LICENSE) · © 2026 MURAD135. Third-party runtime licenses and asset provenance: [notices](docs/THIRD_PARTY_NOTICES.md).
