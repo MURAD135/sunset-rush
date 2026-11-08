@@ -37,12 +37,17 @@ export class ArcadePhysics {
 }
 
 export class FixedClock {
-  constructor(step=FIXED_STEP,maxSteps=12){this.step=step;this.maxSteps=maxSteps;this.accumulator=0;}
+  constructor(step=FIXED_STEP,maxSteps=12){this.step=step;this.maxSteps=maxSteps;this.accumulator=0;this.droppedTime=0;this.revision=0;}
+  get alpha(){return Math.max(0,Math.min(1,this.accumulator/this.step));}
   advance(elapsed,update){
-    this.accumulator+=Math.min(Math.max(0,elapsed),this.step*this.maxSteps);
+    const duration=Number.isFinite(elapsed)?Math.max(0,elapsed):0;
+    const accepted=Math.min(duration,this.step*this.maxSteps);
+    this.droppedTime+=duration-accepted;
+    this.accumulator+=accepted;
     let steps=0;
     while(this.accumulator+1e-10>=this.step&&steps<this.maxSteps){update(this.step);this.accumulator-=this.step;steps++;}
+    this.accumulator=Math.max(0,this.accumulator);
     return steps;
   }
-  reset(){this.accumulator=0;}
+  reset(){this.accumulator=0;this.droppedTime=0;this.revision++;}
 }

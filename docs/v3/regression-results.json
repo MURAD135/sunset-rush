@@ -1,0 +1,106 @@
+{
+  "checks": [
+    "countdown",
+    "keyboard acceleration",
+    "braking",
+    "nitro consumption",
+    "handbrake drift",
+    "pause/resume",
+    "blur clears inputs and pauses",
+    "injected gamepad mapping and disconnect release",
+    "complete three-lap race and five-place result table",
+    "rivals overtake and standings change",
+    "finish rank remains fixed",
+    "restart resets race",
+    "three selectable cars",
+    "restarts do not grow GPU resource counts",
+    "original classic track remains drivable",
+    "original fork/tunnel track builds",
+    "mobile three-finger controls and pointer cancellation",
+    "touch-accessible recovery"
+  ],
+  "errors": [],
+  "race": {
+    "time": 60.933333333331156,
+    "laps": [
+      21.23333333333341,
+      19.849999999998875,
+      19.84999999999887
+    ],
+    "rank": 1,
+    "maxSpeedKmh": 301.8411091481896,
+    "contactFrames": 0,
+    "rankRange": [
+      1,
+      5
+    ]
+  },
+  "memories": [
+    {
+      "calls": 105,
+      "triangles": 42041,
+      "geometries": 125,
+      "textures": 5
+    },
+    {
+      "calls": 105,
+      "triangles": 42041,
+      "geometries": 125,
+      "textures": 5
+    },
+    {
+      "calls": 105,
+      "triangles": 42041,
+      "geometries": 125,
+      "textures": 5
+    },
+    {
+      "calls": 105,
+      "triangles": 42041,
+      "geometries": 125,
+      "textures": 5
+    },
+    {
+      "calls": 105,
+      "triangles": 42041,
+      "geometries": 125,
+      "textures": 5
+    }
+  ],
+  "performanceSamples": [
+    {
+      "quality": 0,
+      "renderer": {
+        "calls": 167,
+        "triangles": 55188,
+        "geometries": 142,
+        "textures": 6
+      },
+      "medianFrameMs": 816.6000000000058,
+      "p95FrameMs": 1599.8999999999942
+    },
+    {
+      "quality": 1,
+      "renderer": {
+        "calls": 167,
+        "triangles": 55188,
+        "geometries": 142,
+        "textures": 6
+      },
+      "medianFrameMs": 800,
+      "p95FrameMs": 1549.8999999999942
+    },
+    {
+      "quality": 2,
+      "renderer": {
+        "calls": 167,
+        "triangles": 55188,
+        "geometries": 142,
+        "textures": 5
+      },
+      "medianFrameMs": 483.3999999999942,
+      "p95FrameMs": 1066.6000000000058
+    }
+  ],
+  "environment": "Headless Chromium / SwiftShader software renderer; not a physical mobile or GPU benchmark."
+}

@@ -9,7 +9,8 @@
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test --test-isolation=none tests/*.test.js",
     "test:production": "node tests/production.mjs",
-    "test:browser": "node tests/browser.mjs"
+    "test:browser": "node tests/browser.mjs",
+    "test:phase1": "node tests/phase1.mjs && node tests/timing.mjs"
   },
   "dependencies": { "three": "0.128.0", "cannon-es": "0.20.0" },
   "devDependencies": { "vite": "6.4.1", "playwright": "1.56.1" }
