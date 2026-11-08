@@ -9,8 +9,8 @@ Thanks for helping improve Sunset Rush. شكراً لمساهمتك في تطو�
 3. For new ideas, use the **Feature request** form.
 4. Create a feature branch from `main` such as `fix/mobile-controls` or `feat/garage-ui`.
 5. Keep commits focused and use prefixes: `feat:`, `fix:`, `docs:`, `refactor:` or `test:`.
-6. Run `python -m http.server 8000` in the project directory to test locally.
-7. Follow [docs/TESTING.md](docs/TESTING.md) and open a pull request with screenshots for UI changes.
+6. Run `npm ci`, `npm test`, `npm run build`, then `npm run dev` to test locally.
+7. Follow [docs/TESTING.md](docs/TESTING.md) and open a draft pull request with screenshots for UI changes. Do not merge or deploy without owner approval.
 
 ## Project standards · معايير المشروع
 

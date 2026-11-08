@@ -1,6 +1,6 @@
 # Releasing Sunset Rush · دليل الإصدارات
 
-The game currently shows version **1.0** in its menu. An official GitHub Release **has not been created by these repository documents**.
+The original baseline menu showed **1.0**. The coastal / Sunset Rush 2.0 development work remains unreleased; no release tag has been created.
 
 ## Semantic versioning · الترقيم
 
@@ -14,9 +14,9 @@ The game currently shows version **1.0** in its menu. An official GitHub Release
 
 ## Pre-release checklist · قبل أي إصدار
 
-1. Merge the intended changes to `main` and wait for the deployment/checks.
+1. Obtain the owner’s approval before merging to `main` or publishing. Run `npm ci`, `npm test`, `npm run build` and browser QA; any eventual Pages deployment must upload `dist/`, not the source root.
 2. Run the [manual QA checklist](TESTING.md) on desktop and mobile.
-3. Confirm the `LICENSE` holder; replace `YOUR NAME` after checking ownership.
+3. Verify the existing MURAD135 MIT license and bundled third-party notices.
 4. Move verified entries from `Unreleased` into a dated version section of `CHANGELOG.md`.
 5. Retest the live GitHub Pages link, Start button, inputs and menus.
 
