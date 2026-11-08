@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-const mergeBufferGeometries = BufferGeometryUtils.mergeBufferGeometries.bind(BufferGeometryUtils);
+import { spatialBatch, instancedBoxes } from './graphics.js';
 
 // All meshes and textures in this file are original procedural assets (MIT).
 // Static scenery is merged by material; no per-tree / per-window draw calls.
@@ -8,7 +7,7 @@ export function buildCoast(group, { radius, width, point, radial }) {
   let seed = 135;
   const random = () => ((seed = (1664525 * seed + 1013904223) >>> 0) / 4294967296);
   const batches = new Map();
-  const mat = (color, options = {}) => new THREE.MeshStandardMaterial({ color, roughness: .8, ...options });
+  const mat = (color, {roughness=.8,metalness=0,...options} = {}) => metalness>0 ? new THREE.MeshStandardMaterial({color,roughness,metalness,...options}) : new THREE.MeshLambertMaterial({color,...options});
   const sand = mat('#edc696'), green = mat('#809663'), rock = mat('#ba9679');
   const red = mat('#df593b', { roughness: .45, metalness: .22 });
   const steel = mat('#654b55'), dark = mat('#253c4d'), cream = mat('#fff0c8');
@@ -46,7 +45,7 @@ export function buildCoast(group, { radius, width, point, radial }) {
       sea+=vec3(.8,.44,.19)*ripples*(.15+.7*sunPath);
       gl_FragColor=vec4(mix(sea,vec3(.91,.67,.50),distanceFog),1.);}`
   });
-  const water=new THREE.Mesh(new THREE.PlaneGeometry(5000,5000),waterMaterial);water.rotation.x=-Math.PI/2;water.position.y=-1.1;group.add(water);
+  const water=new THREE.Mesh(new THREE.PlaneGeometry(5000,5000),waterMaterial);water.rotation.x=-Math.PI/2;water.position.y=-1.1;water.renderOrder=2;group.add(water);
   group.userData.water=waterMaterial;
   // Long, low coastline rocks. Kept off the road by a radial clearance.
   for(let i=0;i<55;i++) {
@@ -102,15 +101,18 @@ export function buildCoast(group, { radius, width, point, radial }) {
   for(let x=5;x<64;x+=12)for(let y=5;y<128;y+=14){ctx.fillStyle=random()>.45?'#edcda0':'#405f72';ctx.fillRect(x,y,5,8);}
   const texture=new THREE.CanvasTexture(canvas);texture.encoding=THREE.sRGBEncoding;
   const building=mat('#ffffff',{map:texture});
+  const buildings=[];
   for(let i=0;i<65;i++) {
     const x=-210-random()*310,z=260+random()*220,h=12+random()*64;
-    box(10+random()*16,h,10+random()*18,building,x,h/2-1,z);
+    buildings.push({w:10+random()*16,h,d:10+random()*18,x,y:h/2-1,z});
   }
+  instancedBoxes(group,building,buildings);
+  const sailMaterial=new THREE.MeshBasicMaterial({color:'#fff1d4',side:THREE.DoubleSide});
   // Sailboats and distant layered headlands make the bay read as open water.
   for(let i=0;i<7;i++) {
     const x=300+random()*250,z=-240+random()*520;
     box(2.2,1,8,cream,x,-.1,z,.2);beam([x,0,z],[x,12,z],.1,dark);
-    const sail=new THREE.BufferGeometry();sail.setAttribute('position',new THREE.Float32BufferAttribute([x,11,z,x,1,z+4,x,1,z],3));sail.computeVertexNormals();add(sail,new THREE.MeshBasicMaterial({color:'#fff1d4',side:THREE.DoubleSide}));
+    const sail=new THREE.BufferGeometry();sail.setAttribute('position',new THREE.Float32BufferAttribute([x,11,z,x,1,z+4,x,1,z],3));sail.computeVertexNormals();add(sail,sailMaterial);
   }
   const distant=mat('#8c9995');
   for(let i=0;i<14;i++) {
@@ -132,17 +134,6 @@ export function buildCoast(group, { radius, width, point, radial }) {
     beam([p[0],0,p[1]],[p[0],7,p[1]],.11,dark);
     box(1.7,.15,.65,cream,p[0],7,p[1]);
   }
-  for(const [material, geometries] of batches) {
-    const flat = geometries.map(g => {
-      if(!g.attributes.uv)g.setAttribute('uv',new THREE.Float32BufferAttribute(new Float32Array(g.attributes.position.count*2),2));
-      return g.index ? g.toNonIndexed() : g;
-    });
-    const merged=mergeBufferGeometries(flat);
-    flat.forEach(g=>g.dispose());
-    // Some custom shapes lack UVs; keep a consistent attribute layout for batching.
-    if(!merged)throw new Error('Unable to batch coastal geometry');
-    const mesh=new THREE.Mesh(merged,material);mesh.receiveShadow=true;mesh.castShadow=![sand,green,distant,building].includes(material);group.add(mesh);
-    geometries.forEach(g=>g.dispose());
-  }
+  for(const [material, geometries] of batches) spatialBatch(group,material,geometries,{castShadow:![sand,green,distant,building].includes(material)});
   return { water:waterMaterial };
 }

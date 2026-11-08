@@ -17,3 +17,7 @@ h1{font-size:clamp(42px,5.8vw,88px);line-height:.98;letter-spacing:-4px;font-wei
 #resultsTable{width:100%;border-collapse:collapse;margin:20px 0;color:#c4d2cf;font-size:12px;direction:ltr}#resultsTable td,#resultsTable th{padding:10px;border-bottom:1px solid #ffffff12;text-align:left}#resultsTable td:last-child{text-align:right;font-variant-numeric:tabular-nums}#resultsTable .you{color:#ffc583;background:#ffc5830c}.ts{max-width:380px;margin:0 auto;font-size:12px;padding:8px 12px}.grp button[data-k=h]{font-size:11px}
 @media(pointer:coarse) and (max-width:520px){#ctl .row{align-items:flex-end}#ctl .row>.grp:last-child{flex-direction:column!important;align-items:flex-end!important}#ctl .row>.grp:last-child>.grp{display:grid;grid-template-columns:repeat(2,55px)}#ctl .grp button{width:55px;height:55px}#ctl .grp button.nos{width:55px;height:48px}.spd{bottom:235px}#mm{bottom:160px;width:90px;height:90px}}
 #graphicsError{position:fixed;inset:0;z-index:50;display:grid;align-content:center;text-align:center;padding:30px;background:#10232f;color:#fff0db}#graphicsError button{justify-self:center;padding:14px 30px;background:#ffc583;color:#10232f;border:0;border-radius:8px}
+
+/* Optional diagnostics; no GPU memory estimate is fabricated. */
+#fp{white-space:pre;direction:ltr;line-height:1.45;background:#081d29df;padding:9px 12px;border-radius:8px;max-width:calc(100vw - 16px);font-size:10px}
+#ql{flex-wrap:wrap}#ql button{min-width:60px}

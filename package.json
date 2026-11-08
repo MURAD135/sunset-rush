@@ -10,8 +10,16 @@
     "test": "node --test --test-isolation=none tests/*.test.js",
     "test:production": "node tests/production.mjs",
     "test:browser": "node tests/browser.mjs",
-    "test:phase1": "node tests/phase1.mjs && node tests/timing.mjs"
+    "test:phase1": "node tests/phase1.mjs && node tests/timing.mjs",
+    "test:phase2": "node tests/phase2.mjs",
+    "profile": "node tests/profile.mjs"
   },
-  "dependencies": { "three": "0.128.0", "cannon-es": "0.20.0" },
-  "devDependencies": { "vite": "6.4.1", "playwright": "1.56.1" }
+  "dependencies": {
+    "three": "0.128.0",
+    "cannon-es": "0.20.0"
+  },
+  "devDependencies": {
+    "vite": "6.4.1",
+    "playwright": "1.56.1"
+  }
 }
