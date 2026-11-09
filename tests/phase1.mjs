@@ -18,7 +18,7 @@ const open=async(url,old=false,options={})=>{
   const page=await browser.newPage({viewport:{width:960,height:600},...options});
   page.on('pageerror',e=>errors.push(e.message));
   await page.addInitScript(()=>{let seed=135;Math.random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);});
-  await page.route('**/src/game.js',async route=>{
+  await page.route('**/src/game.js*',async route=>{
     const response=await route.fetch();let source=await response.text();
     // Static water phase for comparable captures, without changing the game files.
     source=source.replace('rc.userData.water.uniforms.time.value=n/1000','rc.userData.water.uniforms.time.value=0');

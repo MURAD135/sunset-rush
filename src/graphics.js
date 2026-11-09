@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { createSportBody, createCabinGeometry } from './car-visuals.js';
 
 // r128 does not compute InstancedMesh bounds. Give each spatial cluster its own
 // geometry bounds so both the scene and shadow frusta can actually reject it.
@@ -42,12 +43,16 @@ export function spatialBatch(group,material,geometries,{castShadow=true,cellSize
 export function installCarLOD(car,width=2){
   const parts=[],paint=car.userData.bm.color.clone(),glass=new THREE.Color(0x132936).convertSRGBToLinear(),rubber=new THREE.Color(.025,.03,.04),light=new THREE.Color(0xffedbf).convertSRGBToLinear();
   const add=(g,color,x=0,y=0,z=0)=>{g.translate(x,y,z);const flat=g.index?g.toNonIndexed():g,colors=new Float32Array(flat.attributes.position.count*3);for(let i=0;i<colors.length;i+=3){colors[i]=color.r;colors[i+1]=color.g;colors[i+2]=color.b;}flat.setAttribute('color',new THREE.BufferAttribute(colors,3));parts.push(flat);if(flat!==g)g.dispose();};
-  add(new THREE.BoxGeometry(width,.52,4.2),paint,0,.62,0);
-  add(new THREE.BoxGeometry(width-.52,.43,1.65),glass,0,1.05,-.2);
-  add(new THREE.BoxGeometry(width-.6,.07,1.3),paint,0,1.29,-.2);
+  const shape=car.userData.shape||{height:.55,cabin:.47,length:1.9,center:-.3},deck=.35+shape.height;
+  add(createSportBody(width,shape.height),paint);
+  add(createCabinGeometry(width-.32,deck-.02,shape.cabin,shape.length,shape.center),glass);
+  add(new THREE.BoxGeometry((width-.32)*.74,.045,Math.max(.3,shape.length-1.2)+.15),paint,0,deck+shape.cabin,shape.center-.1);
   add(new THREE.BoxGeometry(width,.08,.4),paint,0,1.15,-2);
   for(const side of [-1,1])for(const z of [-1.4,1.4])add(new THREE.CylinderGeometry(.44,.44,.32,10).rotateZ(Math.PI/2),rubber,side*width/2,.44,z);
   for(const side of [-1,1])add(new THREE.BoxGeometry(.52,.08,.06),light,side*(width/2-.45),.7,2.13);
+  const tail=new THREE.Color(0xff3035).convertSRGBToLinear();
+  for(const side of [-1,1])add(new THREE.BoxGeometry(.54,.08,.06),tail,side*(width/2-.45),.72,-2.24);
+  add(new THREE.BoxGeometry(width-.38,.15,.28),rubber,0,.34,-2.16);
   const geometry=BufferGeometryUtils.mergeBufferGeometries(parts);parts.forEach(g=>g.dispose());
   const low=new THREE.Mesh(geometry,new THREE.MeshLambertMaterial({vertexColors:true}));low.castShadow=true;
   const detail=new THREE.Group();for(const child of [...car.children])detail.add(child);car.add(detail,low);low.visible=false;

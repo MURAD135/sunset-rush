@@ -22,7 +22,7 @@ const hooks=`\nif(window.__sunset){window.__freezeRender=true;const profilePixel
     environment:{renderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),webglVersion:gl.getParameter(gl.VERSION),heapUsed:performance.memory?.usedJSHeapSize??null,heapLimit:performance.memory?.jsHeapSizeLimit??null,gpuMemoryBytes:null}};
 };}`;
 await page.addInitScript(()=>{let seed=135;Math.random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);});
-await page.route('**/src/game.js',async route=>{
+await page.route('**/src/game.js*',async route=>{
  const response=await route.fetch();let source=await response.text();source=source.replace('  rd.render(sc,cam);','  if(!window.__freezeRender)rd.render(sc,cam);');await route.fulfill({response,body:source+hooks});
 });
 try{
