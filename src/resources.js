@@ -6,9 +6,11 @@ export function disposeGroup(group, sharedTextures = new Set()) {
   const geometries = new Set(), materials = new Set(), textures = new Set();
   group.traverse(o => {
     if(o.geometry&&!sharedTextures.has(o.geometry))geometries.add(o.geometry);
-    if(o.material)for(const m of Array.isArray(o.material)?o.material:[o.material]) {
-      if(sharedTextures.has(m))continue;materials.add(m);
+    const all=[...(o.material?(Array.isArray(o.material)?o.material:[o.material]):[]),o.customDepthMaterial,o.customDistanceMaterial];
+    for(const m of all){
+      if(!m||sharedTextures.has(m))continue;materials.add(m);
       for(const v of Object.values(m))if(v?.isTexture&&!sharedTextures.has(v))textures.add(v);
+      for(const u of Object.values(m.uniforms||{}))if(u.value?.isTexture&&!sharedTextures.has(u.value))textures.add(u.value);
     }
   });
   geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());group.clear();

@@ -32,7 +32,7 @@ export function spatialBatch(group,material,geometries,{castShadow=true,cellSize
     geometry.computeBoundingSphere();geometry.computeBoundingBox();
     // The procedural wind added later can move tips by up to 0.8 world units.
     geometry.boundingSphere.radius+=1;
-    const mesh=new THREE.Mesh(geometry,material);mesh.castShadow=castShadow;mesh.receiveShadow=true;mesh.name='coast-cell';group.add(mesh);
+    const mesh=new THREE.Mesh(geometry,material);mesh.castShadow=castShadow;mesh.receiveShadow=true;mesh.name='coast-cell';if(material.userData.windDepth)mesh.customDepthMaterial=material.userData.windDepth;group.add(mesh);
     new Set([...flat,...list]).forEach(g=>g.dispose());
   }
 }

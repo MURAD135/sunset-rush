@@ -5,8 +5,9 @@ const label=process.env.PROFILE_LABEL||'before',url=process.env.GAME_URL||'http:
 await mkdir(out,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader']});
 const page=await browser.newPage({viewport:{width:960,height:600},deviceScaleFactor:1}),errors=[];
-page.on('pageerror',e=>errors.push(e.message));
+page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&/WebGL|shader|THREE/.test(m.text()))errors.push(m.text());});
 const hooks=`\nif(window.__sunset){window.__freezeRender=true;const profilePixel=new Uint8Array(4);__sunset.profile=(options={})=>{
+  if(__sunset.environment)__sunset.environment(0);
   if(typeof prepareRender==='function')prepareRender(0);
   if(options.shadow!==undefined)sun.castShadow=options.shadow;
   if(options.water!==undefined)rc.children.forEach(m=>{if(m.material===rc.userData.water)m.visible=options.water;});

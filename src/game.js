@@ -7,6 +7,7 @@ import { installInput } from './input.js';
 import { PoseHistory, ChaseCamera } from './presentation.js';
 import { FrameMetrics, DynamicResolution, QUALITY, QUALITY_MENU } from './performance.js';
 import { installCarLOD, updateCarLOD } from './graphics.js';
+import { addSkyClouds } from './environment.js';
 import { buildCoast } from './coast.js';
 import { disposeGroup, batchCar, correctColors } from './resources.js';
 
@@ -17,7 +18,7 @@ rd.setPixelRatio(Math.min(devicePixelRatio,2));
 rd.outputEncoding=THREE.sRGBEncoding;rd.toneMapping=THREE.ACESFilmicToneMapping;rd.toneMappingExposure=1.05;
 const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(48,1,.1,2500);
 const frameMetrics=new FrameMetrics(),resolution=new DynamicResolution(matchMedia('(pointer:coarse)').matches&&Math.min(innerWidth,innerHeight)<600?30:60);
-let metricTime=0,shadowTime=Infinity,resolutionTime=0,reducedEffects=false,dynamicResolution=true,trackBuildKey='',trackBuilds=0;
+let metricTime=0,shadowTime=Infinity,resolutionTime=0,reducedEffects=false,dynamicResolution=true,trackBuildKey='',trackBuilds=0,environmentTime=0,environmentOverride=null;
 try{const p=JSON.parse(localStorage.getItem('sunset-graphics'));if(p){reducedEffects=!!p.reduced;dynamicResolution=p.dynamic!==false;if([30,60,120].includes(p.target))resolution.targetFps=p.target;resolution.reset();}}catch(e){}
 sc.background=new THREE.Color('#171a30');sc.fog=new THREE.Fog('#171a30',30,140);
 function rs(){rd.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
@@ -168,14 +169,14 @@ function setMode(m){
   const T2=TH[thm],c=new THREE.Color(r?T2.bg:'#171a30');if(r&&wxs)c.lerp(new THREE.Color(0x4a5566),wxs==2?.7:.5);sc.background.copy(c);sc.fog.color.copy(c);setSky(r?c.clone().lerp(new THREE.Color(T2.night?0x02030a:wxs?0x3a4658:0x2a5aa8),.65):'#0b0d1c',c);sunS.visible=!!(r&&!T2.night&&!wxs);sc.fog.near=r?T2.f[0]*(wxs?.4:1):30;sc.fog.far=r?T2.f[1]*(wxs?.5:1):140;rain.visible=!!(r&&wxs>0);
   const nt=!!(r&&T2.night);hb=nt?.4:(r&&wxs?.6:.95);hemi.intensity=hb;sun.intensity=nt?.12:(r&&wxs?.45:.9);rim.intensity=nt?.1:.5;hs.visible=nt||!!(r&&wxs==2);
   $('gTop').hidden=$('gBot').hidden=r;$('hud').hidden=$('ctl').hidden=$('mm').hidden=!r;$('end').hidden=true;$('raceTitle').hidden=$('keysHelp').hidden=!r;$('raceTitle').lastElementChild.textContent=TK.coast?'GOLDEN COAST / CIRCUIT 01':'SUNSET RUSH / ARCADE CIRCUIT';
-  if(r){reset();$('raceTitle').lastElementChild.textContent=TK.coast?'GOLDEN COAST / CIRCUIT 01':'SUNSET RUSH / ARCADE CIRCUIT';correctColors(rc);if(TK.coast&&thm===0&&!wxs){sc.fog.near=180;sc.fog.far=1400;sc.fog.color.set('#ebbd9d').convertSRGBToLinear();setSky('#5b9cb1','#ffd4a0');sun.color.set('#ffe0b5');sun.intensity=1.3;hemi.intensity=.8;}}else{car.position.set(0,0,0);car.rotation.set(0,0,0);$('cnt').textContent='';car.userData.bm.color.set(col).convertSRGBToLinear()}
+  if(r){reset();$('raceTitle').lastElementChild.textContent=TK.coast?'GOLDEN COAST / CIRCUIT 01':'SUNSET RUSH / ARCADE CIRCUIT';correctColors(rc);if(TK.coast&&thm===0&&!wxs){sc.fog.near=180;sc.fog.far=1400;sc.fog.color.set('#ebbd9d').convertSRGBToLinear();setSky('#73afd0','#ffcea5');sun.color.set('#ffdbac');sun.intensity=1.2;hemi.intensity=.9;}}else{car.position.set(0,0,0);car.rotation.set(0,0,0);$('cnt').textContent='';car.userData.bm.color.set(col).convertSRGBToLinear()}
 }
 function reset(){
   $('fx').classList.remove('on');
   TK=TR[trk];R=TK.R;W=TK.W;LAPS=lps;const trackKey=[trk,thm,sfc,wxs].join(':');if(!TK.coast||trackKey!==trackBuildKey)buildTrack();correctColors(rc);ai.forEach((a,i)=>{a.bl=[-.28,.28,-.1,.1][i]*W;a.o=a.bl;a.ne=1;a.br=0});
   const a=-.075;const q=cl(a);progress=new RaceProgress(a,LAPS);raceElapsed=0;simulationClock.reset();input?.clear();P.x=q[0];P.z=q[1];P.th=P.mv=q[2];P.v=0;P.steer=0;P.prev=a;P.cum=a;P.last=-1;P.t=0;P.ls=0;P.laps=[];P.fin=0;P.nt=100;P.nl=0;nosOn=0;paused=0;cn=4;SC=0;CB=1;cbT=0;drT=0;hits=0;PR=0;wp=0;tkT=0;P.y=0;P.vy=0;P.air=0;slip=0;psg=0;js=0;skClr();GR_=[];gt=0;ghM.visible=false;try{GH=JSON.parse(localStorage.getItem('sunset-g'+trk))}catch(e){GH=null}$('pz').hidden=true;car.userData.bm.color.set(col).convertSRGBToLinear();
   ai.forEach((o,i)=>{o.cum=a-(i>1?.055:0);o.finishTime=null;o.speed=0;o.wheel=0;});state='count';cd=3;go_t=0;endT=0;$('end').hidden=true;
-  P.wheel=0;ptc=0;shk=0;hc=0;shadowTime=Infinity;frameMetrics.reset();syncPresentation();
+  P.wheel=0;ptc=0;shk=0;hc=0;environmentTime=0;shadowTime=Infinity;frameMetrics.reset();syncPresentation();
 }
 const fmt=t=>Math.floor(t/60)+':'+(t%60).toFixed(1).padStart(4,'0');
 
@@ -321,6 +322,11 @@ function setQ(i){
   [...$('ql').children].forEach((b,j)=>b.classList.toggle('on',j===(QA?0:QUALITY_MENU.indexOf(ql))));
 }
 function prepareRender(dt){
+  if(environmentOverride===null&&(!paused||mode==='garage'))environmentTime+=Math.min(Math.max(dt,0),.2);
+  const time=environmentOverride??environmentTime;
+  skyClouds.time.value=time;skyClouds.strength.value=rc.visible&&TK.coast?(TH[thm].night?.1:wxs?.3:.85):0;
+  const life=rc.userData.coast;
+  if(life){life.time.value=time;life.motion.value=reducedEffects?.25:1;life.detail.value=ql===2||reducedEffects?0:1;if(life.birds)life.birds.visible=ql!==2&&!reducedEffects;if(life.traffic)life.traffic.visible=ql!==2&&!reducedEffects;}
   const quality=QUALITY[ql];ai.forEach(a=>updateCarLOD(a.m,cam,quality.lod));
   shadowTime+=Math.max(0,dt);
   rd.shadowMap.needsUpdate=!!(sun.castShadow&&shadowTime>=1/quality.shadowHz);
@@ -347,7 +353,7 @@ function sndInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAud
 let rnN=null,rnG=null;
 function rainSnd(){if(!rnN){const b=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;rnN=AC.createBufferSource();rnN.buffer=b;rnN.loop=true;const hp=AC.createBiquadFilter();hp.type='highpass';hp.frequency.value=1800;rnG=AC.createGain();rnG.gain.value=0;rnN.connect(hp);hp.connect(rnG);rnG.connect(AC.destination);rnN.start()}const t=(mode==='race'&&!mute&&!paused&&wxs>0)?(wxs==2?.09:.05):0;rnG.gain.value+=(t-rnG.gain.value)*.1}
 function bip(f,d,ty='square',v=.1){if(!AC||mute)return;try{const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime;o.type=ty;o.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(t+d)}catch(e){}}
-const skyM=new THREE.Mesh(new THREE.SphereGeometry(700,16,10),new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide,fog:false,depthWrite:false,toneMapped:false}));skyM.renderOrder=-1;sc.add(skyM);
+const skyM=new THREE.Mesh(new THREE.SphereGeometry(700,16,10),new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide,fog:false,depthWrite:false,toneMapped:false}));skyM.renderOrder=-1;sc.add(skyM);const skyClouds=addSkyClouds(skyM);
 const sunS=new THREE.Sprite(new THREE.SpriteMaterial({map:GLW,color:0xffc68a,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,fog:false}));sunS.scale.set(125,125,1);sunS.visible=false;sc.add(sunS);
 function setSky(top,hor){const g=skyM.geometry,p=g.attributes.position,n=p.count,c=new Float32Array(n*3),a=new THREE.Color(top).convertSRGBToLinear(),b=new THREE.Color(hor).convertSRGBToLinear(),t=new THREE.Color();for(let i=0;i<n;i++){const k=clamp(p.getY(i)/700,0,1);t.copy(b).lerp(a,Math.pow(k,.6));c[i*3]=t.r;c[i*3+1]=t.g;c[i*3+2]=t.b}g.setAttribute('color',new THREE.BufferAttribute(c,3))}
 const DM=new THREE.Object3D();
@@ -420,7 +426,6 @@ function frame(n){
     if(resolutionTime>=.35){resolutionTime=0;applyResolution(Math.round(scale*40)/40);}
   }
   sndUpd();skyM.position.copy(cam.position);sunS.position.set(cam.position.x+330,cam.position.y+80,cam.position.z+600);
-  if(rc.userData.water)rc.userData.water.uniforms.time.value=n/1000;
   prepareRender(elapsed);const renderStart=performance.now();
   rd.render(sc,cam);frameMetrics.add(elapsed*1000,simulationCpu,performance.now()-renderStart);updateDiagnostics(elapsed);requestAnimationFrame(frame);
 }
@@ -468,7 +473,7 @@ function showMenu(){
   TK=TR[10];R=TK.R;W=TK.W;buildTrack();gar.visible=false;rc.visible=true;
   ai.forEach(a=>a.m.visible=false);const p=cl(-.075);car.position.set(p[0],0,p[1]);car.rotation.set(0,p[2],0);
   sc.fog.color.set('#ebbd9d').convertSRGBToLinear();sc.fog.near=180;sc.fog.far=1400;
-  setSky('#5b9cb1','#ffd4a0');sunS.visible=true;sun.color.set('#ffe0b5');sun.intensity=1.3;hemi.intensity=.8;
+  setSky('#73afd0','#ffcea5');sunS.visible=true;sun.color.set('#ffdbac');sun.intensity=1.2;hemi.intensity=.9;
 }
 $('mSet').onclick=()=>shw('sSet',1);$('cS').onclick=()=>shw('sSet',0);$('mHow').onclick=()=>shw('sHow',1);$('cH').onclick=()=>shw('sHow',0);
 $('mGar').onclick=()=>{setMode('garage');$('menu').hidden=true;$('gTop').hidden=$('gBot').hidden=false};$('gm').onclick=showMenu;
@@ -559,6 +564,7 @@ if(import.meta.env.DEV && new URLSearchParams(location.search).has('test')){
     present:(alpha,dt=0)=>renderRace(alpha,dt),
     presentation:()=>({alpha:simulationClock.alpha,droppedTime:simulationClock.droppedTime,previous:poses.previous.map(p=>({...p})),current:poses.current.map(p=>({...p})),shown:[car,...ai.map(a=>a.m)].map(m=>({x:m.position.x,y:m.position.y,z:m.position.z,heading:m.rotation.y})),camera:{position:cam.position.toArray(),quaternion:cam.quaternion.toArray(),fov:cam.fov},shake:cameraShake,cameraMode:cmv}),
     camera:()=>{cmv=(cmv+1)%3;},
+    environment:value=>{environmentOverride=value;prepareRender(0);return{time:rc.userData.coast?.time.value,birds:rc.userData.coast?.birds?.visible,traffic:rc.userData.coast?.traffic?.visible,waterDetail:rc.userData.coast?.detail.value};},
     diagnostics:()=>({...frameMetrics.snapshot(rd.info,performance.memory),quality:QUALITY[ql].name,auto:!!QA,dpr:rd.getPixelRatio(),resolutionScale:resolution.scale,reducedEffects,trackBuilds,lowDetailRivals:ai.filter(a=>a.m.userData.lod.reduced).length,canvas:[cv.width,cv.height]}),
     graphics:(options={})=>{if(options.reduced!==undefined)reducedEffects=options.reduced;if(options.shadows!==undefined)SHD=options.shadows?1:0;applyQuality();},
     view:value=>{if(value){cam.position.fromArray(value.position);cam.quaternion.fromArray(value.quaternion);cam.fov=value.fov;cam.updateProjectionMatrix();}return{position:cam.position.toArray(),quaternion:cam.quaternion.toArray(),fov:cam.fov};},

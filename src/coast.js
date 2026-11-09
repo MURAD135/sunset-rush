@@ -1,18 +1,20 @@
 import * as THREE from 'three';
 import { spatialBatch, instancedBoxes } from './graphics.js';
+import { createCoastLife, createWater, addPalmWind, addBoats, addBirds, addBridgeTraffic } from './environment.js';
 
 // All meshes and textures in this file are original procedural assets (MIT).
 // Static scenery is merged by material; no per-tree / per-window draw calls.
 export function buildCoast(group, { radius, width, point, radial }) {
   let seed = 135;
   const random = () => ((seed = (1664525 * seed + 1013904223) >>> 0) / 4294967296);
-  const batches = new Map();
+  const batches = new Map(),life=createCoastLife();group.userData.coast=life;
   const mat = (color, {roughness=.8,metalness=0,...options} = {}) => metalness>0 ? new THREE.MeshStandardMaterial({color,roughness,metalness,...options}) : new THREE.MeshLambertMaterial({color,...options});
-  const sand = mat('#edc696'), green = mat('#809663'), rock = mat('#ba9679');
+  const sand = mat('#efd1a6'), green = mat('#81ab72'), rock = mat('#c4a080');
   const red = mat('#df593b', { roughness: .45, metalness: .22 });
   const steel = mat('#654b55'), dark = mat('#253c4d'), cream = mat('#fff0c8');
   const trunk = mat('#9b7150'), leaf = mat('#267b60', { side: THREE.DoubleSide });
   const leafLight = mat('#5caa78', { side: THREE.DoubleSide });
+  addPalmWind(leaf,life);addPalmWind(leafLight,life);
   const matrix = new THREE.Object3D();
   function add(geometry, material, x=0,y=0,z=0, rx=0,ry=0,rz=0) {
     matrix.position.set(x,y,z); matrix.rotation.set(rx,ry,rz); matrix.scale.set(1,1,1); matrix.updateMatrix();
@@ -34,17 +36,7 @@ export function buildCoast(group, { radius, width, point, radial }) {
     const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setIndex(indices);g.computeVertexNormals();add(g,material);
   }
   island(29,-.7,sand); island(16,-.1,green);
-  const waterMaterial = new THREE.ShaderMaterial({
-    uniforms:{time:{value:0}},
-    vertexShader:`varying vec3 world; void main(){world=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(world,1.);}`,
-    fragmentShader:`varying vec3 world; uniform float time;
-      void main(){float wave=sin(world.x*.19+world.z*.11+time*.7)*sin(world.z*.23-time*.5);
-      float ripples=pow(max(0.,wave),12.); float distanceFog=smoothstep(250.,1200.,length(world.xz-cameraPosition.xz));
-      vec3 sea=mix(vec3(.045,.36,.43),vec3(.17,.57,.58),.5+.5*wave);
-      float sunPath=pow(max(0.,1.-abs((world.x-cameraPosition.x)*.0025-(world.z-cameraPosition.z)*.001)),16.);
-      sea+=vec3(.8,.44,.19)*ripples*(.15+.7*sunPath);
-      gl_FragColor=vec4(mix(sea,vec3(.91,.67,.50),distanceFog),1.);}`
-  });
+  const waterMaterial=createWater(life);
   const water=new THREE.Mesh(new THREE.PlaneGeometry(5000,5000),waterMaterial);water.rotation.x=-Math.PI/2;water.position.y=-1.1;water.renderOrder=2;group.add(water);
   group.userData.water=waterMaterial;
   // Long, low coastline rocks. Kept off the road by a radial clearance.
@@ -64,7 +56,7 @@ export function buildCoast(group, { radius, width, point, radial }) {
         for(const side of [-1,1]) positions.push(crown[0]+Math.cos(a)*stretch+Math.sin(a)*half*side,crown[1]+yy,crown[2]+Math.sin(a)*stretch-Math.cos(a)*half*side);
         if(k<6) {const n=k*2; indices.push(n,n+1,n+2,n+1,n+3,n+2);}
       }
-      const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setIndex(indices);g.computeVertexNormals();add(g,j%2?leaf:leafLight);
+      const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setIndex(indices);g.computeVertexNormals();const weights=[];for(let k=0;k<=6;k++)weights.push((k/6)**2,(k/6)**2);g.setAttribute('windWeight',new THREE.Float32BufferAttribute(weights,1));add(g,j%2?leaf:leafLight);
     }
   }
   for(let i=0;i<66;i++) {
@@ -77,13 +69,15 @@ export function buildCoast(group, { radius, width, point, radial }) {
     g.scale(18+random()*22,8+random()*15,18+random()*20);add(g,i%2?green:rock,Math.cos(t)*r,-3,Math.sin(t)*r);
   }
   // Suspension bridge is a distant landmark over the bay, not an invisible obstacle on the circuit.
-  const bridge=new THREE.Group();group.add(bridge);
+  const bridge=new THREE.Group();bridge.position.set(100,0,440);bridge.rotation.y=-.34;group.add(bridge);addBridgeTraffic(bridge,life);
   // Build in a local frame then rotate all bridge geometry together.
   const before=new Map([...batches].map(([m,list])=>[m,list.length]));
   box(20,1.8,520,dark,0,10,0);box(22,.6,520,red,0,8.6,0);
   for(const z of [-150,150]) {
     for(const x of [-12,12]) {box(3.2,74,4.4,red,x,29,z);box(6,5,9,rock,x,-3,z);}
     for(const y of [19,42,63]) box(27,2.8,3.6,red,0,y,z);
+    beam([-10,44,z],[10,61,z],.24,red);beam([10,44,z],[-10,61,z],.24,red);
+    for(const x of [-12,12])box(.5,70,.8,cream,x-.6,29,z-2.3);
   }
   for(const side of [-1,1]) {
     box(.5,2.2,520,red,side*10.8,11.5,0);
@@ -107,13 +101,9 @@ export function buildCoast(group, { radius, width, point, radial }) {
     buildings.push({w:10+random()*16,h,d:10+random()*18,x,y:h/2-1,z});
   }
   instancedBoxes(group,building,buildings);
-  const sailMaterial=new THREE.MeshBasicMaterial({color:'#fff1d4',side:THREE.DoubleSide});
-  // Sailboats and distant layered headlands make the bay read as open water.
-  for(let i=0;i<7;i++) {
-    const x=300+random()*250,z=-240+random()*520;
-    box(2.2,1,8,cream,x,-.1,z,.2);beam([x,0,z],[x,12,z],.1,dark);
-    const sail=new THREE.BufferGeometry();sail.setAttribute('position',new THREE.Float32BufferAttribute([x,11,z,x,1,z+4,x,1,z],3));sail.computeVertexNormals();add(sail,sailMaterial);
-  }
+  const boatPositions=[];
+  for(let i=0;i<7;i++)boatPositions.push({x:300+random()*250,z:-240+random()*520});
+  addBoats(group,boatPositions,life);addBirds(group,life);
   const distant=mat('#8c9995');
   for(let i=0;i<14;i++) {
     const g=new THREE.SphereGeometry(1,10,6);g.scale(100+random()*80,25+random()*55,100);
@@ -134,6 +124,28 @@ export function buildCoast(group, { radius, width, point, radial }) {
     beam([p[0],0,p[1]],[p[0],7,p[1]],.11,dark);
     box(1.7,.15,.65,cream,p[0],7,p[1]);
   }
+  // Local roadside detail remains outside the analytical collision boundaries.
+  const signs=document.createElement('canvas');signs.width=128;signs.height=64;
+  const cx=signs.getContext('2d');cx.fillStyle='#193743';cx.fillRect(0,0,128,64);cx.fillStyle='#ffd78d';
+  for(let j=0;j<3;j++){const x=12+j*40;cx.beginPath();cx.moveTo(x,9);cx.lineTo(x+14,9);cx.lineTo(x+32,32);cx.lineTo(x+14,55);cx.lineTo(x,55);cx.lineTo(x+18,32);cx.fill();}
+  const chevronTexture=new THREE.CanvasTexture(signs);chevronTexture.encoding=THREE.sRGBEncoding;
+  const chevronMaterial=new THREE.MeshBasicMaterial({map:chevronTexture,side:THREE.DoubleSide});
+  for(let i=0;i<12;i++){
+    const p=point((i+.35)/12*Math.PI*2,width/2+6);
+    add(new THREE.PlaneGeometry(3.2,1.6),chevronMaterial,p[0],1.9,p[1],0,p[2]+Math.PI);
+    beam([p[0],0,p[1]],[p[0],1.3,p[1]],.075,steel);
+  }
+  const posts=[];
+  for(let i=0;i<72;i++){const p=point(i/72*Math.PI*2,width/2+4.8);posts.push({x:p[0],y:.65,z:p[1],w:.16,h:1.3,d:.16});}
+  instancedBoxes(group,cream,posts,160);
+  const foamPositions=[],foamIndices=[];
+  for(let i=0;i<=256;i++){
+    const t=i/256*Math.PI*2,r=radial(t)+width/2+29;
+    for(const d of [0,2.8+.7*Math.sin(t*17)])foamPositions.push(Math.cos(t)*(r+d),-1.02,Math.sin(t)*(r+d));
+    if(i<256){const n=i*2;foamIndices.push(n,n+2,n+1,n+1,n+2,n+3);}
+  }
+  const foamGeometry=new THREE.BufferGeometry();foamGeometry.setAttribute('position',new THREE.Float32BufferAttribute(foamPositions,3));foamGeometry.setIndex(foamIndices);foamGeometry.computeVertexNormals();
+  const foam=new THREE.Mesh(foamGeometry,new THREE.MeshBasicMaterial({color:'#d2eadb',transparent:true,opacity:.35,depthWrite:false,side:THREE.DoubleSide}));group.add(foam);
   for(const [material, geometries] of batches) spatialBatch(group,material,geometries,{castShadow:![sand,green,distant,building].includes(material)});
   return { water:waterMaterial };
 }
