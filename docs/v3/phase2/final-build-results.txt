@@ -1,0 +1,20 @@
+
+> sunset-rush@1.1.0-dev build
+> vite build && node scripts/build-sw.mjs
+
+vite v6.4.1 building for production...
+transforming...
+✓ 19 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   10.02 kB │ gzip:   3.32 kB
+dist/assets/index-Cg-2E7Wd.css    20.61 kB │ gzip:   5.39 kB
+dist/assets/physics-BfMfVK9X.js   84.34 kB │ gzip:  24.57 kB
+dist/assets/index-9VvtFaKs.js    112.65 kB │ gzip:  44.10 kB
+dist/assets/three-3o6Jv4OO.js    520.22 kB │ gzip: 130.79 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.90s
