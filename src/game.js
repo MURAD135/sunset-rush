@@ -8,6 +8,7 @@ import { PoseHistory, ChaseCamera } from './presentation.js';
 import { FrameMetrics, DynamicResolution, QUALITY, QUALITY_MENU } from './performance.js';
 import { installCarLOD, updateCarLOD } from './graphics.js';
 import { addSkyClouds } from './environment.js';
+import { RaceParticles } from './effects.js';
 import { createSportBody, createCabinGeometry, createSunsetEnvironment, animateChassis } from './car-visuals.js';
 import { buildCoast } from './coast.js';
 import { disposeGroup, batchCar, correctColors } from './resources.js';
@@ -178,7 +179,7 @@ cols.forEach(([c,n],i)=>{const b=document.createElement('button');b.style.backgr
   b.onclick=()=>{col=c;car.userData.bm.color.set(c).convertSRGBToLinear();[...$('sw').children].forEach(x=>x.classList.remove('on'));b.classList.add('on')};$('sw').appendChild(b)});
 
 function setMode(m){
-  mode=m;input?.clear();simulationClock.reset();const r=m==='race';$('fx').classList.remove('on');pts.visible=skM.visible=r;if(!r){ghM.visible=slines.visible=tnl.visible=false;pl.fill(0);}gar.visible=!r;rc.visible=r;ai.forEach(a=>a.m.visible=r);
+  mode=m;input?.clear();simulationClock.reset();const r=m==='race';$('fx').classList.remove('on');pts.visible=skM.visible=r;if(!r){ghM.visible=slines.visible=tnl.visible=false;particles.clear();}gar.visible=!r;rc.visible=r;ai.forEach(a=>a.m.visible=r);
   const T2=TH[thm],c=new THREE.Color(r?T2.bg:'#171a30');if(r&&wxs)c.lerp(new THREE.Color(0x4a5566),wxs==2?.7:.5);sc.background.copy(c);sc.fog.color.copy(c);setSky(r?c.clone().lerp(new THREE.Color(T2.night?0x02030a:wxs?0x3a4658:0x2a5aa8),.65):'#0b0d1c',c);sunS.visible=!!(r&&!T2.night&&!wxs);sc.fog.near=r?T2.f[0]*(wxs?.4:1):30;sc.fog.far=r?T2.f[1]*(wxs?.5:1):140;rain.visible=!!(r&&wxs>0);
   const nt=!!(r&&T2.night);hb=nt?.4:(r&&wxs?.6:.95);hemi.intensity=hb;sun.intensity=nt?.12:(r&&wxs?.45:.9);rim.intensity=nt?.1:.5;hs.visible=nt||!!(r&&wxs==2);
   $('gTop').hidden=$('gBot').hidden=r;$('hud').hidden=$('ctl').hidden=$('mm').hidden=!r;$('end').hidden=true;$('raceTitle').hidden=$('keysHelp').hidden=!r;$('raceTitle').lastElementChild.textContent=TK.coast?'GOLDEN COAST / CIRCUIT 01':'SUNSET RUSH / ARCADE CIRCUIT';
@@ -189,7 +190,7 @@ function reset(){
   TK=TR[trk];R=TK.R;W=TK.W;LAPS=lps;const trackKey=[trk,thm,sfc,wxs].join(':');if(!TK.coast||trackKey!==trackBuildKey)buildTrack();correctColors(rc);ai.forEach((a,i)=>{a.bl=[-.28,.28,-.1,.1][i]*W;a.o=a.bl;a.ne=1;a.br=0});
   const a=-.075;const q=cl(a);progress=new RaceProgress(a,LAPS);raceElapsed=0;simulationClock.reset();input?.clear();P.x=q[0];P.z=q[1];P.th=P.mv=q[2];P.v=0;P.steer=0;P.prev=a;P.cum=a;P.last=-1;P.t=0;P.ls=0;P.laps=[];P.fin=0;P.nt=100;P.nl=0;nosOn=0;paused=0;cn=4;SC=0;CB=1;cbT=0;drT=0;hits=0;PR=0;wp=0;tkT=0;P.y=0;P.vy=0;P.air=0;slip=0;psg=0;js=0;skClr();GR_=[];gt=0;ghM.visible=false;try{GH=JSON.parse(localStorage.getItem('sunset-g'+trk))}catch(e){GH=null}$('pz').hidden=true;car.userData.bm.color.set(col).convertSRGBToLinear();
   ai.forEach((o,i)=>{o.cum=a-(i>1?.055:0);o.finishTime=null;o.speed=0;o.wheel=0;});state='count';cd=3;go_t=0;endT=0;$('end').hidden=true;
-  P.wheel=0;ptc=0;shk=0;hc=0;environmentTime=0;shadowTime=Infinity;frameMetrics.reset();syncPresentation();
+  P.wheel=0;ptc=0;shk=0;hc=0;environmentTime=0;shadowTime=Infinity;particles.clear();frameMetrics.reset();syncPresentation();
 }
 const fmt=t=>Math.floor(t/60)+':'+(t%60).toFixed(1).padStart(4,'0');
 
@@ -304,24 +305,23 @@ for(let i=0;i<RN;i++){rx[i]=(Math.random()-.5)*70;rz[i]=(Math.random()-.5)*70;ry
 const rain=new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(rpos,3)),new THREE.LineBasicMaterial({color:0xcfe3ff,transparent:true,opacity:.55}));rain.frustumCulled=false;rain.visible=false;sc.add(rain);
 function rainUpd(dt){if(!rain.visible)return;const ox=cam.position.x+Math.sin(P.th)*20,oz=cam.position.z+Math.cos(P.th)*20;for(let i=0;i<RN;i++){ry[i]-=dt*(wxs==2?60:45);if(ry[i]<0)ry[i]+=28;const j=i*6;rpos[j]=ox+rx[i];rpos[j+1]=ry[i];rpos[j+2]=oz+rz[i];rpos[j+3]=rpos[j]+.15;rpos[j+4]=ry[i]+1.3;rpos[j+5]=rpos[j+2]}rain.geometry.attributes.position.needsUpdate=true;
   if(wxs==2){if(lf>0)lf-=dt;else if(Math.random()<dt*.12)lf=.14;hemi.intensity=hb+(lf>0?1.6:0)}else hemi.intensity=hb}
-const NP=150,pp=new Float32Array(NP*3),pc=new Float32Array(NP*3),pb=new Float32Array(NP*3),pv=new Float32Array(NP*3),pl=new Float32Array(NP),pm=new Float32Array(NP),pg=new Float32Array(NP);let pi=0;const rnd=()=>Math.random()-.5;
-const pts=new THREE.Points(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(pp,3)).setAttribute('color',new THREE.BufferAttribute(pc,3)),new THREE.PointsMaterial({size:1.5,map:GLW,vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));pts.frustumCulled=false;sc.add(pts);
-function emit(x,y,z,vx,vy,vz,l,r,g,b,gv){const i=pi++%NP,j=i*3;pp[j]=x;pp[j+1]=y;pp[j+2]=z;pv[j]=vx;pv[j+1]=vy;pv[j+2]=vz;pl[i]=pm[i]=l;pb[j]=r;pb[j+1]=g;pb[j+2]=b;pg[i]=gv}
+const particles=new RaceParticles(GLW),pts=particles.mesh,rnd=()=>Math.random()-.5;sc.add(pts);
+function emit(x,y,z,vx,vy,vz,l,r,g,b,gv){particles.emit(x,y,z,vx,vy,vz,l,r,g,b,gv);}
 function burst(x,z){bip(90,.18,'sawtooth',.18);for(let i=0;i<14;i++)emit(x,.6,z,rnd()*14,2+Math.random()*5,rnd()*14,.45,1,.7,.25,14)}
-function pUpd(dt){for(let i=0;i<NP;i++){const j=i*3;if(pl[i]>0){pl[i]-=dt;pv[j+1]-=pg[i]*dt;pp[j]+=pv[j]*dt;pp[j+1]=Math.max(.05,pp[j+1]+pv[j+1]*dt);pp[j+2]+=pv[j+2]*dt;const f=Math.max(0,pl[i]/pm[i]);pc[j]=pb[j]*f;pc[j+1]=pb[j+1]*f;pc[j+2]=pb[j+2]*f}else pc[j]=pc[j+1]=pc[j+2]=0}pts.geometry.attributes.position.needsUpdate=true;pts.geometry.attributes.color.needsUpdate=true}
-function fxEmit(dt,off,nos){const f=Math.sin(P.th),c=Math.cos(P.th),sk=Math.abs(P.mv-P.th)>.12&&P.v>20;if(sk&&!off&&P.y<.1){skd+=P.v*dt;if(skd>.9){skd=0;skid()}}
+function pUpd(dt){particles.step(dt);}
+function fxEmit(dt,off,nos){particles.intensity=clamp(P.v/45,.35,1);const f=Math.sin(P.th),c=Math.cos(P.th),sk=Math.abs(P.mv-P.th)>.12&&P.v>20;if(sk&&!off&&P.y<.1){skd+=P.v*dt;if(skd>.9){skd=0;skid()}}
   if(P.v>12&&(sk||off))[-1,1].forEach(s=>{const x=P.x-f*1.6-c*s*.95,z=P.z-c*1.6+f*s*.95;if(sk&&!off)emit(x,.2,z,rnd(),.6,rnd(),.7,.3,.3,.32,0);else emit(x,.25,z,rnd()*2,1.5,rnd()*2,.5,sfc?.4:.5,sfc?.26:.42,sfc?.13:.25,6)});
   if(nos)[-1,1].forEach(s=>emit(P.x-f*2.6-c*s*.55,.5,P.z-c*2.6+f*s*.55,-f*10,rnd(),-c*10,.25,.3,.55,1,0))}
 const NS=36,sa=new Float32Array(NS),sr=new Float32Array(NS),sz=new Float32Array(NS),spos=new Float32Array(NS*6);for(let i=0;i<NS;i++){sa[i]=Math.random()*6.283;sr[i]=2.5+Math.random()*7;sz[i]=Math.random()*40}
 const slines=new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(spos,3)),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:0}));slines.frustumCulled=false;slines.visible=false;sc.add(slines);
-function slUpd(dt,pose){const a=clamp((pose.speed-38)/26,0,1);slines.visible=mode==='race'&&a>0;if(!slines.visible)return;slines.material.opacity=a*.4;const f=Math.sin(pose.heading),c=Math.cos(pose.heading),L=1+pose.speed*.05;for(let i=0;i<NS;i++){sz[i]-=dt*(pose.speed+30);if(sz[i]<4)sz[i]+=44;const ox=Math.cos(sa[i])*sr[i],oy=Math.sin(sa[i])*sr[i]*.6+2.5,bx=cam.position.x+f*sz[i]-c*ox,bz=cam.position.z+c*sz[i]+f*ox,j=i*6;spos[j]=bx;spos[j+1]=oy;spos[j+2]=bz;spos[j+3]=bx+f*L;spos[j+4]=oy;spos[j+5]=bz+c*L}slines.geometry.attributes.position.needsUpdate=true}
+function slUpd(dt,pose){const a=clamp((pose.speed-38)/26,0,1);slines.visible=mode==='race'&&a>0;if(!slines.visible)return;slines.material.opacity=a*(reducedEffects?.12:.24);const f=Math.sin(pose.heading),c=Math.cos(pose.heading),L=1+pose.speed*.05;for(let i=0;i<NS;i++){sz[i]-=dt*(pose.speed+30);if(sz[i]<4)sz[i]+=44;const ox=Math.cos(sa[i])*sr[i],oy=Math.sin(sa[i])*sr[i]*.6+2.5,bx=cam.position.x+f*sz[i]-c*ox,bz=cam.position.z+c*sz[i]+f*ox,j=i*6;spos[j]=bx;spos[j+1]=oy;spos[j+2]=bz;spos[j+3]=bx+f*L;spos[j+4]=oy;spos[j+5]=bz+c*L}slines.geometry.attributes.position.needsUpdate=true}
 function applyResolution(scale=1){
   const ratio=Math.min(devicePixelRatio,QUALITY[ql].dpr)*scale;
   if(Math.abs(rd.getPixelRatio()-ratio)>.015){rd.setPixelRatio(ratio);rs();}
 }
 function applyQuality(){
   const quality=QUALITY[ql],budget=reducedEffects?.55:1;
-  pts.geometry.setDrawRange(0,Math.floor(quality.particles*budget));
+  particles.setBudget(Math.floor(quality.particles*budget));
   slines.geometry.setDrawRange(0,Math.floor(quality.lines*budget)*2);rain.geometry.setDrawRange(0,Math.floor(quality.rain*budget)*2);
   sun.castShadow=quality.shadow>0&&!!SHD;
   if(sun.shadow.mapSize.x!==quality.shadow&&quality.shadow>0){
@@ -340,6 +340,7 @@ function prepareRender(dt){
   skyClouds.time.value=time;skyClouds.strength.value=rc.visible&&TK.coast?(TH[thm].night?.1:wxs?.3:.85):0;
   const life=rc.userData.coast;
   if(life){life.time.value=time;life.motion.value=reducedEffects?.25:1;life.detail.value=ql===2||reducedEffects?0:1;if(life.birds)life.birds.visible=ql!==2&&!reducedEffects;if(life.traffic)life.traffic.visible=ql!==2&&!reducedEffects;}
+  particles.setProjection(cv.height,cam.fov);
   const quality=QUALITY[ql];ai.forEach(a=>updateCarLOD(a.m,cam,quality.lod));
   shadowTime+=Math.max(0,dt);
   rd.shadowMap.needsUpdate=!!(sun.castShadow&&shadowTime>=1/quality.shadowHz);
