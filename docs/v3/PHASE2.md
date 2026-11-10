@@ -1,5 +1,8 @@
 # Sunset Rush 3.0 — Phase 2
 
+> تحديث المراجعة 2026-11-10: بعد موافقة المالك رُفع فرع المراجعة وحده وأُنشئ [Draft PR #2](https://github.com/MURAD135/sunset-rush/pull/2) إلى feat/coastal-arcade-racing. نجح CI عند b1ec70a. [دليل الحزمة وHTTPS](REVIEW_GUIDE.md) و[خطة المرحلة الثالثة](PHASE3_PLAN.md). لا دمج أو نشر؛ إشارات «لا رفع» أدناه تصف مراحل التسليم المحلي السابقة لهذه الموافقة.
+
+
 بدأ التنفيذ في 2026-11-08 من `c81bccd` على `feat/sunset-rush-visual-performance`. هذا تقرير مرحلي يُحدّث بعد كل دفعة. لا رفع للفرع، ولا تعديل لـPR #1 أو main، ولا نشر.
 
 ## A — الأداء قبل التطوير البصري

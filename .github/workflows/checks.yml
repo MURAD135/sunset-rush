@@ -17,4 +17,15 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - name: Package static review build (no deployment)
+        run: python3 scripts/package-review.py
+      - name: Retain downloadable review package
+        uses: actions/upload-artifact@v4
+        with:
+          name: sunset-rush-3-review-${{ github.sha }}
+          path: |
+            artifacts/review/*.zip
+            artifacts/review/*.sha256
+          if-no-files-found: error
+          retention-days: 14
 # Intentionally no Pages deployment, release, merge or write token permissions.
