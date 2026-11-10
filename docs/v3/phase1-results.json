@@ -1,0 +1,456 @@
+{
+  "checks": [
+    "Identical full three-lap race, positions and five-racer results at 30/60/120/144 Hz",
+    "Authoritative full-race state equals untouched 2.0 baseline at 60 Hz",
+    "All five vehicles move on every rendered sample at 30/60/120/144 Hz",
+    "Rendering alone does not mutate simulation, contacts, standings or snapshot endpoints",
+    "Pause/resume clears partial time and does not catch up suspended time",
+    "Recovery and restart reset both poses",
+    "Ten-second stall is bounded to 12 simulation steps",
+    "Camera mode transition has no instant positional cut",
+    "Blur pauses and clears inputs; camera shake can be disabled and persists",
+    "Reduced-motion preference defaults camera shake to off"
+  ],
+  "errors": [],
+  "baseline": {
+    "hz": 60,
+    "old": true,
+    "state": "done",
+    "time": 60.783333333331164,
+    "finish": 60.783333333331164,
+    "laps": [
+      21.083333333333417,
+      19.849999999998875,
+      19.84999999999887
+    ],
+    "rank": 1,
+    "x": 190.3493231531069,
+    "z": 20.787132068955984,
+    "speed": 0,
+    "nitro": 100,
+    "heading": -18.946020563791354,
+    "direction": -18.946020563791347,
+    "cum": 18.852179368461265,
+    "results": [
+      {
+        "id": 0,
+        "name": "YOU",
+        "distance": 18.852179368461265,
+        "finishTime": 60.783333333331164
+      },
+      {
+        "id": 3,
+        "name": "KAI",
+        "distance": 22.805448846862674,
+        "finishTime": 70.96832219805624
+      },
+      {
+        "id": 1,
+        "name": "SOL",
+        "distance": 22.817752572303117,
+        "finishTime": 70.98229682439538
+      },
+      {
+        "id": 2,
+        "name": "NOVA",
+        "distance": 22.326543525100067,
+        "finishTime": 72.59218708262122
+      },
+      {
+        "id": 4,
+        "name": "LUNA",
+        "distance": 22.091666770133944,
+        "finishTime": 73.56406067571531
+      }
+    ]
+  },
+  "races": [
+    {
+      "hz": 30,
+      "old": false,
+      "state": "done",
+      "time": 60.783333333331164,
+      "finish": 60.783333333331164,
+      "laps": [
+        21.083333333333417,
+        19.849999999998875,
+        19.84999999999887
+      ],
+      "rank": 1,
+      "x": 190.3493231531069,
+      "z": 20.787132068955984,
+      "speed": 0,
+      "nitro": 100,
+      "heading": -18.946020563791354,
+      "direction": -18.946020563791347,
+      "cum": 18.852179368461265,
+      "results": [
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 18.852179368461265,
+          "finishTime": 60.783333333331164
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 22.805448846862674,
+          "finishTime": 70.96832219805624
+        },
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 22.817752572303117,
+          "finishTime": 70.98229682439538
+        },
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 22.326543525100067,
+          "finishTime": 72.59218708262122
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 22.091666770133944,
+          "finishTime": 73.56406067571531
+        }
+      ]
+    },
+    {
+      "hz": 60,
+      "old": false,
+      "state": "done",
+      "time": 60.783333333331164,
+      "finish": 60.783333333331164,
+      "laps": [
+        21.083333333333417,
+        19.849999999998875,
+        19.84999999999887
+      ],
+      "rank": 1,
+      "x": 190.3493231531069,
+      "z": 20.787132068955984,
+      "speed": 0,
+      "nitro": 100,
+      "heading": -18.946020563791354,
+      "direction": -18.946020563791347,
+      "cum": 18.852179368461265,
+      "results": [
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 18.852179368461265,
+          "finishTime": 60.783333333331164
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 22.805448846862674,
+          "finishTime": 70.96832219805624
+        },
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 22.817752572303117,
+          "finishTime": 70.98229682439538
+        },
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 22.326543525100067,
+          "finishTime": 72.59218708262122
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 22.091666770133944,
+          "finishTime": 73.56406067571531
+        }
+      ]
+    },
+    {
+      "hz": 120,
+      "old": false,
+      "state": "done",
+      "time": 60.783333333331164,
+      "finish": 60.783333333331164,
+      "laps": [
+        21.083333333333417,
+        19.849999999998875,
+        19.84999999999887
+      ],
+      "rank": 1,
+      "x": 190.3493231531069,
+      "z": 20.787132068955984,
+      "speed": 0,
+      "nitro": 100,
+      "heading": -18.946020563791354,
+      "direction": -18.946020563791347,
+      "cum": 18.852179368461265,
+      "results": [
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 18.852179368461265,
+          "finishTime": 60.783333333331164
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 22.805448846862674,
+          "finishTime": 70.96832219805624
+        },
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 22.817752572303117,
+          "finishTime": 70.98229682439538
+        },
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 22.326543525100067,
+          "finishTime": 72.59218708262122
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 22.091666770133944,
+          "finishTime": 73.56406067571531
+        }
+      ]
+    },
+    {
+      "hz": 144,
+      "old": false,
+      "state": "done",
+      "time": 60.783333333331164,
+      "finish": 60.783333333331164,
+      "laps": [
+        21.083333333333417,
+        19.849999999998875,
+        19.84999999999887
+      ],
+      "rank": 1,
+      "x": 190.3493231531069,
+      "z": 20.787132068955984,
+      "speed": 0,
+      "nitro": 100,
+      "heading": -18.946020563791354,
+      "direction": -18.946020563791347,
+      "cum": 18.852179368461265,
+      "results": [
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 18.852179368461265,
+          "finishTime": 60.783333333331164
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 22.805448846862674,
+          "finishTime": 70.96832219805624
+        },
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 22.817752572303117,
+          "finishTime": 70.98229682439538
+        },
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 22.326543525100067,
+          "finishTime": 72.59218708262122
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 22.091666770133944,
+          "finishTime": 73.56406067571531
+        }
+      ]
+    }
+  ],
+  "cadence": [
+    {
+      "version": "before",
+      "hz": 30,
+      "duplicates": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "maxDelta": [
+        1.6394435880036138,
+        1.4124960500883996,
+        1.432017999691404,
+        1.302119839901724,
+        1.4446393210124253
+      ]
+    },
+    {
+      "version": "before",
+      "hz": 60,
+      "duplicates": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "maxDelta": [
+        0.8233333333333284,
+        0.706253220239353,
+        0.7171352128910918,
+        0.6509616515452442,
+        0.7223282312423334
+      ]
+    },
+    {
+      "version": "before",
+      "hz": 120,
+      "duplicates": [
+        60,
+        60,
+        60,
+        60,
+        60
+      ],
+      "maxDelta": [
+        0.8233333333333284,
+        0.706253220239353,
+        0.7178839699892828,
+        0.6507636242547502,
+        0.7223282312423334
+      ]
+    },
+    {
+      "version": "before",
+      "hz": 144,
+      "duplicates": [
+        84,
+        84,
+        84,
+        84,
+        84
+      ],
+      "maxDelta": [
+        0.8233333333333284,
+        0.706253220239353,
+        0.7178839699892828,
+        0.6507636242547502,
+        0.7223282312423334
+      ]
+    },
+    {
+      "version": "after",
+      "hz": 30,
+      "duplicates": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "maxDelta": [
+        1.6317815616500524,
+        1.4124994697783766,
+        1.4335151782546864,
+        1.3017206115137145,
+        1.4446508376813905
+      ]
+    },
+    {
+      "version": "after",
+      "hz": 60,
+      "duplicates": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "maxDelta": [
+        0.8233333333333284,
+        0.706253220239353,
+        0.7178839699892828,
+        0.6507636242547502,
+        0.7223282312423334
+      ]
+    },
+    {
+      "version": "after",
+      "hz": 120,
+      "duplicates": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "maxDelta": [
+        0.4116666666666642,
+        0.3531266101196846,
+        0.3593163484922148,
+        0.3253818121273751,
+        0.36116411562117484
+      ]
+    },
+    {
+      "version": "after",
+      "hz": 144,
+      "duplicates": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "maxDelta": [
+        0.3430555555555564,
+        0.29427217509973275,
+        0.29943029041018515,
+        0.27115151010615207,
+        0.3009700963509775
+      ]
+    }
+  ],
+  "matchedCapture": {
+    "camera": {
+      "position": [
+        189.23628449436237,
+        4.114601760364569,
+        -11.458718936248536
+      ],
+      "quaternion": [
+        0.010785035198400152,
+        0.9840295380314426,
+        0.06403332046753751,
+        -0.16573860493951484
+      ],
+      "fov": 58.09239304281785
+    },
+    "state": {
+      "x": 194.10531644164516,
+      "z": 3.0485704711694783,
+      "heading": 0.3553939597316873,
+      "time": 1.3333333333333335,
+      "speed": 30.333333333333346
+    },
+    "viewport": {
+      "width": 960,
+      "height": 600
+    },
+    "seed": 135
+  },
+  "environment": {
+    "browser": "156.0.8078.79",
+    "renderer": "Chromium / SwiftShader, software rendering; no physical GPU or phone"
+  },
+  "method": "Injected display intervals drive the actual 60 Hz controller and Cannon; the input driver runs once per physics step. Cadence measures mesh transforms, not GPU FPS. Rendering-only calls are checked for state mutation. Baseline response instrumentation is test-only; worktree and PR #1 are unchanged."
+}

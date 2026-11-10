@@ -4,9 +4,9 @@ import {ArcadePhysics,FixedClock} from '../src/physics.js';
 import {RaceProgress,rankRacers,TAU} from '../src/progress.js';
 import {readGamepad} from '../src/input.js';
 
-test('fixed-step simulation is identical at 30, 60 and 144 Hz',()=>{
+test('fixed-step simulation is identical at 30, 60, 120 and 144 Hz',()=>{
   const run=hz=>{let x=0,v=0;const clock=new FixedClock();for(let i=0;i<hz*10;i++)clock.advance(1/hz,dt=>{v+=26*dt;x+=v*dt;});return {x,v};};
-  assert.deepEqual(run(30),run(60));assert.deepEqual(run(144),run(60));
+  for(const hz of [30,120,144])assert.deepEqual(run(hz),run(60));
 });
 test('clock bounds long stalls instead of a runaway catch-up',()=>{const c=new FixedClock();let n=0;c.advance(10,()=>n++);assert.equal(n,12);});
 test('three complete laps require ordered sectors and preserve lap times',()=>{

@@ -1,0 +1,361 @@
+{
+  "label": "before",
+  "viewport": {
+    "width": 960,
+    "height": 600,
+    "dpr": 1
+  },
+  "quality": "Medium",
+  "seed": 135,
+  "view": {
+    "position": [
+      190.62215707414688,
+      4.090509667449945,
+      -7.496271883133774
+    ],
+    "quaternion": [
+      0.012560358764290909,
+      0.9842124942386048,
+      0.07807069048042879,
+      -0.1583444689916438
+    ],
+    "fov": 57.06789177884794
+  },
+  "samples": [
+    {
+      "variant": "medium-full",
+      "meanMs": 491.77500000018625,
+      "fpsEquivalent": 2.033450256722325,
+      "p95Ms": 555.3999999985099,
+      "p99Ms": 715.3999999985099,
+      "calls": 174,
+      "triangles": 66514,
+      "geometries": 126,
+      "textures": 5,
+      "programs": 18,
+      "environment": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "heapUsed": 23164267,
+        "heapLimit": 4395630592,
+        "gpuMemoryBytes": null
+      },
+      "rawMs": [
+        715.3999999985099,
+        484.6000000014901,
+        555.3999999985099,
+        485.0999999977648,
+        456.3999999985099,
+        485,
+        474.69999999925494,
+        485.19999999925494,
+        447.5,
+        496.5,
+        501.9000000022352,
+        473.4000000022352,
+        484.80000000074506,
+        483,
+        440,
+        477.20000000298023,
+        483.1000000014901,
+        448.20000000298023,
+        478.5999999977648,
+        479.5
+      ]
+    },
+    {
+      "variant": "no-shadows",
+      "meanMs": 355.0199999999255,
+      "fpsEquivalent": 2.816742718720663,
+      "p95Ms": 403.80000000074506,
+      "p99Ms": 409.3999999985099,
+      "calls": 146,
+      "triangles": 49386,
+      "geometries": 126,
+      "textures": 5,
+      "programs": 26,
+      "environment": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "heapUsed": 23845140,
+        "heapLimit": 4395630592,
+        "gpuMemoryBytes": null
+      },
+      "rawMs": [
+        324.69999999925494,
+        359.6000000014901,
+        330.80000000074506,
+        360.5,
+        324,
+        367.0999999977648,
+        409.3999999985099,
+        341.0999999977648,
+        374.4000000022352,
+        363.80000000074506,
+        327.1000000014901,
+        327.5,
+        358.80000000074506,
+        330,
+        360,
+        328.0999999977648,
+        403.80000000074506,
+        385.69999999925494,
+        320.69999999925494,
+        403.30000000074506
+      ]
+    },
+    {
+      "variant": "no-water",
+      "meanMs": 346.18500000033526,
+      "fpsEquivalent": 2.8886289122839854,
+      "p95Ms": 406.9000000022352,
+      "p99Ms": 441,
+      "calls": 145,
+      "triangles": 49384,
+      "geometries": 126,
+      "textures": 5,
+      "programs": 26,
+      "environment": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "heapUsed": 22533852,
+        "heapLimit": 4395630592,
+        "gpuMemoryBytes": null
+      },
+      "rawMs": [
+        348.9000000022352,
+        319.0999999977648,
+        369.80000000074506,
+        329.5,
+        320.9000000022352,
+        361.9000000022352,
+        324.80000000074506,
+        321.6000000014901,
+        361.69999999925494,
+        327.0999999977648,
+        364.4000000022352,
+        406.9000000022352,
+        331.5,
+        441,
+        321.0999999977648,
+        320.19999999925494,
+        318,
+        350.69999999925494,
+        329.30000000074506,
+        355.30000000074506
+      ]
+    },
+    {
+      "variant": "no-cars",
+      "meanMs": 280.7899999996647,
+      "fpsEquivalent": 3.5613803910438198,
+      "p95Ms": 297,
+      "p99Ms": 310.6000000014901,
+      "calls": 36,
+      "triangles": 24146,
+      "geometries": 126,
+      "textures": 5,
+      "programs": 26,
+      "environment": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "heapUsed": 15423851,
+        "heapLimit": 4395630592,
+        "gpuMemoryBytes": null
+      },
+      "rawMs": [
+        291.69999999925494,
+        310.6000000014901,
+        281.30000000074506,
+        252.39999999850988,
+        282.5,
+        287.29999999701977,
+        284.9000000022352,
+        291.29999999701977,
+        286.5,
+        253,
+        275.3999999985099,
+        281.5999999977648,
+        251.80000000074506,
+        280.69999999925494,
+        290,
+        285.1000000014901,
+        284.30000000074506,
+        294,
+        254.39999999850988,
+        297
+      ]
+    },
+    {
+      "variant": "half-resolution",
+      "meanMs": 152.19999999962747,
+      "fpsEquivalent": 6.5703022339188415,
+      "p95Ms": 171.79999999701977,
+      "p99Ms": 173.39999999850988,
+      "calls": 146,
+      "triangles": 49386,
+      "geometries": 126,
+      "textures": 5,
+      "programs": 26,
+      "environment": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+        "heapUsed": 15137751,
+        "heapLimit": 4395630592,
+        "gpuMemoryBytes": null
+      },
+      "rawMs": [
+        171.79999999701977,
+        166.40000000223517,
+        133.80000000074506,
+        166.69999999925494,
+        140.89999999850988,
+        168.80000000074506,
+        128.89999999850988,
+        169.89999999850988,
+        133.89999999850988,
+        167.80000000074506,
+        139.5,
+        163.30000000074506,
+        138,
+        167.10000000149012,
+        132.69999999925494,
+        163.19999999925494,
+        122.89999999850988,
+        173.39999999850988,
+        128.19999999925494,
+        166.80000000074506
+      ]
+    }
+  ],
+  "simulation": {
+    "steps": 1200,
+    "cpuMs": 77.80000000074506,
+    "top": [
+      {
+        "fn": "race",
+        "file": "game.js",
+        "hits": 29
+      },
+      {
+        "fn": "scUpd",
+        "file": "game.js",
+        "hits": 7
+      },
+      {
+        "fn": "(program)",
+        "file": "",
+        "hits": 6
+      },
+      {
+        "fn": "$",
+        "file": "game.js",
+        "hits": 5
+      },
+      {
+        "fn": "(garbage collector)",
+        "file": "",
+        "hits": 4
+      },
+      {
+        "fn": "",
+        "file": "game.js",
+        "hits": 4
+      },
+      {
+        "fn": "stepSimulation",
+        "file": "game.js",
+        "hits": 3
+      },
+      {
+        "fn": "(idle)",
+        "file": "",
+        "hits": 2
+      },
+      {
+        "fn": "internalStep",
+        "file": "cannon-es.js?v=6917ba61",
+        "hits": 2
+      },
+      {
+        "fn": "",
+        "file": "game.js",
+        "hits": 2
+      },
+      {
+        "fn": "pUpd",
+        "file": "game.js",
+        "hits": 1
+      },
+      {
+        "fn": "getElementById",
+        "file": "",
+        "hits": 1
+      },
+      {
+        "fn": "step",
+        "file": "cannon-es.js?v=6917ba61",
+        "hits": 1
+      },
+      {
+        "fn": "sortList",
+        "file": "cannon-es.js?v=6917ba61",
+        "hits": 1
+      },
+      {
+        "fn": "updateAABB",
+        "file": "cannon-es.js?v=6917ba61",
+        "hits": 1
+      },
+      {
+        "fn": "calculateWorldAABB",
+        "file": "cannon-es.js?v=6917ba61",
+        "hits": 1
+      },
+      {
+        "fn": "updateInertiaWorld",
+        "file": "cannon-es.js?v=6917ba61",
+        "hits": 1
+      },
+      {
+        "fn": "normalize",
+        "file": "cannon-es.js?v=6917ba61",
+        "hits": 1
+      }
+    ]
+  },
+  "restarts": [
+    {
+      "buildMs": 133.30000000074506,
+      "geometries": 125,
+      "textures": 5,
+      "programs": 22
+    },
+    {
+      "buildMs": 51.599999997764826,
+      "geometries": 125,
+      "textures": 5,
+      "programs": 22
+    },
+    {
+      "buildMs": 55.69999999925494,
+      "geometries": 125,
+      "textures": 5,
+      "programs": 22
+    },
+    {
+      "buildMs": 48.5,
+      "geometries": 125,
+      "textures": 5,
+      "programs": 22
+    },
+    {
+      "buildMs": 40.399999998509884,
+      "geometries": 125,
+      "textures": 5,
+      "programs": 22
+    }
+  ],
+  "errors": [],
+  "method": "20 synchronous WebGL render + 1-pixel readback samples per variant after 3 warmups. Static camera and simulation, seeded geometry, fixed water phase. Shadows forced fresh for every sample; renderer counters include the shadow pass. A readback is required because gl.finish alone returned command-submission timings on this Chromium. CPU sampling covers 1200 actual fixed simulation ticks. Software-renderer timings are not physical GPU FPS; 20 samples give coarse P95/P99 estimates."
+}

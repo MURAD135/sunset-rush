@@ -2,6 +2,8 @@
 
 A playable Three.js arcade racer with an original sunset coastal circuit, four AI rivals and three-lap races. The coastal upgrade is **review work, not a deployed release**. It retains the original eight-car garage, ten legacy tracks, progression and four interface languages.
 
+Sunset Rush 3.0 Phase 2 is available in [Draft PR #2](https://github.com/MURAD135/sunset-rush/pull/2), targeting the 2.0 review branch. See the [production package and mobile review guide](docs/v3/REVIEW_GUIDE.md), [visual/performance evidence](docs/v3/PHASE2.md) and [proposed Phase 3 plan](docs/v3/PHASE3_PLAN.md). GitHub Actions retains a downloadable static review ZIP for 14 days; it does not deploy the game. Physical iOS/Android/GPU validation is still pending.
+
 ## Run locally · التشغيل
 
 Requires Node.js 24+ and npm. The renderer needs a WebGL-capable browser.
@@ -14,7 +16,7 @@ npm run dev
 Open the URL printed by Vite, normally http://localhost:5173. Choose **Play now / العب الآن** for the coastal race, or **Garage / المرآب** to select a car, customize it, or choose a legacy track. The first six cars are available without unlocking. A real 3D circuit appears immediately in the main menu.
 
 ```bash
-npm test                 # seven simulation/input tests
+npm test                 # 27 simulation, presentation and graphics tests
 npm run build           # production bundle + versioned offline cache
 npm run preview         # serve dist locally
 npm run test:browser     # run while the dev server is running

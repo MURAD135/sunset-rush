@@ -2,6 +2,8 @@
 
 All coastal mesh shapes, bridge, palms, island, road signs, water shader, skyline/window textures and UI artwork added by this upgrade are original procedural work, distributed under the repository's MIT license. Car models and app icons originate in this repository and are retained/refined under its existing MIT license. No assets from commercial games or paid asset stores are used. There are no remote model, texture, audio or font requests in the game.
 
+Sunset Rush 3.0 Phase 2 also adds original periodic water normals, painted cloud bands, wind deformation, instanced seabirds/boats/bridge traffic, curved vehicle body rings, glass cabins, wheel spokes and a six-face sunset reflection map. These are generated locally by `environment.js`, `coast.js` and `car-visuals.js`, under the same MIT license. The shared reflection map is filtered once with Three.js PMREM; no downloaded HDRI or commercial vehicle mesh is used.
+
 Three.js 0.128.0 and Cannon-es 0.20.0 are bundled locally. Their licenses follow. Vite/Rollup/esbuild and Playwright are development tools, not game runtime services; consult the pinned dependency packages for their notices.
 
 ## Three.js

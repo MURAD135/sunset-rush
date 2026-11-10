@@ -1,0 +1,323 @@
+{
+  "checks": [
+    "Four full races in the same page preserve all five results, including saved-ghost replay",
+    "GPU object counts and retained JS heap stay bounded after warmup",
+    "Results panel and restart button stay accessible in a 400-pixel-high viewport"
+  ],
+  "runs": [
+    {
+      "race": {
+        "finish": 60.783333333331164,
+        "laps": [
+          21.083333333333417,
+          19.849999999998875,
+          19.84999999999887
+        ],
+        "rank": 1,
+        "results": [
+          {
+            "id": 0,
+            "name": "YOU",
+            "distance": 18.852179368461265,
+            "finishTime": 60.783333333331164
+          },
+          {
+            "id": 3,
+            "name": "KAI",
+            "distance": 22.805448846862674,
+            "finishTime": 70.96832219805624
+          },
+          {
+            "id": 1,
+            "name": "SOL",
+            "distance": 22.817752572303117,
+            "finishTime": 70.98229682439538
+          },
+          {
+            "id": 2,
+            "name": "NOVA",
+            "distance": 22.326543525100067,
+            "finishTime": 72.59218708262122
+          },
+          {
+            "id": 4,
+            "name": "LUNA",
+            "distance": 22.091666770133944,
+            "finishTime": 73.56406067571531
+          }
+        ]
+      },
+      "resources": {
+        "samples": 0,
+        "fps": 0,
+        "meanMs": 0,
+        "p95Ms": 0,
+        "p99Ms": 0,
+        "simulationCpuMs": 0,
+        "renderSubmissionCpuMs": 0,
+        "calls": 127,
+        "triangles": 29179,
+        "geometries": 119,
+        "textures": 10,
+        "programs": 24,
+        "heapUsedBytes": 23743182,
+        "heapLimitBytes": 4395630592,
+        "heapAvailableBytes": 4371887410,
+        "gpuMemoryBytes": null,
+        "quality": "Medium",
+        "auto": false,
+        "dpr": 1,
+        "resolutionScale": 1,
+        "reducedEffects": false,
+        "trackBuilds": 1,
+        "lowDetailRivals": 4,
+        "canvas": [
+          640,
+          400
+        ]
+      },
+      "heap": {
+        "usedSize": 7994900,
+        "totalSize": 9269248,
+        "embedderHeapUsedSize": 1571704,
+        "backingStorageSize": 8032721
+      }
+    },
+    {
+      "race": {
+        "finish": 60.783333333331164,
+        "laps": [
+          21.083333333333417,
+          19.849999999998875,
+          19.84999999999887
+        ],
+        "rank": 1,
+        "results": [
+          {
+            "id": 0,
+            "name": "YOU",
+            "distance": 18.852179368461265,
+            "finishTime": 60.783333333331164
+          },
+          {
+            "id": 3,
+            "name": "KAI",
+            "distance": 22.805448846862674,
+            "finishTime": 70.96832219805624
+          },
+          {
+            "id": 1,
+            "name": "SOL",
+            "distance": 22.817752572303117,
+            "finishTime": 70.98229682439538
+          },
+          {
+            "id": 2,
+            "name": "NOVA",
+            "distance": 22.326543525100067,
+            "finishTime": 72.59218708262122
+          },
+          {
+            "id": 4,
+            "name": "LUNA",
+            "distance": 22.091666770133944,
+            "finishTime": 73.56406067571531
+          }
+        ]
+      },
+      "resources": {
+        "samples": 0,
+        "fps": 0,
+        "meanMs": 0,
+        "p95Ms": 0,
+        "p99Ms": 0,
+        "simulationCpuMs": 0,
+        "renderSubmissionCpuMs": 0,
+        "calls": 127,
+        "triangles": 29179,
+        "geometries": 119,
+        "textures": 10,
+        "programs": 24,
+        "heapUsedBytes": 16406639,
+        "heapLimitBytes": 4395630592,
+        "heapAvailableBytes": 4379223953,
+        "gpuMemoryBytes": null,
+        "quality": "Medium",
+        "auto": false,
+        "dpr": 1,
+        "resolutionScale": 1,
+        "reducedEffects": false,
+        "trackBuilds": 1,
+        "lowDetailRivals": 4,
+        "canvas": [
+          640,
+          400
+        ]
+      },
+      "heap": {
+        "usedSize": 7897276,
+        "totalSize": 8482816,
+        "embedderHeapUsedSize": 1220600,
+        "backingStorageSize": 8032791
+      }
+    },
+    {
+      "race": {
+        "finish": 60.783333333331164,
+        "laps": [
+          21.083333333333417,
+          19.849999999998875,
+          19.84999999999887
+        ],
+        "rank": 1,
+        "results": [
+          {
+            "id": 0,
+            "name": "YOU",
+            "distance": 18.852179368461265,
+            "finishTime": 60.783333333331164
+          },
+          {
+            "id": 3,
+            "name": "KAI",
+            "distance": 22.805448846862674,
+            "finishTime": 70.96832219805624
+          },
+          {
+            "id": 1,
+            "name": "SOL",
+            "distance": 22.817752572303117,
+            "finishTime": 70.98229682439538
+          },
+          {
+            "id": 2,
+            "name": "NOVA",
+            "distance": 22.326543525100067,
+            "finishTime": 72.59218708262122
+          },
+          {
+            "id": 4,
+            "name": "LUNA",
+            "distance": 22.091666770133944,
+            "finishTime": 73.56406067571531
+          }
+        ]
+      },
+      "resources": {
+        "samples": 0,
+        "fps": 0,
+        "meanMs": 0,
+        "p95Ms": 0,
+        "p99Ms": 0,
+        "simulationCpuMs": 0,
+        "renderSubmissionCpuMs": 0,
+        "calls": 127,
+        "triangles": 29179,
+        "geometries": 119,
+        "textures": 10,
+        "programs": 24,
+        "heapUsedBytes": 18485361,
+        "heapLimitBytes": 4395630592,
+        "heapAvailableBytes": 4377145231,
+        "gpuMemoryBytes": null,
+        "quality": "Medium",
+        "auto": false,
+        "dpr": 1,
+        "resolutionScale": 1,
+        "reducedEffects": false,
+        "trackBuilds": 1,
+        "lowDetailRivals": 4,
+        "canvas": [
+          640,
+          400
+        ]
+      },
+      "heap": {
+        "usedSize": 7953880,
+        "totalSize": 8482816,
+        "embedderHeapUsedSize": 1201872,
+        "backingStorageSize": 8032708
+      }
+    },
+    {
+      "race": {
+        "finish": 60.783333333331164,
+        "laps": [
+          21.083333333333417,
+          19.849999999998875,
+          19.84999999999887
+        ],
+        "rank": 1,
+        "results": [
+          {
+            "id": 0,
+            "name": "YOU",
+            "distance": 18.852179368461265,
+            "finishTime": 60.783333333331164
+          },
+          {
+            "id": 3,
+            "name": "KAI",
+            "distance": 22.805448846862674,
+            "finishTime": 70.96832219805624
+          },
+          {
+            "id": 1,
+            "name": "SOL",
+            "distance": 22.817752572303117,
+            "finishTime": 70.98229682439538
+          },
+          {
+            "id": 2,
+            "name": "NOVA",
+            "distance": 22.326543525100067,
+            "finishTime": 72.59218708262122
+          },
+          {
+            "id": 4,
+            "name": "LUNA",
+            "distance": 22.091666770133944,
+            "finishTime": 73.56406067571531
+          }
+        ]
+      },
+      "resources": {
+        "samples": 0,
+        "fps": 0,
+        "meanMs": 0,
+        "p95Ms": 0,
+        "p99Ms": 0,
+        "simulationCpuMs": 0,
+        "renderSubmissionCpuMs": 0,
+        "calls": 127,
+        "triangles": 29179,
+        "geometries": 119,
+        "textures": 10,
+        "programs": 24,
+        "heapUsedBytes": 18120978,
+        "heapLimitBytes": 4395630592,
+        "heapAvailableBytes": 4377509614,
+        "gpuMemoryBytes": null,
+        "quality": "Medium",
+        "auto": false,
+        "dpr": 1,
+        "resolutionScale": 1,
+        "reducedEffects": false,
+        "trackBuilds": 1,
+        "lowDetailRivals": 4,
+        "canvas": [
+          640,
+          400
+        ]
+      },
+      "heap": {
+        "usedSize": 8025388,
+        "totalSize": 8482816,
+        "embedderHeapUsedSize": 1208032,
+        "backingStorageSize": 8032776
+      }
+    }
+  ],
+  "errors": [],
+  "note": "Forced GC is diagnostic only. Four races are a bounded regression check, not proof against every long-session leak."
+}

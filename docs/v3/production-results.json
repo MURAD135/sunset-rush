@@ -1,0 +1,11 @@
+{
+  "subpath": "http://localhost:4173/sunset-rush/",
+  "offlinePlayable": true,
+  "productionTestHooksAbsent": true,
+  "noExternalRequests": true,
+  "errors": [],
+  "external": [],
+  "cache": [
+    "sunset-rush-6545db704598"
+  ]
+}

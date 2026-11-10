@@ -1,0 +1,309 @@
+{
+  "checks": [
+    "All eight car models render with PBR paint and shared reflections without shader errors",
+    "Three complete garage selection cycles retain stable GPU resource counts",
+    "Interpolated suspension responds to a real drift, stays bounded and leaves race authority unchanged"
+  ],
+  "errors": [],
+  "resources": [
+    {
+      "samples": 29,
+      "fps": 4.824488437864141,
+      "meanMs": 207.27586206895586,
+      "p95Ms": 2116.7000000000007,
+      "p99Ms": 2849.8999999999996,
+      "simulationCpuMs": 0,
+      "renderSubmissionCpuMs": 0.10000000009313226,
+      "calls": 208,
+      "triangles": 49313,
+      "geometries": 175,
+      "textures": 10,
+      "programs": 24,
+      "heapUsedBytes": 30455670,
+      "heapLimitBytes": 4395630592,
+      "heapAvailableBytes": 4365174922,
+      "gpuMemoryBytes": null,
+      "quality": "High",
+      "auto": false,
+      "dpr": 1,
+      "resolutionScale": 1,
+      "reducedEffects": false,
+      "trackBuilds": 1,
+      "lowDetailRivals": 0,
+      "canvas": [
+        960,
+        600
+      ],
+      "vehicle": {
+        "body": [
+          -0.006995613948762474,
+          0,
+          0.004825542192456595,
+          "XYZ"
+        ],
+        "height": 0.0030092810119785713,
+        "wheels": [
+          0.4350511038696057,
+          0.43775340749738145,
+          0.44224659250261855,
+          0.4449488961303943
+        ],
+        "paint": "MeshPhysicalMaterial",
+        "clearcoat": 1,
+        "reflection": true
+      }
+    },
+    {
+      "samples": 33,
+      "fps": 5.1207249705172595,
+      "meanMs": 195.28484848484004,
+      "p95Ms": 2116.7000000000007,
+      "p99Ms": 2849.8999999999996,
+      "simulationCpuMs": 0,
+      "renderSubmissionCpuMs": 0.10000000009313226,
+      "calls": 177,
+      "triangles": 41989,
+      "geometries": 175,
+      "textures": 10,
+      "programs": 24,
+      "heapUsedBytes": 28452018,
+      "heapLimitBytes": 4395630592,
+      "heapAvailableBytes": 4367178574,
+      "gpuMemoryBytes": null,
+      "quality": "High",
+      "auto": false,
+      "dpr": 1,
+      "resolutionScale": 1,
+      "reducedEffects": false,
+      "trackBuilds": 1,
+      "lowDetailRivals": 0,
+      "canvas": [
+        960,
+        600
+      ],
+      "vehicle": {
+        "body": [
+          -0.006995613948762474,
+          0,
+          0.004825542192456595,
+          "XYZ"
+        ],
+        "height": 0.0030092810119785713,
+        "wheels": [
+          0.4350511038696057,
+          0.43775340749738145,
+          0.44224659250261855,
+          0.4449488961303943
+        ],
+        "paint": "MeshPhysicalMaterial",
+        "clearcoat": 1,
+        "reflection": true
+      }
+    },
+    {
+      "samples": 33,
+      "fps": 5.1207249705172595,
+      "meanMs": 195.28484848484004,
+      "p95Ms": 2116.7000000000007,
+      "p99Ms": 2849.8999999999996,
+      "simulationCpuMs": 0,
+      "renderSubmissionCpuMs": 0.10000000009313226,
+      "calls": 208,
+      "triangles": 49313,
+      "geometries": 175,
+      "textures": 10,
+      "programs": 24,
+      "heapUsedBytes": 32228875,
+      "heapLimitBytes": 4395630592,
+      "heapAvailableBytes": 4363401717,
+      "gpuMemoryBytes": null,
+      "quality": "High",
+      "auto": false,
+      "dpr": 1,
+      "resolutionScale": 1,
+      "reducedEffects": false,
+      "trackBuilds": 1,
+      "lowDetailRivals": 0,
+      "canvas": [
+        960,
+        600
+      ],
+      "vehicle": {
+        "body": [
+          -0.006995613948762474,
+          0,
+          0.004825542192456595,
+          "XYZ"
+        ],
+        "height": 0.0030092810119785713,
+        "wheels": [
+          0.4350511038696057,
+          0.43775340749738145,
+          0.44224659250261855,
+          0.4449488961303943
+        ],
+        "paint": "MeshPhysicalMaterial",
+        "clearcoat": 1,
+        "reflection": true
+      }
+    }
+  ],
+  "suspension": {
+    "before": {
+      "mode": "race",
+      "state": "go",
+      "paused": 0,
+      "car": 0,
+      "track": 10,
+      "time": 3.899999999999991,
+      "speed": 16.26859666015105,
+      "nitro": 100,
+      "x": 191.75979650443062,
+      "z": 53.38549633022656,
+      "heading": -0.7780916258625379,
+      "direction": -0.56913873321653,
+      "drifting": true,
+      "cum": 0.27152232201811877,
+      "lap": 0,
+      "laps": [],
+      "finish": 0,
+      "results": [
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 0.8652633961975628,
+          "finishTime": null
+        },
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 0.7860432137779194,
+          "finishTime": null
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 0.7595362465223738,
+          "finishTime": null
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 0.7152184593884444,
+          "finishTime": null
+        },
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 0.27152232201811877,
+          "finishTime": null
+        }
+      ],
+      "keys": {
+        "l": 0,
+        "r": 1,
+        "g": 1,
+        "b": 0,
+        "h": 1,
+        "n": 0
+      },
+      "contacts": 0
+    },
+    "after": {
+      "mode": "race",
+      "state": "go",
+      "paused": 0,
+      "car": 0,
+      "track": 10,
+      "time": 3.899999999999991,
+      "speed": 16.26859666015105,
+      "nitro": 100,
+      "x": 191.75979650443062,
+      "z": 53.38549633022656,
+      "heading": -0.7780916258625379,
+      "direction": -0.56913873321653,
+      "drifting": true,
+      "cum": 0.27152232201811877,
+      "lap": 0,
+      "laps": [],
+      "finish": 0,
+      "results": [
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 0.8652633961975628,
+          "finishTime": null
+        },
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 0.7860432137779194,
+          "finishTime": null
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 0.7595362465223738,
+          "finishTime": null
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 0.7152184593884444,
+          "finishTime": null
+        },
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 0.27152232201811877,
+          "finishTime": null
+        }
+      ],
+      "keys": {
+        "l": 0,
+        "r": 1,
+        "g": 1,
+        "b": 0,
+        "h": 1,
+        "n": 0
+      },
+      "contacts": 0
+    },
+    "pose": {
+      "body": [
+        -0.006999986887124362,
+        0,
+        -0.010018928453722311,
+        "XYZ"
+      ],
+      "height": 0.0028177554067526146,
+      "wheels": [
+        0.4392053067108069,
+        0.43359470677672235,
+        0.44640529322327765,
+        0.44079469328919313
+      ],
+      "paint": "MeshPhysicalMaterial",
+      "clearcoat": 1,
+      "reflection": true
+    },
+    "shown": {
+      "body": [
+        -0.006999986877006403,
+        0,
+        -0.010017911311552297,
+        "XYZ"
+      ],
+      "height": 0.0028358748778812854,
+      "wheels": [
+        0.4392050219162028,
+        0.4335949915817335,
+        0.4464050084182665,
+        0.4407949780837972
+      ],
+      "paint": "MeshPhysicalMaterial",
+      "clearcoat": 1,
+      "reflection": true
+    }
+  }
+}

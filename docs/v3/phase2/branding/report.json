@@ -1,0 +1,116 @@
+{
+  "checks": [
+    "Application source and production HTML/CSS/JS contain no optional AI-tool signatures",
+    "Required Three.js and Cannon-es notices remain in the production build",
+    "All four original game icons are preserved byte for byte in the build",
+    "Production menu, settings, help, achievements, five garage tabs, HUD and pause UI have no tool signature, including CSS pseudo-elements"
+  ],
+  "errors": [],
+  "scanned": [
+    "index.html",
+    "src/car-visuals.js",
+    "src/coast.css",
+    "src/coast.js",
+    "src/effects.js",
+    "src/environment.js",
+    "src/game.js",
+    "src/graphics.js",
+    "src/input.js",
+    "src/performance.js",
+    "src/physics.js",
+    "src/presentation.js",
+    "src/progress.js",
+    "src/resources.js",
+    "src/style.css",
+    "public/icons/apple-touch-icon.png",
+    "public/icons/icon-192.png",
+    "public/icons/icon-512.png",
+    "public/icons/icon-maskable-512.png",
+    "public/manifest.webmanifest",
+    "public/sw.js",
+    "dist/THIRD_PARTY_NOTICES.txt",
+    "dist/assets/index-D5P15oPM.js",
+    "dist/assets/index-UF_mW1Yf.css",
+    "dist/assets/physics-BfMfVK9X.js",
+    "dist/assets/three-3o6Jv4OO.js",
+    "dist/icons/apple-touch-icon.png",
+    "dist/icons/icon-192.png",
+    "dist/icons/icon-512.png",
+    "dist/icons/icon-maskable-512.png",
+    "dist/index.html",
+    "dist/manifest.webmanifest",
+    "dist/sw.js"
+  ],
+  "assets": [
+    {
+      "file": "public/icons/apple-touch-icon.png",
+      "sha256": "c023e92444d77e41db94a446ed045c8bd1cd21edc4ff429bcaa3e93690f8a3e2"
+    },
+    {
+      "file": "public/icons/icon-192.png",
+      "sha256": "3b549aab52894969c49c5161a2b062e43170e8b4de1c0cd2ca64df85a5420e14"
+    },
+    {
+      "file": "public/icons/icon-512.png",
+      "sha256": "55dccb8ec288a7915009bc314008d58c8c7a97029cbb30cdbcad6e536e61a09f"
+    },
+    {
+      "file": "public/icons/icon-maskable-512.png",
+      "sha256": "532d13a65f8c5118c8b1e81ed1fd251275400374ac5a44bbb86ec33a68ff81f6"
+    }
+  ],
+  "screens": [
+    {
+      "name": "menu-after",
+      "text": "SR\nSUNSET RUSH\nCOASTAL RACING CLUB\nVOL. 01 / THE GOLDEN COAST\nSAN FRANCISCO INSPIRED CIRCUIT\nCHASE THE\nGOLDEN HOUR.\n\nSunset Coast / 3 LAPS · 5 DRIVERS · ONE FINISH LINE\n\nPlay now\nGarage & customize\nDaily challenge · 2× coins\nAchievements\nSettings\nHow to play\n COASTAL ARCADE RACING\nLevel 1\nBUILT FOR THE DRIVE /\n🎁 Daily bonus: +50 coins · Streak 1\nسباق الغروب"
+    },
+    {
+      "name": "settings",
+      "text": "SR\nSUNSET RUSH\nCOASTAL RACING CLUB\nVOL. 01 / THE GOLDEN COAST\nSAN FRANCISCO INSPIRED CIRCUIT\nCHASE THE\nGOLDEN HOUR.\n\nSunset Coast / 3 LAPS · 5 DRIVERS · ONE FINISH LINE\n\nPlay now\nGarage & customize\nDaily challenge · 2× coins\nAchievements\nSettings\nHow to play\n COASTAL ARCADE RACING\nLevel 1\nBUILT FOR THE DRIVE /\nSettings\nSound\nVibration\nAuto accelerate\nSteering sensitivity\nLow\nNormal\nHigh\nCamera shake\nOff\nReduced\nFull\nGraphics quality\nAuto\nLow\nMedium\nHigh\nUltra\nShadows\nCrowds\nAdaptive resolution in Auto\nReduce effects\nTarget FPS\n30\n60\n120\nShow FPS\nGhost car\nTilt steering\nLanguage\nالعربية\nEnglish\nFrançais\nEspañol\nReset progress & coinsOK\nسباق الغروب\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\"\n\"\""
+    },
+    {
+      "name": "help",
+      "text": "SR\nSUNSET RUSH\nCOASTAL RACING CLUB\nVOL. 01 / THE GOLDEN COAST\nSAN FRANCISCO INSPIRED CIRCUIT\nCHASE THE\nGOLDEN HOUR.\n\nSunset Coast / 3 LAPS · 5 DRIVERS · ONE FINISH LINE\n\nPlay now\nGarage & customize\nDaily challenge · 2× coins\nAchievements\nSettings\nHow to play\n COASTAL ARCADE RACING\nLevel 1\nBUILT FOR THE DRIVE /\nHow to play\nWASD / arrows to drive · Space to drift · Shift for nitro · R to recover · Esc to pause.\nGamepad: left stick steer, RT gas, LT brake, B drift, X nitro, Start pause.\nOn touch screens hold gas and steering together, then add drift or nitro.\nNitro charges by drifting and over blue pads.\nTake the shortcut tunnel or the outer road.\nRain and mud reduce grip, so slow before corners.\nEarn coins and upgrade your car in the workshop.\nGot it\nسباق الغروب"
+    },
+    {
+      "name": "achievements",
+      "text": "SR\nSUNSET RUSH\nCOASTAL RACING CLUB\nVOL. 01 / THE GOLDEN COAST\nSAN FRANCISCO INSPIRED CIRCUIT\nCHASE THE\nGOLDEN HOUR.\n\nSunset Coast / 3 LAPS · 5 DRIVERS · ONE FINISH LINE\n\nPlay now\nGarage & customize\nDaily challenge · 2× coins\nAchievements\nSettings\nHow to play\n COASTAL ARCADE RACING\nLevel 1\nBUILT FOR THE DRIVE /\nAchievements\nDaily missions\nFinish 3 races\n0/3\nScore 3000 points\n0/3000\nDrift for 40s\n0/40\nPlay time\n0:00:12\nRaces\n0\nWins\n0\nBest score\n0\nDrift time\n0s\nNitro time\n0s\nFirst win\n🔒\nThree wins\n🔒\nDrift king\n🔒\nNitro addict\n🔒\nSupersonic\n🔒\nClean race\n🔒\nTunnel runner\n🔒\nRain driver\n🔒\nMud master\n🔒\nCoin tycoon\n🔒\nMarathon\n🔒\nDaily champion\n🔒\nOK\nسباق الغروب"
+    },
+    {
+      "name": "garage-0",
+      "text": "Garage\n50 🪙\nDrag to orbit the car, pinch to zoom\nLights\nPhoto\nFront\nSide\nRear\nTop\nCar\nLook\nTrack\nWeather\nWorkshop\nجي تي\nHyper\nRally\nItalian\nBritish\nGerman\nMuscle 🔒800\nElectric 🔒1200\nSpeed\nAccel.\nHandling\n🔒300\n🔒300\n🔒400\nStart race\nسباق الغروب\n\"\""
+    },
+    {
+      "name": "garage-1",
+      "text": "Garage\n50 🪙\nDrag to orbit the car, pinch to zoom\nLights\nPhoto\nFront\nSide\nRear\nTop\nCar\nLook\nTrack\nWeather\nWorkshop\nGloss\nMatte\nMetallic\nNo wing\nWing\nTall wing\nStripes\n×\nRims\nUnderglow\n×\nStart race\nسباق الغروب\n\"\""
+    },
+    {
+      "name": "garage-2",
+      "text": "Garage\n50 🪙\nDrag to orbit the car, pinch to zoom\nLights\nPhoto\nFront\nSide\nRear\nTop\nCar\nLook\nTrack\nWeather\nWorkshop\nClassic\nOval\nTriangle\nWinding\nWide\nNarrow\nLong road\nStar\nMountain\nMarathon\nSunset Coast\n2 laps\n3 laps\n5 laps\nEasy rivals\nMedium rivals\nHard rivals\nStart race\nسباق الغروب\n\"\""
+    },
+    {
+      "name": "garage-3",
+      "text": "Garage\n50 🪙\nDrag to orbit the car, pinch to zoom\nLights\nPhoto\nFront\nSide\nRear\nTop\nCar\nLook\nTrack\nWeather\nWorkshop\nSunset\nNight\nDesert\nSnow\nClear\nRain\nStorm\nAsphalt\nDirt\nMud\nStart race\nسباق الغروب\n\"\""
+    },
+    {
+      "name": "garage-4",
+      "text": "Garage\n50 🪙\nDrag to orbit the car, pinch to zoom\nLights\nPhoto\nFront\nSide\nRear\nTop\nCar\nLook\nTrack\nWeather\nWorkshop\nCoins: 50\nEngine 0/3 · 150\nTires 0/3 · 150\nNitro 0/3 · 150\nMagnet 0/3 · 210\nMultiplier 0/3 · 210\nStart race\nسباق الغروب\n\"\""
+    },
+    {
+      "name": "hud",
+      "text": "GO!\nPLACE\n3/5\nLAP\n1/3\nSCORE\n0\nTIME\n0:00.2\n0km/h\n100%\nSUNSET RUSH\nGOLDEN COAST / CIRCUIT 01\nW A S D DRIVE · SPACE DRIFT · SHIFT NITRO · R RECOVER · ESC PAUSE\nسباق الغروب"
+    },
+    {
+      "name": "pause",
+      "text": "GO!\nPLACE\n5/5\nLAP\n1/3\nSCORE\n0\nTIME\n0:00.8\n0km/h\n100%\nSUNSET RUSH\nGOLDEN COAST / CIRCUIT 01\nW A S D DRIVE · SPACE DRIFT · SHIFT NITRO · R RECOVER · ESC PAUSE\nPaused\nResumeRecover carRestart raceGarage\nسباق الغروب"
+    }
+  ],
+  "removed": [
+    "Optional menu footer engine caption THREE.JS / ARCADE RACING replaced by COASTAL ARCADE RACING"
+  ],
+  "retained": [
+    "Sunset Rush / SR original branding",
+    "Original circuit names and racing slogans",
+    "Three.js and Cannon-es copyright and MIT notices"
+  ]
+}

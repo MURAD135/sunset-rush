@@ -1,0 +1,268 @@
+{
+  "checks": [
+    "Water, wind and wildlife animation changes actual rendered pixels without changing race state",
+    "Reduced effects and Low disable secondary animation and simplify water",
+    "Repeated coast/classic switching releases water textures and custom shadow programs"
+  ],
+  "errors": [],
+  "sample": {
+    "before": {
+      "mode": "race",
+      "state": "go",
+      "paused": 0,
+      "car": 0,
+      "track": 10,
+      "time": 1.3333333333333335,
+      "speed": 30.333333333333346,
+      "nitro": 100,
+      "x": 194.10531644164516,
+      "z": 3.0485704711694783,
+      "heading": 0.3553939597316873,
+      "direction": 0.3451787226232262,
+      "drifting": false,
+      "cum": 0.01570446343138768,
+      "lap": 0,
+      "laps": [],
+      "finish": 0,
+      "results": [
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 0.22799342139368833,
+          "finishTime": null
+        },
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 0.22795055959747912,
+          "finishTime": null
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 0.15780753776970968,
+          "finishTime": null
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 0.14842431323698851,
+          "finishTime": null
+        },
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 0.01570446343138768,
+          "finishTime": null
+        }
+      ],
+      "keys": {
+        "l": 0.25,
+        "r": 0,
+        "g": 1,
+        "b": 0,
+        "h": 0,
+        "n": 0
+      },
+      "contacts": 0
+    },
+    "after": {
+      "mode": "race",
+      "state": "go",
+      "paused": 0,
+      "car": 0,
+      "track": 10,
+      "time": 1.3333333333333335,
+      "speed": 30.333333333333346,
+      "nitro": 100,
+      "x": 194.10531644164516,
+      "z": 3.0485704711694783,
+      "heading": 0.3553939597316873,
+      "direction": 0.3451787226232262,
+      "drifting": false,
+      "cum": 0.01570446343138768,
+      "lap": 0,
+      "laps": [],
+      "finish": 0,
+      "results": [
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 0.22799342139368833,
+          "finishTime": null
+        },
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 0.22795055959747912,
+          "finishTime": null
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 0.15780753776970968,
+          "finishTime": null
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 0.14842431323698851,
+          "finishTime": null
+        },
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 0.01570446343138768,
+          "finishTime": null
+        }
+      ],
+      "keys": {
+        "l": 0.25,
+        "r": 0,
+        "g": 1,
+        "b": 0,
+        "h": 0,
+        "n": 0
+      },
+      "contacts": 0
+    },
+    "changedPixels": 10124,
+    "meanChannelDelta": 0.6014075520833333,
+    "active": {
+      "time": 4,
+      "birds": true,
+      "traffic": true,
+      "waterDetail": 1
+    },
+    "reduced": {
+      "time": 4,
+      "birds": false,
+      "traffic": false,
+      "waterDetail": 0
+    },
+    "low": {
+      "time": 4,
+      "birds": false,
+      "traffic": false,
+      "waterDetail": 0
+    }
+  },
+  "resources": [
+    {
+      "samples": 0,
+      "fps": 0,
+      "meanMs": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "simulationCpuMs": 0,
+      "renderSubmissionCpuMs": 0,
+      "calls": 138,
+      "triangles": 34221,
+      "geometries": 150,
+      "textures": 8,
+      "programs": 28,
+      "heapUsedBytes": 33112525,
+      "heapLimitBytes": 4395630592,
+      "heapAvailableBytes": 4362518067,
+      "gpuMemoryBytes": null,
+      "quality": "Low",
+      "auto": false,
+      "dpr": 0.85,
+      "resolutionScale": 1,
+      "reducedEffects": true,
+      "trackBuilds": 3,
+      "lowDetailRivals": 0,
+      "canvas": [
+        544,
+        340
+      ]
+    },
+    {
+      "samples": 0,
+      "fps": 0,
+      "meanMs": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "simulationCpuMs": 0,
+      "renderSubmissionCpuMs": 0,
+      "calls": 138,
+      "triangles": 34221,
+      "geometries": 150,
+      "textures": 8,
+      "programs": 28,
+      "heapUsedBytes": 44394867,
+      "heapLimitBytes": 4395630592,
+      "heapAvailableBytes": 4351235725,
+      "gpuMemoryBytes": null,
+      "quality": "Low",
+      "auto": false,
+      "dpr": 0.85,
+      "resolutionScale": 1,
+      "reducedEffects": true,
+      "trackBuilds": 5,
+      "lowDetailRivals": 0,
+      "canvas": [
+        544,
+        340
+      ]
+    },
+    {
+      "samples": 0,
+      "fps": 0,
+      "meanMs": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "simulationCpuMs": 0,
+      "renderSubmissionCpuMs": 0,
+      "calls": 138,
+      "triangles": 34221,
+      "geometries": 150,
+      "textures": 8,
+      "programs": 28,
+      "heapUsedBytes": 36121312,
+      "heapLimitBytes": 4395630592,
+      "heapAvailableBytes": 4359509280,
+      "gpuMemoryBytes": null,
+      "quality": "Low",
+      "auto": false,
+      "dpr": 0.85,
+      "resolutionScale": 1,
+      "reducedEffects": true,
+      "trackBuilds": 7,
+      "lowDetailRivals": 0,
+      "canvas": [
+        544,
+        340
+      ]
+    },
+    {
+      "samples": 0,
+      "fps": 0,
+      "meanMs": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "simulationCpuMs": 0,
+      "renderSubmissionCpuMs": 0,
+      "calls": 138,
+      "triangles": 34221,
+      "geometries": 150,
+      "textures": 8,
+      "programs": 28,
+      "heapUsedBytes": 34045498,
+      "heapLimitBytes": 4395630592,
+      "heapAvailableBytes": 4361585094,
+      "gpuMemoryBytes": null,
+      "quality": "Low",
+      "auto": false,
+      "dpr": 0.85,
+      "resolutionScale": 1,
+      "reducedEffects": true,
+      "trackBuilds": 9,
+      "lowDetailRivals": 0,
+      "canvas": [
+        544,
+        340
+      ]
+    }
+  ]
+}

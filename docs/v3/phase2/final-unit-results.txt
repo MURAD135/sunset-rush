@@ -1,0 +1,39 @@
+
+> sunset-rush@1.1.0-dev test
+> node --test --test-isolation=none tests/*.test.js
+
+✔ sport body and glass remain finite and within existing vehicle dimensions (75.377861ms)
+✔ visual suspension is bounded, cadence independent and cannot mutate the driving pose (6.078311ms)
+✔ fixed-step simulation is identical at 30, 60, 120 and 144 Hz (25.897824ms)
+✔ clock bounds long stalls instead of a runaway catch-up (0.488561ms)
+✔ three complete laps require ordered sectors and preserve lap times (12.15618ms)
+✔ line rocking, reverse driving, teleports and off-road cannot grant a lap (8.686679ms)
+✔ finish order is frozen even after an opponent drives farther (0.683083ms)
+✔ Cannon integrates free motion and resolves a stationary rival contact (92.741168ms)
+✔ gamepad deadzone, proportional triggers and disconnected release (0.404568ms)
+✔ smoke expands and fades, while a reduced pool recycles existing resources (6.872041ms)
+✔ nitro and collision sparks retain distinct lifetimes and bounded projected sizes (0.545529ms)
+✔ water uniforms and custom shadow resources are disposed once on track replacement (8.171745ms)
+✔ animated environmental instances share one time source and remain bounded (6.791105ms)
+✔ cluster bounds make r128 instances visible in the correct frustum (1.226708ms)
+✔ car LOD preserves its detail hierarchy and uses hysteresis near the threshold (30.307388ms)
+✔ frame metrics use bounded storage, retain chronological samples and honest memory availability (0.650774ms)
+✔ dynamic resolution reduces sustained load gradually and respects its floor (3.054343ms)
+✔ hysteresis rejects alternating borderline frames and ignores a suspended tab (0.807786ms)
+✔ quality presets retain saved IDs and offer all five menu choices (0.252363ms)
+✔ player and rival interpolate without changing authoritative endpoints (1.791284ms)
+✔ fixed 60 Hz motion renders uniformly at 30/60/120/144 Hz with one-step latency (17.819769ms)
+✔ reset discards old positions, orientations and wheel phases after recovery (1.214874ms)
+✔ interpolating meshes cannot change Cannon contact response at any display cadence (167.815608ms)
+✔ clock alpha stays valid on stalls, invalid times and pause/reset (0.353367ms)
+✔ camera damping and FOV converge equally at 30/60/120/144 Hz (13.517827ms)
+✔ camera mode switches ease without teleporting and heading wraps the short way (0.333077ms)
+✔ shake is continuous, bounded, deterministic and fully disabled at zero (29.050705ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1152.939039
