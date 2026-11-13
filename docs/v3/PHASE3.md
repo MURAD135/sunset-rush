@@ -85,3 +85,11 @@ See `phase3/save-cost.json`.
 No hardware GPU/iOS Safari/Android Chrome listening/performance tests available.
 No new FPS claim. GPU rendering work in this phase is unchanged; JavaScript,
 local save latency and audio still require physical-device profiling.
+
+## Cloud/native groundwork
+
+Four transport/lifecycle unit tests passed (mock backend only), bringing the
+suite to 47. Production build and `prepare:native` passed, staging 12 runtime
+files under `artifacts/native/2ce0a34276ff`. No signed application, SDK install,
+cloud service, deployment or store upload. See `CLOUD_AND_STORES.md` for the
+implemented contracts and actual remaining work. Browser regression pending.

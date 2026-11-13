@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { SaveStore } from './save-system.js';
+import { bindLifecycle, isNativeRuntime } from './platform.js';
 import { installSaveUI } from './save-ui.js';
 import { RaceAudio } from './audio.js';
 import { steeringResponse, RivalPlanner } from './driving.js';
@@ -581,7 +582,7 @@ addEventListener('deviceorientation',e=>{if(e.gamma!=null)GM=Math.abs(e.gamma)<3
 $('shr').onclick=()=>{const t=tr('النقاط:')+' '+Math.round(SC)+' · SUNSET RUSH';if(navigator.share)navigator.share({text:t}).catch(()=>{});else try{navigator.clipboard.writeText(t)}catch(e){}};dayInit();achUi();
 correctColors(gar);setMode('garage');showMenu();requestAnimationFrame(frame);
 
-if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+if (import.meta.env.PROD && !isNativeRuntime() && 'serviceWorker' in navigator) {
   addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(console.warn));
 }
 
@@ -589,8 +590,7 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
 saves.beforeFlush=()=>{svu();svs();saves.setItem('sunset-preferences',JSON.stringify({sport,muted:!!mute,auto:!!AUTO,vibrate:!!VB,sensitivity:SS}));};
 installSaveUI(saves,{document,window});
 setInterval(()=>saves.requestFlush(),5000);
-addEventListener('pagehide',()=>{saves.requestFlush();audio?.silence();});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)saves.requestFlush();});
+bindLifecycle({document,window,nativeApp:window.SunsetRushNative?.app,save:()=>saves.requestFlush(),silence:()=>audio?.silence(),pause:()=>{if(mode==='race'&&state!=='done'&&!paused)pauseRace();}});
 addEventListener('storage',event=>saves.observe(event.key));
 $('sSet').addEventListener('click',event=>{if(!event.target.closest('#saveImport,#saveExport,#savePrevious,#saveFile'))saves.requestFlush();});
 saves.requestFlush();

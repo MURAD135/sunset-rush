@@ -15,7 +15,9 @@
     "test:visuals": "node tests/environment.mjs && node tests/vehicles.mjs && node tests/effects.mjs",
     "test:branding": "node tests/branding.mjs",
     "profile": "node tests/profile.mjs",
-    "test:endurance": "node tests/endurance.mjs"
+    "test:endurance": "node tests/endurance.mjs",
+    "prepare:native": "npm run build && node scripts/prepare-native.mjs",
+    "test:phase3": "node tests/audio-browser.mjs && node tests/driving-browser.mjs && node tests/save-browser.mjs"
   },
   "dependencies": {
     "three": "0.128.0",
