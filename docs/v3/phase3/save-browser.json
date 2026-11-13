@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "legacy migration retains wallet, races and unlocked car",
+    "purchase autosaves atomically and survives reload",
+    "real backup download includes preferences",
+    "confirmed import survives pagehide and reload without stale overwrite",
+    "mode and mute restore",
+    "corrupt import leaves profile intact",
+    "quota failure visible and retry succeeds",
+    "second tab makes the stale writer read-only",
+    "daily award does not repeat on reload"
+  ],
+  "errors": []
+}

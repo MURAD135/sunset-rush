@@ -1,0 +1,8 @@
+{
+  "environment": "Node 24 Linux, in-memory storage adapter; excludes physical disk/WebKit and GPU",
+  "scenario": "11 maximum-length 4000-point ghosts, 30 serializations/checksums/readbacks",
+  "chars": 730914,
+  "meanMs": 6.875739799999999,
+  "p95Ms": 19.43814000000002,
+  "p99Ms": 21.745767
+}
