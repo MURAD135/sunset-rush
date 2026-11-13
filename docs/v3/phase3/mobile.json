@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "allSixButtonsFit": true,
+      "threeFingerNitro": true,
+      "cancelReleases": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "allSixButtonsFit": true,
+      "threeFingerNitro": true,
+      "cancelReleases": true
+    }
+  ],
+  "errors": [],
+  "environment": "Chromium touch emulation; not a physical iOS or Android device"
+}

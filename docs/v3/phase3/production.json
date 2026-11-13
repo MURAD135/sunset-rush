@@ -1,0 +1,11 @@
+{
+  "subpath": "http://127.0.0.1:4173/",
+  "offlinePlayable": true,
+  "productionTestHooksAbsent": true,
+  "noExternalRequests": true,
+  "errors": [],
+  "external": [],
+  "cache": [
+    "sunset-rush-fd1e832029e5"
+  ]
+}

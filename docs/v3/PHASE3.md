@@ -73,8 +73,7 @@ Unit coverage now includes migration, malformed fields, interrupted/quota writes
 checksum corruption, future schema protection, previous-generation recovery,
 export/import, stale tabs and pagehide after restore. Eleven save unit tests and nine browser save integration checks passed, including
 real file download/import and a two-tab conflict. A browser timer receiver bug
-found by integration was fixed and covered before commit. Final regression
-results will be appended after completion.
+found by integration was fixed and covered before commit. Final regression results are recorded below.
 
 A worst-size serialization exercise (11 × 4,000-point ghosts, 730,914 characters,
 30 writes) measured mean 6.88 ms, P95 19.44 ms, P99 21.75 ms in Node with an
@@ -92,4 +91,61 @@ Four transport/lifecycle unit tests passed (mock backend only), bringing the
 suite to 47. Production build and `prepare:native` passed, staging 12 runtime
 files under `artifacts/native/2ce0a34276ff`. No signed application, SDK install,
 cloud service, deployment or store upload. See `CLOUD_AND_STORES.md` for the
-implemented contracts and actual remaining work. Browser regression pending.
+implemented contracts and actual remaining work. Browser regression completed successfully as recorded below.
+
+## Final verification — 2026-11-13
+
+All runs below passed on Node 24.22.1 / Linux / Chromium 156 with SwiftShader:
+
+| Check | Result |
+|---|---|
+| Unit suite | 47 passed (original 27 preserved) |
+| Original browser controls/races/resources/mobile | 18 passed |
+| Interpolation/camera + timing | 9 + 6 passed |
+| Additional comparison with committed Phase 2 race evidence | 1 passed; exact four-cadence parity |
+| Quality/DRS/resource checks | 6 passed |
+| Audio integration | 4 passed; six sources, 18 nodes |
+| Sport full races and persistent rewards | Four identical three-lap/four-rival races at 30/60/120/144Hz; rewards and Sport record survive reload |
+| Local save integration | 9 passed; no page errors |
+| Endurance | Four consecutive full races; 119 geometries, 10 textures, 24 programs unchanged |
+| Mobile touch emulation | 390×844 and 844×390 passed |
+| Production | Offline race playable, no external requests, no development hooks or page errors |
+| Production build/native staging | Passed; existing Three.js >500kB chunk advisory remains |
+
+Classic finish: 60.783333333331164 s; Sport finish: 60.44999999999785 s with
+the same test driver. These are race times, **not frame performance**. Retained
+JS heap after diagnostic GC across four races: 7.741, 7.751, 7.858, 7.897 MiB.
+This bounded run did not reveal growing GPU resources; it does not prove absence
+of all long-session leaks. Save serialization can still hitch for large profiles;
+no claim of physical-device FPS or memory profiling is made.
+
+Production cache: `sunset-rush-fd1e832029e5`. Native web-assets staging ID:
+`2ce0a34276ff`. Runtime code is saved in 7f5b578; additional regression tests in
+6fef515. Test evidence and an actual save-settings screenshot are in `phase3/`.
+Earlier matched visual comparisons remain in `phase2/`; this phase did not
+change coastal geometry/lighting and does not claim a new visual before/after.
+
+### Try it
+
+On the local phase-three branch: `npm ci`, then `npm run dev` and open the printed
+local URL. Settings → Driving mode → Sport enables new handling/opponents; Classic
+is retained. Play enables audio. Settings → Save progress offers export, confirmed
+import and restore of the previous generation. `npm run prepare:native` regenerates
+the unsigned staging directory. Cloud save is not enabled.
+
+### Remaining work
+
+- Physical iOS/Safari, Android/Chrome and native WebView tests, controller/audio
+  interruption testing, subjective engine/driving/AI tuning and GPU profiling.
+- Broader Sport combinations of cars/upgrades/weather/forks. Existing race features
+  remain; four-cadence validation currently focuses on the coastal circuit.
+- Real authenticated cloud backend, server revision enforcement and account/conflict
+  UI. The tested adapter contract alone is not working cross-device sync.
+- Native SDK/wrapper projects, native file export/import, app ID confirmation,
+  signing, store artwork/privacy/submission and signed device builds.
+- Browser storage is origin-bound; export before moving between localhost/HTTPS/
+  native origins. No active-race resume checkpoint or guaranteed OS-kill flush.
+
+No push, PR #1/#2 edit, merge or deployment was performed. The unavailable five
+uncommitted files were not represented as recovered; new work is independently
+saved in small commits, and original histories/backups are preserved.
