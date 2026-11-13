@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { RaceAudio } from './audio.js';
 import './style.css';
 import './coast.css';
 import { ArcadePhysics, FixedClock, FIXED_STEP } from './physics.js';
@@ -362,11 +363,11 @@ const mc=$('mm').getContext('2d');
 function mmDraw(){const S=R*(1+TK.a);mc.clearRect(0,0,192,192);mc.lineWidth=12;mc.strokeStyle='rgba(128,128,140,.8)';mc.beginPath();for(let i=0;i<=60;i++){const p=cl(i/60*6.2832),X=96+p[0]/S*76,Y=96+p[1]/S*76;i?mc.lineTo(X,Y):mc.moveTo(X,Y)}mc.stroke();
   const dot=(x,z,c,r)=>{mc.fillStyle=c;mc.beginPath();mc.arc(96+x/S*76,96+z/S*76,r,0,6.283);mc.fill()};
   ai.forEach((a,i)=>dot(a.m.position.x,a.m.position.z,i?'#f1f1f1':'#3a86ff',6));dot(P.x,P.z,'#ff9f1c',8)}
-let AC,osc,gn,mute=0;
-function sndInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();osc=AC.createOscillator();gn=AC.createGain();const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=700;osc.type='sawtooth';gn.gain.value=0;osc.connect(lp);lp.connect(gn);gn.connect(AC.destination);osc.start()}catch(e){AC=0}}
-let rnN=null,rnG=null;
-function rainSnd(){if(!rnN){const b=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;rnN=AC.createBufferSource();rnN.buffer=b;rnN.loop=true;const hp=AC.createBiquadFilter();hp.type='highpass';hp.frequency.value=1800;rnG=AC.createGain();rnG.gain.value=0;rnN.connect(hp);hp.connect(rnG);rnG.connect(AC.destination);rnN.start()}const t=(mode==='race'&&!mute&&!paused&&wxs>0)?(wxs==2?.09:.05):0;rnG.gain.value+=(t-rnG.gain.value)*.1}
-function bip(f,d,ty='square',v=.1){if(!AC||mute)return;try{const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime;o.type=ty;o.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(t+d)}catch(e){}}
+let AC,audio,mute=0;
+function sndInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();audio=new RaceAudio(AC);}catch(e){AC=0}}
+function bip(f,d,type='square',v=.1){if(audio&&!mute&&!document.hidden)audio.cue(f,d,type,v);}
+addEventListener('blur',()=>audio?.silence());
+document.addEventListener('visibilitychange',()=>{if(document.hidden)audio?.silence();});
 const skyM=new THREE.Mesh(new THREE.SphereGeometry(700,16,10),new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide,fog:false,depthWrite:false,toneMapped:false}));skyM.renderOrder=-1;sc.add(skyM);const skyClouds=addSkyClouds(skyM);
 const sunS=new THREE.Sprite(new THREE.SpriteMaterial({map:GLW,color:0xffc68a,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,fog:false}));sunS.scale.set(125,125,1);sunS.visible=false;sc.add(sunS);
 function setSky(top,hor){const g=skyM.geometry,p=g.attributes.position,n=p.count,c=new Float32Array(n*3),a=new THREE.Color(top).convertSRGBToLinear(),b=new THREE.Color(hor).convertSRGBToLinear(),t=new THREE.Color();for(let i=0;i<n;i++){const k=clamp(p.getY(i)/700,0,1);t.copy(b).lerp(a,Math.pow(k,.6));c[i*3]=t.r;c[i*3+1]=t.g;c[i*3+2]=t.b}g.setAttribute('color',new THREE.BufferAttribute(c,3))}
@@ -418,7 +419,7 @@ function skClr(){ski=0;for(let i=0;i<SKN;i++){DM2.position.set(0,-5,0);DM2.rotat
 function skid(){const f=Math.sin(P.th),c=Math.cos(P.th);[-1,1].forEach(s=>{DM2.position.set(P.x-f*1.6-c*s*.95,.045,P.z-c*1.6+f*s*.95);DM2.rotation.set(0,P.mv,0);DM2.updateMatrix();skM.setMatrixAt(ski++%SKN,DM2.matrix)});skM.instanceMatrix.needsUpdate=true}
 function carLock(){[...$('cs').children].forEach((b,i)=>{b.textContent=TY[i].n+(i>5&&!S.cu.includes(i)?' 🔒'+(i==6?800:1200):'')})}
 function rbf(a){const gap=P.cum-a.cum,lap=Math.max(0,Math.floor(Math.max(P.cum,0)/6.2832));return clamp(1+gap*.12,.93,1.07)*(1+.02*lap)}
-function sndUpd(){if(!AC||!gn)return;rainSnd();const on=mode==='race'&&!mute&&!paused&&state!=='count';gn.gain.value+=((on?(nosOn?.08:.05):0)-gn.gain.value)*.2;{const g=Math.min(5,Math.floor(P.v/12)),r=Math.min(1,(P.v-g*12)/12);osc.frequency.value=60+g*10+r*(95+g*8)+(nosOn?25:0)}}
+function sndUpd(){audio?.update({active:mode==='race'&&!paused&&!document.hidden,muted:!!mute,speed:P.v,throttle:state==='count'?0:Math.max(K.g,AUTO),car:ty,nitro:!!nosOn,drift:Math.abs(wrapAngle(P.mv-P.th))*2,weather:wxs});}
 let last=performance.now();
 
 function updateScene(elapsed){
@@ -456,7 +457,7 @@ cv.addEventListener('pointermove',e=>{
 });
 ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,e=>{ptr.delete(e.pointerId);pd=0}));
 cv.addEventListener('wheel',e=>{if(mode==='garage'){dist=clamp(dist+e.deltaY*.01,5,18);idle=0}},{passive:true});
-function pauseRace(){if(mode!=='race'||state==='done')return;paused=paused?0:1;$('pz').hidden=!paused;input?.clear();simulationClock.reset();poses.reset();last=performance.now();}
+function pauseRace(){if(mode!=='race'||state==='done')return;paused=paused?0:1;if(paused)audio?.silence();$('pz').hidden=!paused;input?.clear();simulationClock.reset();poses.reset();last=performance.now();}
 function recoverCar(){
   if(mode!=='race'||state!=='go'||paused)return;
   const p=cl(P.cum,0,NB);P.x=p[0];P.z=p[1];P.th=P.mv=p[2];P.v=0;P.y=P.vy=0;P.air=0;
@@ -493,7 +494,7 @@ $('mSet').onclick=()=>shw('sSet',1);$('cS').onclick=()=>shw('sSet',0);$('mHow').
 $('mGar').onclick=()=>{setMode('garage');$('menu').hidden=true;$('gTop').hidden=$('gBot').hidden=false};$('gm').onclick=showMenu;
 $('mPlay').onclick=()=>{DAILY=0;$('menu').hidden=true;sndInit();if(AC&&AC.resume)AC.resume();setMode('race')};
 const tgl=(id,fn)=>{const b=$(id);b.onclick=()=>{const on=b.getAttribute('aria-checked')!=='true';b.setAttribute('aria-checked',String(on));fn(on)}};
-tgl('tgS',on=>{mute=!on;sI()});tgl('tgV',on=>VB=on?1:0);tgl('tgA',on=>AUTO=on?1:0);
+tgl('tgS',on=>{mute=!on;if(on){sndInit();audio?.resume();}sndUpd();sI()});tgl('tgV',on=>VB=on?1:0);tgl('tgA',on=>AUTO=on?1:0);
 seg('ss',['منخفضة','عادية','عالية'],1,i=>SS=[.8,1,1.25][i]);
 seg('cameraShake',['متوقف','خفيف','كامل'],[0,.35,1].indexOf(cameraShake),i=>{cameraShake=[0,.35,1][i];try{localStorage.setItem('sunset-camera-shake',cameraShake)}catch(e){}});
 $('rst').onclick=()=>{if(!rs2){rs2=1;$('rst').textContent='اضغط مرة أخرى للتأكيد';setTimeout(()=>{rs2=0;$('rst').textContent='إعادة ضبط التقدم والعملات'},3000)}else{UP=[0,0,0,0,0];coins=0;svu();upUi();rs2=0;$('rst').textContent='تمت إعادة الضبط'}};
@@ -515,7 +516,7 @@ if(matchMedia('(pointer:coarse)').matches)setQ(2);else if(devicePixelRatio>2.5||
 try{const q=JSON.parse(localStorage.getItem('sunset-q'));if(q){QA=q[0]==0;SHD=q[1];CRV=q[2];FPSON=q[3];setQ(QA?ql:q[0]-1);tgs('tgSh',SHD);tgs('tgCr',CRV);tgs('tgFp',FPSON);$('fp').hidden=!FPSON}}catch(e){}
 applyQuality();applyResolution();
 $('start').onclick=()=>{DAILY=0;sndInit();if(AC&&AC.resume)AC.resume();setMode('race')};
-$('snd').onclick=()=>{mute=!mute;sI()};
+$('snd').onclick=()=>{mute=!mute;if(!mute){sndInit();audio?.resume();}sndUpd();sI()};
 [['أمام',0,.2],['جانب',1.57,.12],['خلف',3.14,.2],['فوق',.6,1.3]].forEach(([n,y,p])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{yaw=y;pitch=p;idle=-6};$('vw').appendChild(b)});$('back').onclick=$('toG').onclick=()=>setMode('garage');$('again').onclick=reset;
 const I18=[
 ['فائقة','Ultra','Ultra','Ultra'],['تخفيف المؤثرات','Reduce effects','Réduire les effets','Reducir efectos'],['دقة تكيفية في الوضع التلقائي','Adaptive resolution in Auto','Résolution adaptative en Auto','Resolución adaptativa en Auto'],['هدف الإطارات','Target FPS','FPS cible','FPS objetivo'],
@@ -565,6 +566,7 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
 if(import.meta.env.DEV && new URLSearchParams(location.search).has('test')){
   garage(0);testManual=true;
   window.__sunset={
+    audio:()=>audio?.diagnostics()||null,
     start:()=>{$('menu').hidden=true;setMode('race');},
     state:()=>({mode,state,paused,car:ty,track:trk,time:P.t,speed:P.v,nitro:P.nt,x:P.x,z:P.z,heading:P.th,direction:P.mv,drifting:Math.abs(wrapAngle(P.mv-P.th))>.12,cum:P.cum,lap:progress.completed,laps:[...P.laps],finish:P.fin,rank:P.place,results:standings(),keys:{...K},contacts:drivePhysics.contacts,renderer:{calls:rd.info.render.calls,triangles:rd.info.render.triangles,geometries:rd.info.memory.geometries,textures:rd.info.memory.textures},frameTimes:frameMetrics.frames()}),
     step:(frames,keys={})=>{Object.assign(K,{l:0,r:0,g:0,b:0,h:0,n:0},keys);for(let i=0;i<frames;i++)if(!paused)stepSimulation(FIXED_STEP);if(!paused)renderRace(1,Math.min(frames*FIXED_STEP,.2));},
