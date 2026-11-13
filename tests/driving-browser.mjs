@@ -26,7 +26,9 @@ try{
   const result=await run(page,hz);assert.equal(result.state,'done');assert.equal(result.laps.length,3);assert.equal(result.results.length,5);
   const ai=await page.evaluate(()=>__sunset.rivals());assert.ok(ai.decisions.every(n=>n===ai.decisions[0]&&n>600&&n<=900));
   if(races.length){const ref={...races[0],hz};assert.deepEqual(result,ref);}races.push(result);
+  const saved=await page.evaluate(async()=>{await __sunset.flush();return __sunset.save();});assert.equal(saved.stats.r,1);assert.ok(saved.stats.bt['10:sport']>0);assert.equal(saved.stats.bt['10'],undefined);
+  await page.reload();await page.waitForFunction(()=>window.__sunset);const restored=await page.evaluate(()=>__sunset.save());assert.equal(restored.coins,saved.coins);assert.equal(restored.stats.r,1);assert.equal(restored.stats.bt['10:sport'],saved.stats.bt['10:sport']);
   await page.close();
  }
- assert.deepEqual(errors,[]);await mkdir('artifacts/phase3',{recursive:true});await writeFile('artifacts/phase3/driving.json',JSON.stringify({races,errors},null,2));console.log('Sport: four identical complete races',races.map(r=>({hz:r.hz,finish:r.finish,rank:r.rank})));
+ assert.deepEqual(errors,[]);await mkdir('artifacts/phase3',{recursive:true});await writeFile('artifacts/phase3/driving.json',JSON.stringify({races,rewardsAndSportRecordsSurviveReload:true,errors},null,2));console.log('Sport: four identical complete races',races.map(r=>({hz:r.hz,finish:r.finish,rank:r.rank})));
 }finally{await browser.close();}

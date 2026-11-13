@@ -10,7 +10,7 @@
     "test": "node --test --test-isolation=none tests/*.test.js",
     "test:production": "node tests/production.mjs",
     "test:browser": "node tests/browser.mjs",
-    "test:phase1": "node tests/phase1.mjs && node tests/timing.mjs",
+    "test:phase1": "node tests/phase1.mjs && node tests/timing.mjs && node tests/classic-baseline.mjs",
     "test:phase2": "node tests/phase2.mjs",
     "test:visuals": "node tests/environment.mjs && node tests/vehicles.mjs && node tests/effects.mjs",
     "test:branding": "node tests/branding.mjs",

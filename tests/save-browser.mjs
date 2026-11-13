@@ -18,6 +18,6 @@ try{
  await page.locator('#driveMode button').first().click();await page.waitForFunction(()=>__sunset.save().status==='unavailable');assert.ok(await page.locator('#saveNotice').isVisible());await page.evaluate(async()=>{restoreStorage();await __sunset.flush();});assert.equal((await state()).status,'saved');checks.push('quota failure visible and retry succeeds');
  const other=await context.newPage();await other.goto(base+'/?test=1');await other.waitForFunction(()=>window.__sunset);await Promise.any([page.waitForFunction(()=>__sunset.save().status==='conflict'),other.waitForFunction(()=>__sunset.save().status==='conflict')]);const states=await Promise.all([state(),other.evaluate(()=>__sunset.save())]);assert.ok(states.some(s=>s.status==='conflict'));checks.push('second tab makes the stale writer read-only');await other.close();
  await page.reload();await ready();assert.equal((await state()).stats.r,7);assert.equal((await state()).coins,350);checks.push('daily award does not repeat on reload');
- await page.locator('#mSet').click();await page.screenshot({path:'artifacts/phase3/save-settings.png'});
+ await page.locator('#mSet').click();await page.locator('#saveStatus').scrollIntoViewIfNeeded();await page.screenshot({path:'artifacts/phase3/save-settings.png'});
  assert.deepEqual(errors,[]);await mkdir('docs/v3/phase3',{recursive:true});await writeFile('docs/v3/phase3/save-browser.json',JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({checks,errors},null,2));
 }finally{await browser.close();}
