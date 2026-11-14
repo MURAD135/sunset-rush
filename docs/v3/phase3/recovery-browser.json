@@ -1,0 +1,7 @@
+{
+  "checks": [
+    "unreadable local generations are downloadable without overwriting originals",
+    "explicit validated import archives both corrupt generations and restores coherent progress after reload"
+  ],
+  "errors": []
+}

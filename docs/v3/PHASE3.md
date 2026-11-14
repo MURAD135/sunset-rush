@@ -252,3 +252,16 @@ Mock tests cover CAS, changing data, logout and account changes while a restore
 waits for the save lock. No credentials, backend or external accounts exist here.
 See CLOUD_AND_STORES.md for the security boundary and remaining integration.
 The separate background-work commit 2889066 passed both remote CI runs.
+
+
+## Recovery when both local generations are damaged
+
+Explicit import can now recover an all-damaged profile. It validates the chosen
+backup, verifies an exact archive of both raw slots, then replaces a slot and
+seals the old live state until reload. The archive is downloadable in Settings.
+Quota/readback failures, concurrent edits, future-version profiles and an already
+occupied different damage archive refuse replacement. The last case requires
+manual archive export/storage maintenance; it is intentionally not silent loss.
+68 units/build plus two browser recovery checks passed (`phase3/recovery-browser.json`).
+An acknowledged autosave and an exported backup remain the durability boundary;
+this does not protect against OS-wide site-data deletion or physical disk failure.

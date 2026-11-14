@@ -3,6 +3,7 @@ import { normalizeSession, normalizeResults } from './profile-data.js';
 // Checksums detect accidental damage; they are NOT anti-cheat or authentication.
 export const SAVE_VERSION=2;
 export const SAVE_KEYS=['sunset-profile-a','sunset-profile-b'];
+export const DAMAGED_BACKUP_KEY='sunset-damaged-backup';
 export const MAX_SAVE_CHARS=2_000_000;
 export const defaultStats=()=>({t:0,r:0,w:0,hs:0,ds:0,ns:0,tc:0,mx:0,f:{},a:[],o:[],bt:{},ts:0,xp:0,lv:1,dm:null,cu:[]});
 const object=v=>v&&typeof v==='object'&&!Array.isArray(v);
@@ -98,6 +99,33 @@ export class SaveStore {
       try{return this.import(text);}finally{if(!this.restored)this.beforeFlush=prepare;}
     };
     return this.withLock?this.withLock(restore):Promise.resolve().then(restore);
+  }
+  get canRecoverDamage(){return this.blocked&&this.slot===-1&&this.issues.includes('damaged-slot')&&!this.issues.includes('future-version');}
+  damagedBackup(){
+    // Keep an exact forensic copy; it is deliberately not a playable/importable save.
+    if(this.canRecoverDamage)return JSON.stringify({format:'sunset-rush-damaged',version:1,slots:this.tokens});
+    return this.storage.getItem(DAMAGED_BACKUP_KEY);
+  }
+  async recoverDamage(text){
+    const incoming=decodeSave(text);
+    const recover=()=>{
+      if(!this.canRecoverDamage)throw Error('Explicit recovery requires only damaged local generations');
+      if(SAVE_KEYS.some((key,i)=>this.storage.getItem(key)!==this.tokens[i]))throw Error('Storage changed; reload before recovery');
+      const archive=this.damagedBackup(),previousArchive=this.storage.getItem(DAMAGED_BACKUP_KEY);
+      // Never overwrite an older forensic archive silently. Download/remove it
+      // deliberately before attempting another damaged-profile recovery.
+      if(previousArchive!==null&&previousArchive!==archive)throw Error('A previous damaged backup must be preserved first');
+      this.storage.setItem(DAMAGED_BACKUP_KEY,archive);
+      if(this.storage.getItem(DAMAGED_BACKUP_KEY)!==archive)throw Error('Cannot preserve damaged data');
+      const restored=encodeSave(incoming.data,1,this.now());
+      this.storage.setItem(SAVE_KEYS[0],restored);
+      if(this.storage.getItem(SAVE_KEYS[0])!==restored)throw Error('Restore readback failed');
+      this.tokens[0]=restored;this.slot=0;this.revision=1;this.data=incoming.data;
+      this.blocked=false;this.dirty=false;this.restored=true;this.beforeFlush=null;
+      if(this.timer!==null)this.cancel.call(globalThis,this.timer);this.timer=null;
+      this.emit('saved');return true;
+    };
+    return this.withLock?this.withLock(recover):Promise.resolve().then(recover);
   }
   flush(){
     if(this.restored)return true;

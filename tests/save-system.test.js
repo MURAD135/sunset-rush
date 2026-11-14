@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {SaveStore,SAVE_KEYS,encodeSave,decodeSave,defaultStats} from '../src/save-system.js';
+import {SaveStore,SAVE_KEYS,DAMAGED_BACKUP_KEY,encodeSave,decodeSave,defaultStats} from '../src/save-system.js';
 const memory=()=>{const map=new Map();return{map,get length(){return map.size;},key:i=>[...map.keys()][i],getItem:k=>map.get(k)??null,setItem(k,v){map.set(k,String(v));}};};
 const open=s=>new SaveStore(s,{schedule:()=>0,cancel:()=>{},now:()=>123});
 const wallet=(store,coins)=>store.setItem('sunset-up',JSON.stringify({u:[1,0,0,0,0],c:coins}));
@@ -56,4 +56,25 @@ test('failed live snapshot capture is reported without replacing the durable gen
  const storage=memory(),a=open(storage);wallet(a,100);a.flush();wallet(a,200);a.beforeFlush=()=>{throw new Error('Snapshot failed');};
  assert.equal(await a.requestFlush(),false);assert.equal(a.status,'unavailable');assert.equal(coins(open(storage)),100);
  a.beforeFlush=()=>wallet(a,250);assert.equal(await a.requestFlush(),true);assert.equal(coins(open(storage)),250);
+});
+
+test('explicit all-damaged recovery archives exact originals before restoring a validated backup',async()=>{
+ const s=memory();s.setItem(SAVE_KEYS[0],'broken A');s.setItem(SAVE_KEYS[1],'broken B');const a=open(s),text=encodeSave({'sunset-up':'{"u":[1,0,0,0,0],"c":450}'});
+ assert.equal(a.canRecoverDamage,true);await assert.rejects(a.recoverDamage('invalid'));assert.equal(s.getItem(DAMAGED_BACKUP_KEY),null);
+ assert.ok(await a.recoverDamage(text));assert.deepEqual(JSON.parse(s.getItem(DAMAGED_BACKUP_KEY)).slots,['broken A','broken B']);assert.equal(coins(open(s)),450);
+ a.beforeFlush=()=>wallet(a,0);a.flush();assert.equal(coins(open(s)),450);assert.ok(a.damagedBackup());
+});
+test('archive quota failure and concurrent edits cannot destroy damaged originals',async()=>{
+ const text=encodeSave({'sunset-up':'{"u":[0,0,0,0,0],"c":450}'});
+ for(const failure of ['quota','readback','concurrent']){const s=memory();s.setItem(SAVE_KEYS[0],'broken A');s.setItem(SAVE_KEYS[1],'broken B');const a=open(s),set=s.setItem;
+ if(failure==='quota')s.setItem=(k,v)=>{if(k===DAMAGED_BACKUP_KEY)throw Error('Quota');set(k,v);};
+ if(failure==='readback')s.setItem=(k,v)=>{if(k!==DAMAGED_BACKUP_KEY)set(k,v);};
+ if(failure==='concurrent')s.setItem(SAVE_KEYS[1],'newer');
+ await assert.rejects(a.recoverDamage(text));assert.equal(s.getItem(SAVE_KEYS[0]),'broken A');assert.equal(s.getItem(SAVE_KEYS[1]),failure==='concurrent'?'newer':'broken B');assert.equal(a.blocked,true);}
+});
+test('future-version, stale-writer and archived damage are not silently replaced by recovery',async()=>{
+ const text=encodeSave({'sunset-up':'{"u":[0,0,0,0,0],"c":450}'});
+ for(const mode of ['future','stale','archive']){const s=memory();s.setItem(SAVE_KEYS[0],mode==='future'?' {"version":9}':'broken');const a=open(s);
+ if(mode==='stale')a.issues=[];if(mode==='archive')s.setItem(DAMAGED_BACKUP_KEY,'older forensic archive');const original=s.getItem(SAVE_KEYS[0]);
+ await assert.rejects(a.recoverDamage(text));assert.equal(s.getItem(SAVE_KEYS[0]),original);if(mode==='archive')assert.equal(s.getItem(DAMAGED_BACKUP_KEY),'older forensic archive');}
 });

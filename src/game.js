@@ -549,6 +549,7 @@ $('snd').onclick=()=>{mute=!mute;if(!mute){sndInit();if(!paused)audio?.resume();
 const I18=[
 ['ملف اللاعب','Player profile','Profil du joueur','Perfil del jugador'],['إنشاء ملف ضيف محلي','Create local guest profile','Créer un profil invité local','Crear perfil invitado local'],['المزامنة السحابية غير مفعّلة','Cloud sync is not enabled','Synchronisation cloud non activée','Sincronización en la nube desactivada'],
 ['آخر السباقات','Recent races','Courses récentes','Carreras recientes'],
+['تنزيل البيانات المتضررة','Download damaged data','Télécharger les données endommagées','Descargar datos dañados'],
 ['حفظ التقدم','Save progress','Sauvegarde','Guardar progreso'],['تصدير نسخة','Export backup','Exporter une copie','Exportar copia'],['استيراد نسخة','Import backup','Importer une copie','Importar copia'],['استعادة النسخة السابقة','Restore previous save','Restaurer la copie précédente','Restaurar copia anterior'],
 
 ['نمط القيادة','Driving mode','Mode de conduite','Modo de conducción'],['كلاسيكي','Classic','Classique','Clásico'],['رياضي','Sport','Sport','Deportivo'],
@@ -610,7 +611,7 @@ installSaveUI(saves,{document,window});
 setInterval(()=>{if(!document.hidden&&!nativeBackground&&!pageHidden)saves.requestFlush();},5000);
 bindLifecycle({document,window,nativeApp:window.SunsetRushNative?.app,save:()=>saves.requestFlush(),silence:()=>audio?.suspend(),onActivity:(active,source)=>{if(source==='native')nativeBackground=!active;if(source==='page')pageHidden=!active;frameBudget.reset();last=performance.now();simulationClock.reset();poses.reset();},pause:()=>{if(mode==='race'&&state!=='done'&&!paused)pauseRace();}});
 addEventListener('storage',event=>saves.observe(event.key));
-$('sSet').addEventListener('click',event=>{if(!event.target.closest('#saveImport,#saveExport,#savePrevious,#saveFile'))saves.requestFlush();});
+$('sSet').addEventListener('click',event=>{if(!event.target.closest('#saveImport,#saveExport,#savePrevious,#saveDamaged,#saveFile'))saves.requestFlush();});
 for(const id of ['gBot','gTop']){$(id).addEventListener('click',()=>saves.requestFlush());$(id).addEventListener('input',()=>saves.setItem('sunset-session',JSON.stringify(sessionSnapshot())));}
 for(const id of ['snd','cmb'])$(id).addEventListener('click',()=>saves.requestFlush());
 saves.requestFlush();
