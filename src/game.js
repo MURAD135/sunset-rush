@@ -547,6 +547,7 @@ $('start').onclick=()=>{DAILY=0;sndInit();setMode('race')};
 $('snd').onclick=()=>{mute=!mute;if(!mute){sndInit();if(!paused)audio?.resume();}else audio?.suspend();sndUpd();sI()};
 [['أمام',0,.2],['جانب',1.57,.12],['خلف',3.14,.2],['فوق',.6,1.3]].forEach(([n,y,p])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{yaw=y;pitch=p;idle=-6};$('vw').appendChild(b)});$('back').onclick=$('toG').onclick=()=>setMode('garage');$('again').onclick=reset;
 const I18=[
+['ملف اللاعب','Player profile','Profil du joueur','Perfil del jugador'],['إنشاء ملف ضيف محلي','Create local guest profile','Créer un profil invité local','Crear perfil invitado local'],['المزامنة السحابية غير مفعّلة','Cloud sync is not enabled','Synchronisation cloud non activée','Sincronización en la nube desactivada'],
 ['آخر السباقات','Recent races','Courses récentes','Carreras recientes'],
 ['حفظ التقدم','Save progress','Sauvegarde','Guardar progreso'],['تصدير نسخة','Export backup','Exporter une copie','Exportar copia'],['استيراد نسخة','Import backup','Importer une copie','Importar copia'],['استعادة النسخة السابقة','Restore previous save','Restaurer la copie précédente','Restaurar copia anterior'],
 

@@ -3,13 +3,15 @@
 ## Implemented boundary, not an active service
 
 `src/cloud-save.js` is backend-independent and disabled without an injected
-transport. No login, remote endpoint, account registration, analytics or network
-requests were added. Tests use an explicitly mocked backend.
+transport. No remote login, endpoint, account registration, analytics or network
+requests were added. The optional GuestProfile is a random local identifier,
+not a credential, authenticated guest or cloud account. It is not exported with
+progress. Creating it does not change wallets or enroll any external service. Tests use an explicitly mocked backend.
 
 Transport contract (authenticated account is determined **server-side**):
 
 ```js
-read() // null, or { revision: opaqueServerRevision, save: format1JSONString }
+read() // null, or { revision: opaqueServerRevision, save: validatedVersion2JSONString }
 write({ save, expectedRevision }) // { revision }, or { conflict: true }
 // expectedRevision: null means create only if no cloud save exists.
 ```
@@ -31,6 +33,28 @@ only a candidate; `SaveStore.restore()` performs validated backup and adoption.
 An interrupted response must be followed by read/compare before retry, not blind
 repeated rewards. Account deletion, export, retention and recovery policy belong
 to the future backend and store release.
+
+## Explicit conflict review coordinator
+
+`CloudReview` wraps the transport with a session/review generation. The caller
+must explicitly inject an already authenticated, account-bound transport; the
+client boolean is only an integration guard, never server authorization. The
+game does not instantiate a cloud provider. Local guest IDs cannot authenticate.
+
+Each conflict requires a new explicit local/cloud choice. Local choice performs
+server compare-and-swap; remote choice re-reads the reviewed revision, then
+checks the local snapshot and session again inside the SaveStore lock before
+backing up and restoring. Logout/account changes discard pending reviews. No
+wallet addition/max merge occurs; graphics/control/session choices stay local.
+An upload already accepted by the old account's server cannot be recalled on
+logout: the future transport must remain bound to that account and re-check
+authorization server-side. Credentials must never be put in these JSON exports.
+
+Mocks cover disabled/unauthenticated operation, local and remote edits, CAS
+conflicts, logout during read, and account change while waiting for a save lock.
+This is tested local architecture, not functioning cross-device synchronization.
+A production identity provider, transport, account-linking/deletion policy and
+conflict-review UI remain required before activation.
 
 ## Concrete packaging groundwork
 

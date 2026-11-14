@@ -54,6 +54,7 @@ export function decodeSave(text){
   for(const [key,value] of Object.entries(e.data))if(typeof value!=='string'||normalizeValue(key,value)!==value)throw Error('Invalid save data');
   return e;
 }
+export const profileFingerprint=data=>JSON.stringify(Object.entries(data).sort(([a],[b])=>a.localeCompare(b)));
 export class SaveStore {
   constructor(storage,{schedule=setTimeout,cancel=clearTimeout,now=Date.now,onStatus=()=>{},withLock=null}={}){
     Object.assign(this,{storage,schedule,cancel,now,onStatus,withLock});this.data={};this.tokens=[null,null];this.slot=-1;this.revision=0;this.dirty=false;this.timer=null;this.blocked=false;this.issues=[];this.status='pending';this.requestCount=0;
@@ -87,7 +88,17 @@ export class SaveStore {
       return false;
     }
   }
-  restore(text){return this.withLock?this.withLock(()=>this.import(text)):Promise.resolve().then(()=>this.import(text));}
+  restore(text,{expectedData,guard}={}){
+    const restore=()=>{
+      if(guard&&!guard()){const error=Error('Session changed');error.code='STALE_SESSION';throw error;}
+      const prepare=this.beforeFlush;prepare?.();
+      if(expectedData&&profileFingerprint(this.data)!==profileFingerprint(expectedData)){const error=Error('Progress changed during review');error.code='STALE_PROFILE';throw error;}
+      // Capture once under the lock, then preserve that coherent generation.
+      this.beforeFlush=null;
+      try{return this.import(text);}finally{if(!this.restored)this.beforeFlush=prepare;}
+    };
+    return this.withLock?this.withLock(restore):Promise.resolve().then(restore);
+  }
   flush(){
     if(this.restored)return true;
     this.beforeFlush?.();if(this.timer!==null){this.cancel.call(globalThis,this.timer);this.timer=null;}

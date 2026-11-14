@@ -2,9 +2,10 @@
   "checks": [
     "legacy migration retains wallet, races and unlocked car",
     "purchase autosaves atomically and survives reload",
-    "real backup download includes preferences",
+    "real backup download includes preferences and excludes the optional local guest identity",
     "confirmed import survives pagehide and reload without stale overwrite",
     "mode and mute restore",
+    "optional local guest survives reload/import without a cloud account or credential",
     "corrupt import leaves profile intact",
     "quota failure visible and retry succeeds",
     "denied Web Lock reports unsaved state without unhandled rejection and retries safely",

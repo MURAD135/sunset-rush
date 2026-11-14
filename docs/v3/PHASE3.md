@@ -240,3 +240,15 @@ streams each yielded 30 idle presentations while active streams stayed uncapped.
 These are measured scheduling/behavior counts, not battery watts, temperature or
 physical-device FPS. Evidence: `phase3/power.json`. CI at 2bb58b6 passed before
 this independent batch; final active-race regressions follow after all batches.
+
+
+## Optional guest and guarded cloud conflict architecture
+
+65 units/build and 11 real browser save checks passed. A guest is opt-in and
+local only, persists across reload/import, and is excluded from progress exports.
+The settings explicitly state cloud sync is disabled. CloudReview requires an
+injected authenticated/account-bound transport and an explicit snapshot choice.
+Mock tests cover CAS, changing data, logout and account changes while a restore
+waits for the save lock. No credentials, backend or external accounts exist here.
+See CLOUD_AND_STORES.md for the security boundary and remaining integration.
+The separate background-work commit 2889066 passed both remote CI runs.

@@ -1,6 +1,11 @@
 // Local backup controls. Restoring requires an explicit player confirmation and reload.
+import {GuestProfile} from './guest-profile.js';
 export function installSaveUI(store,{document,window}){
   const $=id=>document.getElementById(id);
+  let guestStorage;try{guestStorage=window.localStorage;}catch{}
+  const guest=new GuestProfile(guestStorage),guestCopy={ar:['ملف ضيف محلي على هذا الجهاز','اللعب المحلي دون حساب','تعذر حفظ ملف الضيف'],en:['Local guest profile on this device','Local play without an account','Guest profile could not be saved'],fr:['Profil invité local sur cet appareil','Jeu local sans compte','Profil invité non enregistré'],es:['Perfil de invitado local en este dispositivo','Juego local sin cuenta','No se pudo guardar el perfil invitado']};
+  const showGuest=()=>{const text=guestCopy[document.documentElement.lang]||guestCopy.en;const exists=!!guest.load();$('guestStatus').textContent=text[exists?0:1];$('guestCreate').disabled=exists;};
+  $('guestCreate').onclick=()=>{try{guest.create();showGuest();}catch{$('guestStatus').textContent=(guestCopy[document.documentElement.lang]||guestCopy.en)[2];}};showGuest();
   const messages={
     ar:{pending:'تغييرات بانتظار الحفظ',saved:'التقدم محفوظ على هذا الجهاز',recovered:'استُعيد التقدم من النسخة السابقة',unavailable:'تعذر الحفظ. صدّر نسخة احتياطية قبل إغلاق اللعبة.',blocked:'بيانات حفظ تالفة أو إصدار أحدث. لم تُستبدل البيانات الأصلية.',conflict:'تغير الحفظ في نافذة أخرى. صدّر تقدمك ثم أعد تحميل الصفحة.',invalid:'تعذر استعادة الملف. لم يُستبدل التقدم.',confirm:'استعادة هذه النسخة واستبدال التقدم الحالي؟ ستُحفظ النسخة الحالية للتراجع.',empty:'لا توجد نسخة سابقة صالحة.'},
     en:{pending:'Changes waiting to save',saved:'Progress saved on this device',recovered:'Recovered the previous save',unavailable:'Saving failed. Export a backup before closing.',blocked:'Damaged save or newer version. Original data was preserved.',conflict:'Another window changed this save. Export your progress, then reload.',invalid:'Could not restore this file. Progress was not replaced.',confirm:'Restore this backup and replace current progress? Current progress will be kept for rollback.',empty:'No valid previous backup.'},
@@ -17,5 +22,5 @@ export function installSaveUI(store,{document,window}){
   $('saveImport').onclick=()=>$('saveFile').click();
   $('saveFile').onchange=async()=>{const file=$('saveFile').files?.[0];if(file){if(file.size>4_000_000){$('saveStatus').textContent=message('invalid');}else{try{await restore(await file.text());}catch{$('saveStatus').textContent=message('invalid');}}}$('saveFile').value='';};
   $('savePrevious').onclick=()=>{try{const text=store.backup();if(text)restore(text);else $('saveStatus').textContent=message('empty');}catch{$('saveStatus').textContent=message('empty');}};
-  $('mSet').addEventListener('click',()=>show(store));
+  $('mSet').addEventListener('click',()=>{show(store);showGuest();});
 }
