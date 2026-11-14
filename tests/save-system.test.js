@@ -44,3 +44,16 @@ test('Web Lock adapter serializes simultaneous flushes and rejects the stale wri
 test('browser timer functions are invoked with the global receiver',()=>{
  const a=new SaveStore(memory(),{schedule:function(){assert.equal(this,globalThis);return 1;},cancel:function(){assert.equal(this,globalThis);}});wallet(a,50);assert.ok(a.flush());
 });
+
+test('denied async or synchronous save locks retain the draft and allow a later retry',async()=>{
+ for(const withLock of [()=>Promise.reject(new Error('SecurityError')),()=>{throw new Error('SecurityError');}]){
+  const storage=memory(),a=open(storage);wallet(a,100);a.flush();a.withLock=withLock;wallet(a,200);
+  assert.equal(await a.requestFlush(),false);assert.equal(a.status,'unavailable');assert.equal(a.dirty,true);assert.equal(coins(a),200);assert.equal(coins(open(storage)),100);
+  a.withLock=fn=>Promise.resolve().then(fn);assert.equal(await a.requestFlush(),true);assert.equal(coins(open(storage)),200);
+ }
+});
+test('failed live snapshot capture is reported without replacing the durable generation',async()=>{
+ const storage=memory(),a=open(storage);wallet(a,100);a.flush();wallet(a,200);a.beforeFlush=()=>{throw new Error('Snapshot failed');};
+ assert.equal(await a.requestFlush(),false);assert.equal(a.status,'unavailable');assert.equal(coins(open(storage)),100);
+ a.beforeFlush=()=>wallet(a,250);assert.equal(await a.requestFlush(),true);assert.equal(coins(open(storage)),250);
+});

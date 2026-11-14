@@ -74,7 +74,15 @@ export class SaveStore {
     const normalized=normalizeValue(key,String(value));if(this.data[key]===normalized)return;
     this.data[key]=normalized;this.dirty=true;if(!this.blocked){this.emit('pending');if(this.timer===null)this.timer=this.schedule.call(globalThis,()=>{this.timer=null;this.requestFlush();},500);}
   }
-  requestFlush(){return this.withLock?this.withLock(()=>this.flush()):Promise.resolve(this.flush());}
+  async requestFlush(){
+    try{return await (this.withLock?this.withLock(()=>this.flush()):this.flush());}
+    catch{
+      // A denied/failed lock is not permission to write without serialization.
+      // Keep the in-memory draft and retry on the next autosave/player action.
+      if(!this.blocked)this.emit('unavailable');
+      return false;
+    }
+  }
   restore(text){return this.withLock?this.withLock(()=>this.import(text)):Promise.resolve().then(()=>this.import(text));}
   flush(){
     if(this.restored)return true;

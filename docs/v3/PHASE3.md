@@ -160,3 +160,10 @@ resume failures are handled. 48 units, production build and seven Chromium
 audio checks passed, including real context suspension and an injected native
 background event. Resources remain six sources/18 nodes. This is not a real
 iOS interruption test; evidence: `phase3/audio-resume.json`.
+
+The save follow-up handles synchronous/asynchronous Web Lock denial and live
+snapshot exceptions inside requestFlush. Failure retains both the durable
+previous generation and the unsaved in-memory draft, reports unavailable, and
+retries through the lock. It never falls back to an unlocked write. 50 unit
+tests, build and all ten browser save checks passed without page errors;
+`phase3/save-browser.json` includes injected lock rejection/recovery.
