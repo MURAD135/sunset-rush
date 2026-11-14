@@ -3,6 +3,10 @@
 Starting point: `382f66a`, branch `feat/sunset-rush-phase3-save-system`.
 No push, deployment, merge, or changes to PR #1/#2.
 
+Latest follow-up: 2026-11-14, runtime commit `0675e64`: 51 units passed,
+interrupted-audio recovery, handled save-lock failures and lap-aware Sport traffic.
+Current verification is recorded at the end and in `phase3/nov14-summary.json`.
+
 ## Recovery checkpoint
 
 On 2026-11-13 this workspace was clean at 382f66a. No stash or new dangling
@@ -174,5 +178,26 @@ Authoritative race progress, finish order, player physics and Classic behavior
 are unchanged. Unit coverage includes seam-ahead traffic, boxed passing lanes,
 fast rear traffic and immutable input progress. 51 units/build and four complete
 Sport races passed; 60.45 s at all four display cadences, with durable rewards
-verified after reload. Native web-assets staging is now `9e1a1e02ded4`; final
-Classic/production regressions are being completed before closing this follow-up.
+verified after reload. Native web-assets staging is now `9e1a1e02ded4`; Classic/production regressions subsequently passed as recorded below.
+
+### Follow-up closed — 2026-11-14
+
+All 51 units/build/native staging passed. Browser checks: original 18 controls/
+races/resources, nine interpolation/camera, six timing, plus exact committed
+Phase 2 outcome comparison (34 total regression checks); seven audio checks;
+ten save checks. Four complete Sport races at 30/60/120/144 Hz remained identical
+and preserved rewards after reload. Production passed offline play, absence of
+development hooks and external requests. Four consecutive Classic races retained
+119 geometries, 10 textures, 24 programs; diagnostic GC heap 7.732 → 7.892 MiB.
+No physical GPU FPS, Safari/iOS/Android or real OS audio-interruption result is
+claimed. Previous mobile-emulation evidence dates from November 13.
+
+Current production cache: `sunset-rush-40f4601e229b`; staged native web assets:
+`artifacts/native/9e1a1e02ded4` (unsigned assets, not APK/AAB/IPA). Incremental
+commits: f2c346e checkpoint, a50cf72 audio recovery, 666bf76 save failure handling,
+0675e64 lapped traffic. Source history and the unavailable-five-files finding
+remain preserved; no PR edits, pushes, merges or deployments occurred.
+
+Next work remains real-device validation/tuning, broader Sport track/weather
+coverage, an authenticated backend and account/conflict UI, and actual native
+SDK projects/signing/store preparation. No cloud synchronization was activated.
