@@ -21,6 +21,8 @@ import { disposeGroup, batchCar, correctColors } from './resources.js';
 let storage;try{storage=window.localStorage;}catch{}
 const saves=new SaveStore(storage,{withLock:navigator.locks?fn=>navigator.locks.request('sunset-rush-profile',fn):null});
 const preferences=JSON.parse(saves.getItem('sunset-preferences')||'{}');
+const savedSession=JSON.parse(saves.getItem('sunset-session')||'null');
+let recentResults=JSON.parse(saves.getItem('sunset-results')||'[]'),raceId='';
 const $=id=>document.getElementById(id),clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 const cv=$('c');let rd;
 try{rd=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:'high-performance'});}catch(error){$('graphicsError').hidden=false;throw error;}
@@ -197,6 +199,7 @@ function setMode(m){
   if(r){reset();$('raceTitle').lastElementChild.textContent=TK.coast?'GOLDEN COAST / CIRCUIT 01':'SUNSET RUSH / ARCADE CIRCUIT';correctColors(rc);if(TK.coast&&thm===0&&!wxs){sc.fog.near=180;sc.fog.far=1400;sc.fog.color.set('#ebbd9d').convertSRGBToLinear();setSky('#73afd0','#ffcea5');sun.color.set('#ffdbac');sun.intensity=1.2;hemi.intensity=.9;}}else{car.position.set(0,0,0);car.rotation.set(0,0,0);animateChassis(car,{speed:0,wheel:0,pitch:0,roll:0});$('cnt').textContent='';car.userData.bm.color.set(col).convertSRGBToLinear()}
 }
 function reset(){
+  raceId=globalThis.crypto?.randomUUID?.()||`${Date.now().toString(36)}-${saves.revision}-${S.r}`;
   if(!mute)audio?.resume();
   $('fx').classList.remove('on');
   raceSport=sport;aiTick=0;planners.forEach(p=>p.reset());
@@ -316,7 +319,7 @@ function showEnd(){
   const o=['الأول','الثاني','الثالث','الرابع','الخامس'],best=Math.min(...P.laps);let rec='';
   try{const b=parseFloat(saves.getItem('sunset-best-'+trk+'-'+LAPS+(raceSport?'-sport':'')));if(!b||P.fin<b){saves.setItem('sunset-best-'+trk+'-'+LAPS+(raceSport?'-sport':''),P.fin);rec=b?'<br>رقم قياسي جديد.':''}else rec='<br>أفضل وقت لك: '+fmt(b)}catch(e){}
   $('eT').textContent=(['🥇','🥈','🥉'][P.place-1]||'🏁')+' المركز '+o[P.place-1];
-  $('eS').innerHTML='الوقت الكلي '+fmt(P.fin)+'<br>أسرع لفة '+fmt(best)+rec+(()=>{const cg=Math.round([120,70,40,20,10][P.place-1]*LAPS/3*(DAILY?2:1)*(1+.25*UP[4]));coins+=cg;S.tc+=cg;svu();upUi();const bn=[1000,600,400,200,100][P.place-1]+(hits?0:500);SC+=bn;S.ts+=Math.round(SC);S.xp+=Math.round(SC/8+(P.place==1?60:20));const nl=1+Math.floor(Math.sqrt(S.xp/60));if(nl>S.lv){S.lv=nl;coins+=100*nl;svu();upUi();toastT('⬆️ مستوى جديد! '+nl+' · +'+100*nl+' عملة')}const nw=SC>S.hs;S.hs=Math.max(S.hs,SC);S.r++;if(!S.bt[trk+(raceSport?':sport':'')]||P.fin<S.bt[trk+(raceSport?':sport':'')]){S.bt[trk+(raceSport?':sport':'')]=P.fin;try{saves.setItem('sunset-g'+trk+(raceSport?'-sport':''),JSON.stringify(GR_))}catch(e){}}trrUi();if(P.place==1){S.w++;if(wxs>0)S.f.rn=1;if(sfc==2)S.f.md=1}if(!hits)S.f.cl=1;if(DAILY)S.f.dy=1;chk();return'<br>+'+cg+' عملة<br>النقاط: '+Math.round(SC)+(nw?' ⭐':'')})();$('end').hidden=false;$('pp').replaceChildren();updateResults();saves.requestFlush();
+  $('eS').innerHTML='الوقت الكلي '+fmt(P.fin)+'<br>أسرع لفة '+fmt(best)+rec+(()=>{const cg=Math.round([120,70,40,20,10][P.place-1]*LAPS/3*(DAILY?2:1)*(1+.25*UP[4]));coins+=cg;S.tc+=cg;svu();upUi();const bn=[1000,600,400,200,100][P.place-1]+(hits?0:500);SC+=bn;S.ts+=Math.round(SC);S.xp+=Math.round(SC/8+(P.place==1?60:20));const nl=1+Math.floor(Math.sqrt(S.xp/60));if(nl>S.lv){S.lv=nl;coins+=100*nl;svu();upUi();toastT('⬆️ مستوى جديد! '+nl+' · +'+100*nl+' عملة')}const nw=SC>S.hs;S.hs=Math.max(S.hs,SC);S.r++;if(!S.bt[trk+(raceSport?':sport':'')]||P.fin<S.bt[trk+(raceSport?':sport':'')]){S.bt[trk+(raceSport?':sport':'')]=P.fin;try{saves.setItem('sunset-g'+trk+(raceSport?'-sport':''),JSON.stringify(GR_))}catch(e){}}trrUi();if(P.place==1){S.w++;if(wxs>0)S.f.rn=1;if(sfc==2)S.f.md=1}if(!hits)S.f.cl=1;if(DAILY)S.f.dy=1;chk();return'<br>+'+cg+' عملة<br>النقاط: '+Math.round(SC)+(nw?' ⭐':'')})();$('end').hidden=false;$('pp').replaceChildren();updateResults();if(!recentResults.some(r=>r.id===raceId)){recentResults.push({id:raceId,at:Date.now(),track:trk,car:ty,mode:raceSport?'sport':'classic',laps:[...P.laps],time:P.fin,place:P.place,score:Math.round(SC)});recentResults=recentResults.slice(-20);saves.setItem('sunset-results',JSON.stringify(recentResults));}saves.requestFlush();
 }
 function updateResults(){const table=$('resultsTable');table.innerHTML=standings().map((a,i)=>'<tr class="'+(a.id===0?'you':'')+'"><td>'+String(i+1).padStart(2,'0')+'</td><th>'+a.name+'</th><td>'+(a.finishTime!=null?fmt(a.finishTime):'RACING')+'</td></tr>').join('');
 }
@@ -401,7 +404,7 @@ const svs=()=>{try{saves.setItem('sunset-st',JSON.stringify(S))}catch(e){}},ACH=
 function popup(t){const e=document.createElement('div');e.className='pop';e.textContent=t;$('pp').appendChild(e);setTimeout(()=>e.remove(),1000)}
 function toast(n){const e=document.createElement('div');e.className='ts';e.textContent='🏆 إنجاز جديد! '+n;$('pp').appendChild(e);setTimeout(()=>e.remove(),3500)}
 function addSc(n,t){SC+=n*CB;popup('+'+Math.round(n*CB)+' '+t);cbT=4}
-function achUi(){const fm=t=>Math.floor(t/3600)+':'+String(Math.floor(t%3600/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0');
+function achUi(){const history=$('recentRaces');if(history)history.replaceChildren(...recentResults.slice(-5).reverse().map(r=>{const row=document.createElement('div');row.className='rw2';row.textContent=($('tk').children[r.track]?.textContent||String(r.track+1))+' · '+r.place+'/5 · '+fmt(r.time)+' · '+r.mode;return row;}));const fm=t=>Math.floor(t/3600)+':'+String(Math.floor(t%3600/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0');
   $('stg').innerHTML=[['وقت اللعب',fm(S.t)],['السباقات',S.r],['الانتصارات',S.w],['أعلى نقاط',Math.round(S.hs)],['وقت الانجراف',Math.round(S.ds)+'s'],['وقت النيترو',Math.round(S.ns)+'s']].map(([a,b])=>'<div class="chip"><small>'+a+'</small><b>'+b+'</b></div>').join('');
   dayInit();$('msn').innerHTML=S.dm.ids.map((id,k)=>{const v=Math.min(MS[id][2],Math.floor(MS[id][1](S)-S.dm.b[id]));return'<div class="rw2"><span>'+MS[id][0]+'</span><b>'+(S.dm.cl[k]?'✅':v+'/'+MS[id][2])+'</b></div>'}).join('');xpUi();$('acl').innerHTML=ACH.map(([n],i)=>'<div class="rw2"><span>'+n+'</span><b>'+(S.a.includes(i)?'🏆':'🔒')+'</b></div>').join('')}
 function chk(){dayInit();S.dm.ids.forEach((id,k)=>{if(!S.dm.cl[k]&&MS[id][1](S)-S.dm.b[id]>=MS[id][2]){S.dm.cl[k]=1;coins+=150;svu();upUi();toastT('✅ '+MS[id][0]+' +150 عملة')}});ACH.forEach(([n,f],i)=>{if(!S.a.includes(i)&&f(S)){S.a.push(i);toast(n)}});svs();achUi()}
@@ -540,6 +543,7 @@ $('start').onclick=()=>{DAILY=0;sndInit();setMode('race')};
 $('snd').onclick=()=>{mute=!mute;if(!mute){sndInit();audio?.resume();}sndUpd();sI()};
 [['أمام',0,.2],['جانب',1.57,.12],['خلف',3.14,.2],['فوق',.6,1.3]].forEach(([n,y,p])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{yaw=y;pitch=p;idle=-6};$('vw').appendChild(b)});$('back').onclick=$('toG').onclick=()=>setMode('garage');$('again').onclick=reset;
 const I18=[
+['آخر السباقات','Recent races','Courses récentes','Carreras recientes'],
 ['حفظ التقدم','Save progress','Sauvegarde','Guardar progreso'],['تصدير نسخة','Export backup','Exporter une copie','Exportar copia'],['استيراد نسخة','Import backup','Importer une copie','Importar copia'],['استعادة النسخة السابقة','Restore previous save','Restaurer la copie précédente','Restaurar copia anterior'],
 
 ['نمط القيادة','Driving mode','Mode de conduite','Modo de conducción'],['كلاسيكي','Classic','Classique','Clásico'],['رياضي','Sport','Sport','Deportivo'],
@@ -581,6 +585,14 @@ try{const d=new Date().toDateString(),l=saves.getItem('sunset-day'),y=new Date(D
 $('tgTl').onclick=async()=>{const b=$('tgTl'),on=b.getAttribute('aria-checked')!=='true';if(on&&window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission){try{const r=await DeviceOrientationEvent.requestPermission();if(r!=='granted')return}catch(e){return}}b.setAttribute('aria-checked',String(on));TL=on?1:0;$('ctl').classList.toggle('tl',on)};
 addEventListener('deviceorientation',e=>{if(e.gamma!=null)GM=Math.abs(e.gamma)<3?0:e.gamma});carLock();
 $('shr').onclick=()=>{const t=tr('النقاط:')+' '+Math.round(SC)+' · SUNSET RUSH';if(navigator.share)navigator.share({text:t}).catch(()=>{});else try{navigator.clipboard.writeText(t)}catch(e){}};dayInit();achUi();
+function sessionSnapshot(){return{car:ty,color:col,track:trk,difficulty:dif,weather:wxs,surface:sfc,theme:thm,laps:lps,camera:cmv,ghost:!!GHON,lights:!!GL,opt:{...opt}};}
+function markSelection(id,index){[...$(id).children].forEach((b,i)=>b.classList.toggle('on',i===index));}
+if(savedSession){
+  const p=savedSession;col=p.color;Object.assign(opt,p.opt);trk=p.track;dif=p.difficulty;wxs=p.weather;sfc=p.surface;thm=p.theme;lps=p.laps;cmv=p.camera;GHON=p.ghost?1:0;GL=p.lights?1:0;
+  setCar(p.car<=5||S.cu.includes(p.car)?p.car:0);ci.value=col;
+  for(const [id,index] of Object.entries({df:dif,tk:trk,wx:wxs,sf:sfc,tz:thm,lp:[2,3,5].indexOf(lps),fn:opt.fin,wg:opt.wing,sp:[0,'#ffffff','#111111','#ffb547'].indexOf(opt.stripe),rm:['#c9ccd6','#111111','#ffb547','#e63946','#3a86ff'].indexOf(opt.rim),gl:[0,'#00e5ff','#ff2ec4','#7cff4f'].indexOf(opt.glow),sw:cols.findIndex(([c])=>c===col)}))markSelection(id,index);
+  tgs('tgGh',GHON);trrUi();
+}
 correctColors(gar);setMode('garage');showMenu();requestAnimationFrame(frame);
 
 if (import.meta.env.PROD && !isNativeRuntime() && 'serviceWorker' in navigator) {
@@ -588,16 +600,19 @@ if (import.meta.env.PROD && !isNativeRuntime() && 'serviceWorker' in navigator) 
 }
 
 // Batch wallet, achievements, daily claims and preferences into the same generation.
-saves.beforeFlush=()=>{svu();svs();saves.setItem('sunset-preferences',JSON.stringify({sport,muted:!!mute,auto:!!AUTO,vibrate:!!VB,sensitivity:SS}));};
+saves.beforeFlush=()=>{svu();svs();saves.setItem('sunset-session',JSON.stringify(sessionSnapshot()));saves.setItem('sunset-preferences',JSON.stringify({sport,muted:!!mute,auto:!!AUTO,vibrate:!!VB,sensitivity:SS}));};
 installSaveUI(saves,{document,window});
 setInterval(()=>saves.requestFlush(),5000);
 bindLifecycle({document,window,nativeApp:window.SunsetRushNative?.app,save:()=>saves.requestFlush(),silence:()=>audio?.silence(),pause:()=>{if(mode==='race'&&state!=='done'&&!paused)pauseRace();}});
 addEventListener('storage',event=>saves.observe(event.key));
 $('sSet').addEventListener('click',event=>{if(!event.target.closest('#saveImport,#saveExport,#savePrevious,#saveFile'))saves.requestFlush();});
+for(const id of ['gBot','gTop']){$(id).addEventListener('click',()=>saves.requestFlush());$(id).addEventListener('input',()=>saves.setItem('sunset-session',JSON.stringify(sessionSnapshot())));}
+for(const id of ['snd','cmb'])$(id).addEventListener('click',()=>saves.requestFlush());
 saves.requestFlush();
 if(import.meta.env.DEV && new URLSearchParams(location.search).has('test')){
   garage(0);testManual=true;
   window.__sunset={
+    profile:()=>({session:sessionSnapshot(),recentResults:structuredClone(recentResults)}),
     save:()=>({status:saves.status,revision:saves.revision,dirty:saves.dirty,coins,upgrades:[...UP],stats:JSON.parse(JSON.stringify(S))}),
     flush:()=>saves.requestFlush(),
     driving:value=>{sport=!!value;},

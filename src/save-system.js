@@ -1,18 +1,21 @@
+import { normalizeSession, normalizeResults } from './profile-data.js';
 // One coherent profile per atomic localStorage write, plus its previous generation.
 // Checksums detect accidental damage; they are NOT anti-cheat or authentication.
-export const SAVE_VERSION=1;
+export const SAVE_VERSION=2;
 export const SAVE_KEYS=['sunset-profile-a','sunset-profile-b'];
 export const MAX_SAVE_CHARS=2_000_000;
 export const defaultStats=()=>({t:0,r:0,w:0,hs:0,ds:0,ns:0,tc:0,mx:0,f:{},a:[],o:[],bt:{},ts:0,xp:0,lv:1,dm:null,cu:[]});
 const object=v=>v&&typeof v==='object'&&!Array.isArray(v);
 const num=(v,lo=0,hi=1e12)=>typeof v==='number'&&Number.isFinite(v)?Math.max(lo,Math.min(hi,v)):lo;
 const ids=(v,lo,hi)=>Array.isArray(v)?[...new Set(v.filter(n=>Number.isInteger(n)&&n>=lo&&n<=hi))]:[];
-export const knownKey=k=>/^sunset-(up|st|day|streak|q|graphics|camera-shake|lang|preferences)$/.test(k)||/^sunset-g(?:[0-9]|10)(?:-sport)?$/.test(k)||/^sunset-best-(?:[0-9]|10)-(?:2|3|5)(?:-sport)?$/.test(k);
+export const knownKey=k=>/^sunset-(up|st|day|streak|q|graphics|camera-shake|lang|preferences|session|results)$/.test(k)||/^sunset-g(?:[0-9]|10)(?:-sport)?$/.test(k)||/^sunset-best-(?:[0-9]|10)-(?:2|3|5)(?:-sport)?$/.test(k);
 export function normalizeValue(key,raw){
   if(!knownKey(key))throw Error('Unknown save field');
   if(key==='sunset-day'){if(typeof raw!=='string'||raw.length>64||!Number.isFinite(Date.parse(raw)))throw Error('Invalid daily date');return raw;}
   const v=JSON.parse(raw);let out;
-  if(key==='sunset-up'){
+  if(key==='sunset-session'){out=normalizeSession(v);
+  }else if(key==='sunset-results'){out=normalizeResults(v);
+  }else if(key==='sunset-up'){
     if(!object(v)||!Array.isArray(v.u)||typeof v.c!=='number')throw Error('Invalid wallet');
     out={u:Array.from({length:5},(_,i)=>Math.floor(num(v.u[i],0,3))),c:Math.floor(num(v.c))};
   }else if(key==='sunset-st'){
@@ -44,7 +47,7 @@ export function encodeSave(data,revision=0,now=Date.now()){
 }
 export function decodeSave(text){
   if(typeof text!=='string'||text.length>MAX_SAVE_CHARS)throw Error('Invalid save size');
-  const e=JSON.parse(text);if(e.format!=='sunset-rush'||e.version!==SAVE_VERSION)throw Error('Unsupported save version');
+  const e=JSON.parse(text);if(e.format!=='sunset-rush'||![1,SAVE_VERSION].includes(e.version))throw Error('Unsupported save version');
   if(!Number.isSafeInteger(e.revision)||e.revision<0||!Number.isFinite(e.updatedAt)||!object(e.data))throw Error('Invalid save header');
   const body={format:e.format,version:e.version,revision:e.revision,updatedAt:e.updatedAt,data:e.data};
   if(checksum(JSON.stringify(body))!==e.checksum)throw Error('Save checksum mismatch');
@@ -57,7 +60,7 @@ export class SaveStore {
     try{
       this.tokens=SAVE_KEYS.map(k=>storage.getItem(k));const valid=[];
       this.tokens.forEach((raw,index)=>{if(raw===null)return;try{const version=JSON.parse(raw)?.version;if(version>SAVE_VERSION){this.blocked=true;this.issues.push('future-version');return;}valid.push({index,save:decodeSave(raw)});}catch{this.issues.push('damaged-slot');}});
-      if(valid.length){valid.sort((a,b)=>b.save.revision-a.save.revision);const best=valid[0];this.slot=best.index;this.revision=best.save.revision;this.data=best.save.data;this.status=this.issues.length?'recovered':'saved';}
+      if(valid.length){valid.sort((a,b)=>b.save.revision-a.save.revision);const best=valid[0];this.slot=best.index;this.revision=best.save.revision;this.data=best.save.data;this.dirty=best.save.version<SAVE_VERSION;this.status=this.issues.length?'recovered':this.dirty?'pending':'saved';}
       else if(this.tokens.some(v=>v!==null)){this.blocked=true;this.status='blocked';}
       else{this.migrate();this.dirty=true;this.status='pending';}
       if(this.blocked)this.status='blocked';

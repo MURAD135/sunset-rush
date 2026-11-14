@@ -1,5 +1,5 @@
 import {decodeSave,encodeSave} from './save-system.js';
-const deviceKeys=new Set(['sunset-q','sunset-graphics','sunset-camera-shake','sunset-lang','sunset-preferences']);
+const deviceKeys=new Set(['sunset-q','sunset-graphics','sunset-camera-shake','sunset-lang','sunset-preferences','sunset-session']);
 export const portableData=data=>Object.fromEntries(Object.entries(data).filter(([key])=>!deviceKeys.has(key)).sort(([a],[b])=>a.localeCompare(b)));
 // No default backend, credentials, identity, network requests, or automatic conflict merge.
 // A real adapter must bind BOTH operations to the authenticated server-side account.

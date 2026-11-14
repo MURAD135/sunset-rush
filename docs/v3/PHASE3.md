@@ -201,3 +201,25 @@ remain preserved; no PR edits, pushes, merges or deployments occurred.
 Next work remains real-device validation/tuning, broader Sport track/weather
 coverage, an authenticated backend and account/conflict UI, and actual native
 SDK projects/signing/store preparation. No cloud synchronization was activated.
+
+## Save coverage expansion and authorized review branch
+
+Owner authorized pushing this branch and a draft targeting visual-performance.
+Draft PR #3: https://github.com/MURAD135/sunset-rush/pull/3. Initial 93b94df push
+and PR checks succeeded; PR #1/#2 are untouched.
+
+Version 2 saves migrate version 1 envelopes while retaining the previous slot.
+New session coverage: selected/unlocked car, color, finish/wing/stripe/rims/glow,
+circuit, difficulty, weather/surface/theme, lap count, camera, ghost and lamps.
+Existing wallet, upgrades, purchased cars/paints, achievements, bests, ghosts,
+daily claims and quality/language/control preferences remain preserved. All 11
+tracks are already available; no invented paid-track unlock system was added.
+Device tilt permission still requires a player gesture where the platform demands it.
+
+The last 20 personal race results are bounded and saved; Achievements shows the
+latest five. Old profiles retain their old bests, not fabricated historical races.
+54 units/build passed. A real CDP renderer crash, without pagehide, preserved a
+paid car/paint/upgrade and every tested preference. Corrupt latest-slot recovery
+passed. Four full Sport races retained their journal and rewards after reload.
+`phase3/profile-crash.json` records fixtures/results. Renderer crash is not a
+physical power cut; updates not yet acknowledged as saved can still be lost.
