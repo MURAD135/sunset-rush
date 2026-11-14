@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { SaveStore } from './save-system.js';
+import { FrameBudget } from './frame-budget.js';
 import { bindLifecycle, isNativeRuntime } from './platform.js';
 import { installSaveUI } from './save-ui.js';
 import { RaceAudio } from './audio.js';
@@ -24,6 +25,7 @@ const preferences=JSON.parse(saves.getItem('sunset-preferences')||'{}');
 const savedSession=JSON.parse(saves.getItem('sunset-session')||'null');
 let recentResults=JSON.parse(saves.getItem('sunset-results')||'[]'),raceId='';
 const $=id=>document.getElementById(id),clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const frameBudget=new FrameBudget();let nativeBackground=false,pageHidden=false;
 const cv=$('c');let rd;
 try{rd=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:'high-performance'});}catch(error){$('graphicsError').hidden=false;throw error;}
 rd.setPixelRatio(Math.min(devicePixelRatio,2));
@@ -192,7 +194,7 @@ cols.forEach(([c,n],i)=>{const b=document.createElement('button');b.style.backgr
   b.onclick=()=>{col=c;car.userData.bm.color.set(c).convertSRGBToLinear();[...$('sw').children].forEach(x=>x.classList.remove('on'));b.classList.add('on')};$('sw').appendChild(b)});
 
 function setMode(m){
-  mode=m;input?.clear();simulationClock.reset();const r=m==='race';$('fx').classList.remove('on');pts.visible=skM.visible=r;if(!r){ghM.visible=slines.visible=tnl.visible=false;particles.clear();}gar.visible=!r;rc.visible=r;ai.forEach(a=>a.m.visible=r);
+  mode=m;input?.clear();simulationClock.reset();const r=m==='race';if(!r)audio?.suspend();$('fx').classList.remove('on');pts.visible=skM.visible=r;if(!r){ghM.visible=slines.visible=tnl.visible=false;particles.clear();}gar.visible=!r;rc.visible=r;ai.forEach(a=>a.m.visible=r);
   const T2=TH[thm],c=new THREE.Color(r?T2.bg:'#171a30');if(r&&wxs)c.lerp(new THREE.Color(0x4a5566),wxs==2?.7:.5);sc.background.copy(c);sc.fog.color.copy(c);setSky(r?c.clone().lerp(new THREE.Color(T2.night?0x02030a:wxs?0x3a4658:0x2a5aa8),.65):'#0b0d1c',c);sunS.visible=!!(r&&!T2.night&&!wxs);sc.fog.near=r?T2.f[0]*(wxs?.4:1):30;sc.fog.far=r?T2.f[1]*(wxs?.5:1):140;rain.visible=!!(r&&wxs>0);
   const nt=!!(r&&T2.night);hb=nt?.4:(r&&wxs?.6:.95);hemi.intensity=hb;sun.intensity=nt?.12:(r&&wxs?.45:.9);rim.intensity=nt?.1:.5;hs.visible=nt||!!(r&&wxs==2);
   $('gTop').hidden=$('gBot').hidden=r;$('hud').hidden=$('ctl').hidden=$('mm').hidden=!r;$('end').hidden=true;$('raceTitle').hidden=$('keysHelp').hidden=!r;$('raceTitle').lastElementChild.textContent=TK.coast?'GOLDEN COAST / CIRCUIT 01':'SUNSET RUSH / ARCADE CIRCUIT';
@@ -386,7 +388,7 @@ function mmDraw(){const S=R*(1+TK.a);mc.clearRect(0,0,192,192);mc.lineWidth=12;m
   const dot=(x,z,c,r)=>{mc.fillStyle=c;mc.beginPath();mc.arc(96+x/S*76,96+z/S*76,r,0,6.283);mc.fill()};
   ai.forEach((a,i)=>dot(a.m.position.x,a.m.position.z,i?'#f1f1f1':'#3a86ff',6));dot(P.x,P.z,'#ff9f1c',8)}
 let AC,audio,mute=preferences.muted?1:0;
-function sndInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();audio=new RaceAudio(AC);}catch(e){AC=0}}
+function sndInit(){if(AC||mute)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();audio=new RaceAudio(AC);}catch(e){AC=0}}
 function bip(f,d,type='square',v=.1){if(audio&&!mute&&!document.hidden)audio.cue(f,d,type,v);}
 addEventListener('blur',()=>audio?.silence());
 document.addEventListener('visibilitychange',()=>{if(document.hidden)audio?.silence();});
@@ -408,7 +410,7 @@ function achUi(){const history=$('recentRaces');if(history)history.replaceChildr
   $('stg').innerHTML=[['وقت اللعب',fm(S.t)],['السباقات',S.r],['الانتصارات',S.w],['أعلى نقاط',Math.round(S.hs)],['وقت الانجراف',Math.round(S.ds)+'s'],['وقت النيترو',Math.round(S.ns)+'s']].map(([a,b])=>'<div class="chip"><small>'+a+'</small><b>'+b+'</b></div>').join('');
   dayInit();$('msn').innerHTML=S.dm.ids.map((id,k)=>{const v=Math.min(MS[id][2],Math.floor(MS[id][1](S)-S.dm.b[id]));return'<div class="rw2"><span>'+MS[id][0]+'</span><b>'+(S.dm.cl[k]?'✅':v+'/'+MS[id][2])+'</b></div>'}).join('');xpUi();$('acl').innerHTML=ACH.map(([n],i)=>'<div class="rw2"><span>'+n+'</span><b>'+(S.a.includes(i)?'🏆':'🔒')+'</b></div>').join('')}
 function chk(){dayInit();S.dm.ids.forEach((id,k)=>{if(!S.dm.cl[k]&&MS[id][1](S)-S.dm.b[id]>=MS[id][2]){S.dm.cl[k]=1;coins+=150;svu();upUi();toastT('✅ '+MS[id][0]+' +150 عملة')}});ACH.forEach(([n,f],i)=>{if(!S.a.includes(i)&&f(S)){S.a.push(i);toast(n)}});svs();achUi()}
-setInterval(()=>{if(!document.hidden){S.t++;if(S.t%10==0)chk()}},1000);
+setInterval(()=>{if(!document.hidden&&!nativeBackground&&!pageHidden){S.t++;if(S.t%10==0)chk()}},1000);
 function scUpd(dt,rank){if(state!=='go'||paused)return;const sk=Math.abs(P.mv-P.th)>.12&&P.v>20;
   if(sk){drT+=dt;S.ds+=dt;SC+=40*dt*CB;if(drT>=1){drT=0;CB=Math.min(5,CB+1);addSc(60,'انجراف')}}
   if(nosOn){S.ns+=dt;SC+=25*dt*CB}
@@ -454,12 +456,14 @@ function updateScene(elapsed){
   else simulationClock.reset();
 }
 function frame(n){
+  const hidden=document.hidden||nativeBackground||pageHidden,active=mode==='race'&&!paused&&state!=='done';
+  if(!frameBudget.accept(n,{hidden,active})){if(hidden)last=n;requestAnimationFrame(frame);return;}
   const elapsed=Math.max(0,(n-last)/1000);last=n;
   const startCpu=performance.now();
   if(!testManual)updateScene(elapsed);
   const simulationCpu=performance.now()-startCpu;
   if(QA&&dynamicResolution&&!paused&&!testManual){
-    const scale=resolution.update(elapsed*1000,elapsed);resolutionTime+=elapsed;
+    const scale=resolution.update(elapsed*1000,elapsed,active?resolution.targetFps:Math.min(30,resolution.targetFps));resolutionTime+=elapsed;
     if(resolutionTime>=.35){resolutionTime=0;applyResolution(Math.round(scale*40)/40);}
   }
   sndUpd();skyM.position.copy(cam.position);sunS.position.set(cam.position.x+330,cam.position.y+80,cam.position.z+600);
@@ -479,7 +483,7 @@ cv.addEventListener('pointermove',e=>{
 });
 ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,e=>{ptr.delete(e.pointerId);pd=0}));
 cv.addEventListener('wheel',e=>{if(mode==='garage'){dist=clamp(dist+e.deltaY*.01,5,18);idle=0}},{passive:true});
-function pauseRace(){if(mode!=='race'||state==='done')return;paused=paused?0:1;if(paused)audio?.silence();else if(!mute)audio?.resume();$('pz').hidden=!paused;input?.clear();simulationClock.reset();poses.reset();last=performance.now();}
+function pauseRace(){if(mode!=='race'||state==='done')return;paused=paused?0:1;if(paused)audio?.suspend();else if(!mute)audio?.resume();$('pz').hidden=!paused;input?.clear();simulationClock.reset();poses.reset();last=performance.now();}
 function recoverCar(){
   if(mode!=='race'||state!=='go'||paused)return;
   const p=cl(P.cum,0,NB);P.x=p[0];P.z=p[1];P.th=P.mv=p[2];P.v=0;P.y=P.vy=0;P.air=0;
@@ -516,7 +520,7 @@ $('mSet').onclick=()=>shw('sSet',1);$('cS').onclick=()=>shw('sSet',0);$('mHow').
 $('mGar').onclick=()=>{setMode('garage');$('menu').hidden=true;$('gTop').hidden=$('gBot').hidden=false};$('gm').onclick=showMenu;
 $('mPlay').onclick=()=>{DAILY=0;$('menu').hidden=true;sndInit();setMode('race')};
 const tgl=(id,fn)=>{const b=$(id);b.onclick=()=>{const on=b.getAttribute('aria-checked')!=='true';b.setAttribute('aria-checked',String(on));fn(on)}};
-tgl('tgS',on=>{mute=!on;if(on){sndInit();audio?.resume();}sndUpd();sI()});tgl('tgV',on=>VB=on?1:0);tgl('tgA',on=>AUTO=on?1:0);
+tgl('tgS',on=>{mute=!on;if(on){sndInit();if(mode==='race'&&!paused)audio?.resume();else audio?.suspend();}else audio?.suspend();sndUpd();sI()});tgl('tgV',on=>VB=on?1:0);tgl('tgA',on=>AUTO=on?1:0);
 seg('driveMode',['كلاسيكي','رياضي'],sport?1:0,i=>{sport=!!i;trrUi();});
 seg('ss',['منخفضة','عادية','عالية'],[.8,1,1.25].indexOf(SS),i=>SS=[.8,1,1.25][i]);
 seg('cameraShake',['متوقف','خفيف','كامل'],[0,.35,1].indexOf(cameraShake),i=>{cameraShake=[0,.35,1][i];try{saves.setItem('sunset-camera-shake',cameraShake)}catch(e){}});
@@ -540,7 +544,7 @@ try{const q=JSON.parse(saves.getItem('sunset-q'));if(q){QA=q[0]==0;SHD=q[1];CRV=
 tgs('tgV',VB);tgs('tgA',AUTO);
 applyQuality();applyResolution();
 $('start').onclick=()=>{DAILY=0;sndInit();setMode('race')};
-$('snd').onclick=()=>{mute=!mute;if(!mute){sndInit();audio?.resume();}sndUpd();sI()};
+$('snd').onclick=()=>{mute=!mute;if(!mute){sndInit();if(!paused)audio?.resume();}else audio?.suspend();sndUpd();sI()};
 [['أمام',0,.2],['جانب',1.57,.12],['خلف',3.14,.2],['فوق',.6,1.3]].forEach(([n,y,p])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{yaw=y;pitch=p;idle=-6};$('vw').appendChild(b)});$('back').onclick=$('toG').onclick=()=>setMode('garage');$('again').onclick=reset;
 const I18=[
 ['آخر السباقات','Recent races','Courses récentes','Carreras recientes'],
@@ -602,8 +606,8 @@ if (import.meta.env.PROD && !isNativeRuntime() && 'serviceWorker' in navigator) 
 // Batch wallet, achievements, daily claims and preferences into the same generation.
 saves.beforeFlush=()=>{svu();svs();saves.setItem('sunset-session',JSON.stringify(sessionSnapshot()));saves.setItem('sunset-preferences',JSON.stringify({sport,muted:!!mute,auto:!!AUTO,vibrate:!!VB,sensitivity:SS}));};
 installSaveUI(saves,{document,window});
-setInterval(()=>saves.requestFlush(),5000);
-bindLifecycle({document,window,nativeApp:window.SunsetRushNative?.app,save:()=>saves.requestFlush(),silence:()=>audio?.silence(),pause:()=>{if(mode==='race'&&state!=='done'&&!paused)pauseRace();}});
+setInterval(()=>{if(!document.hidden&&!nativeBackground&&!pageHidden)saves.requestFlush();},5000);
+bindLifecycle({document,window,nativeApp:window.SunsetRushNative?.app,save:()=>saves.requestFlush(),silence:()=>audio?.suspend(),onActivity:(active,source)=>{if(source==='native')nativeBackground=!active;if(source==='page')pageHidden=!active;frameBudget.reset();last=performance.now();simulationClock.reset();poses.reset();},pause:()=>{if(mode==='race'&&state!=='done'&&!paused)pauseRace();}});
 addEventListener('storage',event=>saves.observe(event.key));
 $('sSet').addEventListener('click',event=>{if(!event.target.closest('#saveImport,#saveExport,#savePrevious,#saveFile'))saves.requestFlush();});
 for(const id of ['gBot','gTop']){$(id).addEventListener('click',()=>saves.requestFlush());$(id).addEventListener('input',()=>saves.setItem('sunset-session',JSON.stringify(sessionSnapshot())));}
@@ -612,6 +616,7 @@ saves.requestFlush();
 if(import.meta.env.DEV && new URLSearchParams(location.search).has('test')){
   garage(0);testManual=true;
   window.__sunset={
+    power:()=>({...frameBudget.snapshot(),nativeBackground,pageHidden,saveRequests:saves.requestCount}),
     profile:()=>({session:sessionSnapshot(),recentResults:structuredClone(recentResults)}),
     save:()=>({status:saves.status,revision:saves.revision,dirty:saves.dirty,coins,upgrades:[...UP],stats:JSON.parse(JSON.stringify(S))}),
     flush:()=>saves.requestFlush(),

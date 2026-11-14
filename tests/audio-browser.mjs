@@ -8,7 +8,7 @@ try{
  await page.locator('#mPlay').click();const initial=await page.evaluate(()=>__sunset.audio());assert.equal(initial.sources,6);assert.equal(initial.state,'running');
  await page.evaluate(()=>{__sunset.step(190);__sunset.step(80,{g:1});__sunset.step(25,{g:1,n:1});__sunset.tick(.016);});
  assert.deepEqual(await page.evaluate(()=>__sunset.audio()),initial);
- await page.locator('#snd').click();await page.locator('#snd').click();
+ await page.locator('#snd').click();await page.waitForFunction(()=>__sunset.audio().state==='suspended');await page.locator('#snd').click();await page.waitForFunction(()=>__sunset.audio().state==='running');
  assert.deepEqual(await page.evaluate(()=>__sunset.audio()),initial);
  // Simulate an OS/browser audio interruption with a real suspended context.
  await page.locator('#psb').click();await page.evaluate(()=>audioForTest.suspend());

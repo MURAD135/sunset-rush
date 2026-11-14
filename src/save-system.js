@@ -56,7 +56,7 @@ export function decodeSave(text){
 }
 export class SaveStore {
   constructor(storage,{schedule=setTimeout,cancel=clearTimeout,now=Date.now,onStatus=()=>{},withLock=null}={}){
-    Object.assign(this,{storage,schedule,cancel,now,onStatus,withLock});this.data={};this.tokens=[null,null];this.slot=-1;this.revision=0;this.dirty=false;this.timer=null;this.blocked=false;this.issues=[];this.status='pending';
+    Object.assign(this,{storage,schedule,cancel,now,onStatus,withLock});this.data={};this.tokens=[null,null];this.slot=-1;this.revision=0;this.dirty=false;this.timer=null;this.blocked=false;this.issues=[];this.status='pending';this.requestCount=0;
     try{
       this.tokens=SAVE_KEYS.map(k=>storage.getItem(k));const valid=[];
       this.tokens.forEach((raw,index)=>{if(raw===null)return;try{const version=JSON.parse(raw)?.version;if(version>SAVE_VERSION){this.blocked=true;this.issues.push('future-version');return;}valid.push({index,save:decodeSave(raw)});}catch{this.issues.push('damaged-slot');}});
@@ -78,6 +78,7 @@ export class SaveStore {
     this.data[key]=normalized;this.dirty=true;if(!this.blocked){this.emit('pending');if(this.timer===null)this.timer=this.schedule.call(globalThis,()=>{this.timer=null;this.requestFlush();},500);}
   }
   async requestFlush(){
+    this.requestCount++;
     try{return await (this.withLock?this.withLock(()=>this.flush()):this.flush());}
     catch{
       // A denied/failed lock is not permission to write without serialization.

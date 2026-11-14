@@ -25,3 +25,6 @@ test('audio resume handles successful, rejected and synchronously denied browser
  ctx.resume=()=>{throw new Error('InvalidStateError');};assert.equal(await audio.resume(),false);
  audio.dispose();
 });
+test('suspend silences audio and handles unsupported or interrupted contexts',async()=>{
+ const ctx=context(),audio=new RaceAudio(ctx);audio.update({active:true,speed:40});ctx.suspend=async()=>{};assert.equal(await audio.suspend(),true);assert.equal(audio.master.gain.value,0);ctx.suspend=()=>Promise.reject(new Error('closed'));assert.equal(await audio.suspend(),false);audio.dispose();
+});

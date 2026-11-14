@@ -223,3 +223,20 @@ paid car/paint/upgrade and every tested preference. Corrupt latest-slot recovery
 passed. Four full Sport races retained their journal and rewards after reload.
 `phase3/profile-crash.json` records fixtures/results. Renderer crash is not a
 physical power cut; updates not yet acknowledged as saved can still be lost.
+
+## Background work and idle rendering
+
+Active racing is uncapped by the new FrameBudget. Menus, pause and results have
+a 30 Hz presentation ceiling; hidden/native-background callbacks submit no render.
+DRS uses the effective idle target to avoid lowering resolution merely because
+of intentional pacing. AudioContext is suspended on mute/pause/background and
+resumes on a player gesture. Background skips periodic save requests/play-time
+accounting; the lifecycle transition itself still requests a save.
+
+58 units/build, four power-browser checks and seven audio checks passed. During
+5.5 seconds of simulated native background there were zero new rendered frames,
+periodic save requests or play-time increments. Synthetic 60/120/144 Hz callback
+streams each yielded 30 idle presentations while active streams stayed uncapped.
+These are measured scheduling/behavior counts, not battery watts, temperature or
+physical-device FPS. Evidence: `phase3/power.json`. CI at 2bb58b6 passed before
+this independent batch; final active-race regressions follow after all batches.
