@@ -17,3 +17,11 @@ test('planner lookahead braking and choices are deterministic without shared RNG
  for(let t=0;t<600;t++){a.update(t,self,[],18,25);Math.random();b.update(t,self,[],18,25);}
  assert.deepEqual(a,b);assert.equal(a.speedLimit,25);
 });
+
+test('rivals see lapped traffic ahead and behind across the circuit seam without changing progress',()=>{
+ const planner=new RivalPlanner(1),self={id:1,distance:990,lane:0,preferred:0,speed:45},traffic=[{id:0,distance:10,lane:0,speed:20}];
+ const original=structuredClone({self,traffic});planner.update(0,self,traffic,18,60,1000);
+ assert.ok(Math.abs(planner.lane)>3);assert.deepEqual({self,traffic},original);
+ planner.reset();planner.update(0,self,[-6.4,0,6.4].map((lane,i)=>({id:i+2,lane,distance:0,speed:20})),18,60,1000);assert.ok(planner.speedLimit<=20);
+ planner.reset();planner.update(0,{...self,distance:10},[{id:2,distance:995,lane:0,speed:70}],18,60,1000);assert.ok(Math.abs(planner.lane)>3);
+});

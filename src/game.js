@@ -246,7 +246,7 @@ function race(dt){
     if(raceSport&&aiTick%6===0){
       const radius=rad(P.cum);Object.assign(traffic[0],{distance:P.cum*radius,lane:Math.hypot(P.x,P.z)-rad(Math.atan2(P.z,P.x)),speed:P.v});
       ai.forEach((a,i)=>Object.assign(traffic[i+1],{distance:a.cum*radius,lane:a.o,speed:a.speed,preferred:a.bl}));
-      ai.forEach((a,i)=>{let cap=100;for(const ahead of [0,.1,.2]){const u=a.cum+ahead,r=rad(u,a.br),d=dr(u,a.br),dd=-R*TK.a*TK.k*TK.k*Math.cos(TK.k*u),k=r*r+2*d*d-r*dd;cap=Math.min(cap,12+.32*(k>0?Math.pow(r*r+d*d,1.5)/k:1e4));}planners[i].update(aiTick,traffic[i+1],traffic,W,cap);});
+      ai.forEach((a,i)=>{let cap=100;for(const ahead of [0,.1,.2]){const u=a.cum+ahead,r=rad(u,a.br),d=dr(u,a.br),dd=-R*TK.a*TK.k*TK.k*Math.cos(TK.k*u),k=r*r+2*d*d-r*dd;cap=Math.min(cap,12+.32*(k>0?Math.pow(r*r+d*d,1.5)/k:1e4));}planners[i].update(aiTick,traffic[i+1],traffic,W,cap,TAU*radius);});
     }
     if(raceSport)aiTick++;
     ai.forEach((a,i)=>{if(!(TK.f&&fu(a.cum)>0))a.br=raceSport?((i+Math.floor(Math.max(0,a.cum)/TAU))%3!==0?1:0):(Math.random()<.65?1:0);const rr=rad(a.cum,a.br|0),d1=dr(a.cum,a.br|0),d2=-R*TK.a*TK.k*TK.k*Math.cos(TK.k*a.cum),kn=rr*rr+2*d1*d1-rr*d2,Rc=kn>0?Math.pow(rr*rr+d1*d1,1.5)/kn:1e4;const pa=Math.atan2(P.z,P.x),po=Math.hypot(P.x,P.z)-rad(pa),gp=(P.cum-a.cum)*rr;let ot=a.bl-(Rc<160?W*.3*(1-Rc/160):0);if(Math.abs(gp)<14&&Math.abs(po-a.o)<3.4)ot=a.o+(a.o>=po?1:-1)*4;ot=clamp(ot,-W/2+2.6,W/2-2.6);if(raceSport)ot=planners[i].lane;a.o+=(ot-a.o)*Math.min(1,dt*1.8);const st=Rc>350&&a.ne>.25;a.ne=clamp(a.ne+(st?-.5:.12)*dt,0,1);

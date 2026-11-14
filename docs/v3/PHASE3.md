@@ -167,3 +167,12 @@ previous generation and the unsaved in-memory draft, reports unavailable, and
 retries through the lock. It never falls back to an unlocked write. 50 unit
 tests, build and all ten browser save checks passed without page errors;
 `phase3/save-browser.json` includes injected lock rejection/recovery.
+
+Sport now wraps only the traffic gap used for lane/speed decisions around the
+circuit, so a nearby slower/lapped car is not ignored across the lap seam.
+Authoritative race progress, finish order, player physics and Classic behavior
+are unchanged. Unit coverage includes seam-ahead traffic, boxed passing lanes,
+fast rear traffic and immutable input progress. 51 units/build and four complete
+Sport races passed; 60.45 s at all four display cadences, with durable rewards
+verified after reload. Native web-assets staging is now `9e1a1e02ded4`; final
+Classic/production regressions are being completed before closing this follow-up.

@@ -9,7 +9,7 @@ export function steeringResponse(current,target,speed,drift,dt,sport=false){
 export class RivalPlanner {
   constructor(id){this.id=id;this.reset();}
   reset(){this.nextTick=0;this.lane=0;this.speedLimit=Infinity;this.decisions=0;}
-  update(tick,self,traffic,width,curvatureSpeed){
+  update(tick,self,traffic,width,curvatureSpeed,loopLength=Infinity){
     if(tick<this.nextTick)return;
     this.nextTick=tick+6;this.decisions++;
     const edge=width/2-2.6,preferred=clamp(self.preferred,-edge,edge);
@@ -19,7 +19,10 @@ export class RivalPlanner {
       let score=-Math.abs(lane-preferred)*.08-Math.abs(lane-self.lane)*.16,cap=curvatureSpeed;
       for(const other of traffic){
         if(other.id===self.id)continue;
-        const gap=other.distance-self.distance;
+        let gap=other.distance-self.distance;
+        // Traffic occupies the same road even when lap counters differ. Keep
+        // unwrapped race progress authoritative; wrap only this local decision.
+        if(Number.isFinite(loopLength)&&loopLength>0)gap-=Math.round(gap/loopLength)*loopLength;
         if(Math.abs(other.lane-lane)>3.1)continue;
         // Leave room for a car approaching from behind; avoid cutting across side-by-side cars.
         if(gap>-9&&gap<7)score-=100;
