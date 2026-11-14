@@ -149,3 +149,14 @@ the unsigned staging directory. Cloud save is not enabled.
 No push, PR #1/#2 edit, merge or deployment was performed. The unavailable five
 uncommitted files were not represented as recovered; new work is independently
 saved in small commits, and original histories/backups are preserved.
+
+## Resume follow-up — 2026-11-14
+
+A clean checkout at b9d4cf6 was verified; no five-file pending diff or stash
+was present. Baseline 47 units/build passed again. The new audio batch fixes
+resume/restart/recover buttons failing to resume an interrupted AudioContext.
+Foreground alone still leaves gameplay/audio paused. Rejected or synchronous
+resume failures are handled. 48 units, production build and seven Chromium
+audio checks passed, including real context suspension and an injected native
+background event. Resources remain six sources/18 nodes. This is not a real
+iOS interruption test; evidence: `phase3/audio-resume.json`.

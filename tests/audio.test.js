@@ -18,3 +18,10 @@ test('pooled audio retains six sources through races and cues, mutes and dispose
   audio.update({active:true,muted:true});assert.equal(audio.master.gain.value,0);
   audio.silence();audio.dispose();assert.ok(audio.nodes.every(n=>n.disconnected));assert.ok(audio.sources.every(n=>n.stopped));
 });
+
+test('audio resume handles successful, rejected and synchronously denied browser resumes',async()=>{
+ const ctx=context(),audio=new RaceAudio(ctx);assert.equal(await audio.resume(),true);
+ ctx.resume=()=>Promise.reject(new Error('NotAllowedError'));assert.equal(await audio.resume(),false);
+ ctx.resume=()=>{throw new Error('InvalidStateError');};assert.equal(await audio.resume(),false);
+ audio.dispose();
+});

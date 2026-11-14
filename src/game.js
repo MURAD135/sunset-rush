@@ -197,6 +197,7 @@ function setMode(m){
   if(r){reset();$('raceTitle').lastElementChild.textContent=TK.coast?'GOLDEN COAST / CIRCUIT 01':'SUNSET RUSH / ARCADE CIRCUIT';correctColors(rc);if(TK.coast&&thm===0&&!wxs){sc.fog.near=180;sc.fog.far=1400;sc.fog.color.set('#ebbd9d').convertSRGBToLinear();setSky('#73afd0','#ffcea5');sun.color.set('#ffdbac');sun.intensity=1.2;hemi.intensity=.9;}}else{car.position.set(0,0,0);car.rotation.set(0,0,0);animateChassis(car,{speed:0,wheel:0,pitch:0,roll:0});$('cnt').textContent='';car.userData.bm.color.set(col).convertSRGBToLinear()}
 }
 function reset(){
+  if(!mute)audio?.resume();
   $('fx').classList.remove('on');
   raceSport=sport;aiTick=0;planners.forEach(p=>p.reset());
   TK=TR[trk];R=TK.R;W=TK.W;LAPS=lps;const trackKey=[trk,thm,sfc,wxs].join(':');if(!TK.coast||trackKey!==trackBuildKey)buildTrack();correctColors(rc);ai.forEach((a,i)=>{a.bl=[-.28,.28,-.1,.1][i]*W;a.o=a.bl;a.ne=1;a.br=0});
@@ -475,7 +476,7 @@ cv.addEventListener('pointermove',e=>{
 });
 ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,e=>{ptr.delete(e.pointerId);pd=0}));
 cv.addEventListener('wheel',e=>{if(mode==='garage'){dist=clamp(dist+e.deltaY*.01,5,18);idle=0}},{passive:true});
-function pauseRace(){if(mode!=='race'||state==='done')return;paused=paused?0:1;if(paused)audio?.silence();$('pz').hidden=!paused;input?.clear();simulationClock.reset();poses.reset();last=performance.now();}
+function pauseRace(){if(mode!=='race'||state==='done')return;paused=paused?0:1;if(paused)audio?.silence();else if(!mute)audio?.resume();$('pz').hidden=!paused;input?.clear();simulationClock.reset();poses.reset();last=performance.now();}
 function recoverCar(){
   if(mode!=='race'||state!=='go'||paused)return;
   const p=cl(P.cum,0,NB);P.x=p[0];P.z=p[1];P.th=P.mv=p[2];P.v=0;P.y=P.vy=0;P.air=0;
@@ -510,14 +511,14 @@ function showMenu(){
 }
 $('mSet').onclick=()=>shw('sSet',1);$('cS').onclick=()=>shw('sSet',0);$('mHow').onclick=()=>shw('sHow',1);$('cH').onclick=()=>shw('sHow',0);
 $('mGar').onclick=()=>{setMode('garage');$('menu').hidden=true;$('gTop').hidden=$('gBot').hidden=false};$('gm').onclick=showMenu;
-$('mPlay').onclick=()=>{DAILY=0;$('menu').hidden=true;sndInit();if(AC&&AC.resume)AC.resume();setMode('race')};
+$('mPlay').onclick=()=>{DAILY=0;$('menu').hidden=true;sndInit();setMode('race')};
 const tgl=(id,fn)=>{const b=$(id);b.onclick=()=>{const on=b.getAttribute('aria-checked')!=='true';b.setAttribute('aria-checked',String(on));fn(on)}};
 tgl('tgS',on=>{mute=!on;if(on){sndInit();audio?.resume();}sndUpd();sI()});tgl('tgV',on=>VB=on?1:0);tgl('tgA',on=>AUTO=on?1:0);
 seg('driveMode',['كلاسيكي','رياضي'],sport?1:0,i=>{sport=!!i;trrUi();});
 seg('ss',['منخفضة','عادية','عالية'],[.8,1,1.25].indexOf(SS),i=>SS=[.8,1,1.25][i]);
 seg('cameraShake',['متوقف','خفيف','كامل'],[0,.35,1].indexOf(cameraShake),i=>{cameraShake=[0,.35,1][i];try{saves.setItem('sunset-camera-shake',cameraShake)}catch(e){}});
 $('rst').onclick=()=>{if(!rs2){rs2=1;$('rst').textContent='اضغط مرة أخرى للتأكيد';setTimeout(()=>{rs2=0;$('rst').textContent='إعادة ضبط التقدم والعملات'},3000)}else{UP=[0,0,0,0,0];coins=0;svu();upUi();rs2=0;$('rst').textContent='تمت إعادة الضبط'}};
-$('pzRecover').onclick=()=>{paused=0;$('pz').hidden=true;input.clear();recoverCar();};
+$('pzRecover').onclick=()=>{paused=0;$('pz').hidden=true;input.clear();recoverCar();if(!mute)audio?.resume();};
 $('pzR').onclick=()=>{if(paused)pauseRace();};$('pzA').onclick=()=>{$('pz').hidden=true;reset()};$('pzG').onclick=()=>{$('pz').hidden=true;paused=0;setMode('garage')};
 addEventListener('contextmenu',e=>e.preventDefault());addEventListener('blur',()=>{K.l=K.r=K.g=K.b=K.n=0});
 $('cmb').onclick=()=>cmv=(cmv+1)%3;$('psb').onclick=pauseRace;
@@ -535,7 +536,7 @@ if(matchMedia('(pointer:coarse)').matches)setQ(2);else if(devicePixelRatio>2.5||
 try{const q=JSON.parse(saves.getItem('sunset-q'));if(q){QA=q[0]==0;SHD=q[1];CRV=q[2];FPSON=q[3];setQ(QA?ql:q[0]-1);tgs('tgSh',SHD);tgs('tgCr',CRV);tgs('tgFp',FPSON);$('fp').hidden=!FPSON}}catch(e){}
 tgs('tgV',VB);tgs('tgA',AUTO);
 applyQuality();applyResolution();
-$('start').onclick=()=>{DAILY=0;sndInit();if(AC&&AC.resume)AC.resume();setMode('race')};
+$('start').onclick=()=>{DAILY=0;sndInit();setMode('race')};
 $('snd').onclick=()=>{mute=!mute;if(!mute){sndInit();audio?.resume();}sndUpd();sI()};
 [['أمام',0,.2],['جانب',1.57,.12],['خلف',3.14,.2],['فوق',.6,1.3]].forEach(([n,y,p])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{yaw=y;pitch=p;idle=-6};$('vw').appendChild(b)});$('back').onclick=$('toG').onclick=()=>setMode('garage');$('again').onclick=reset;
 const I18=[
@@ -571,7 +572,7 @@ function walk(r){const w=document.createTreeWalker(r,4);let n;while(n=w.nextNode
 function setLang(i){LG=i;D=I18.map(r=>[r[0],r[i]]).sort((a,b)=>b[0].length-a[0].length);document.documentElement.lang=LN[i];document.documentElement.dir=i?'ltr':'rtl';walk(document.body);try{saves.setItem('sunset-lang',i)}catch(e){}[...$('lg').children].forEach((b,j)=>b.classList.toggle('on',j==i))}
 new MutationObserver(ms=>{if(!LG)return;ms.forEach(m=>m.addedNodes.forEach(n=>n.nodeType===3?trNode(n):n.nodeType===1&&walk(n)))}).observe(document.body,{childList:true,subtree:true});
 document.querySelector('.hw').innerHTML=['WASD أو الأسهم للقيادة · Space للانجراف · Shift للنيترو · R للعودة إلى الطريق · Esc للإيقاف.','يد التحكم: العصا اليسرى للتوجيه، RT للتسارع، LT للفرملة، B للانجراف، X للنيترو، Start للإيقاف.','على الهاتف اضغط التسريع والتوجيه معًا، وأضف الانجراف أو النيترو عند الحاجة.','النيترو يتعبّأ بالانجراف وبالمربعات الزرقاء.','اختر النفق المختصر أو الطريق الخارجي.','المطر والوحل يقللان التماسك، فخفّف قبل المنعطف.','اكسب العملات وطوّر سيارتك في الورشة.'].map(s=>'<li>'+s+'</li>').join('');
-$('mDay').onclick=()=>{const d=new Date(),s=d.getFullYear()*372+d.getMonth()*31+d.getDate(),rn=k=>((s*9301+k*49297)%233280)/233280;trk=Math.floor(rn(1)*TR.length);thm=Math.floor(rn(2)*4);wxs=Math.floor(rn(3)*3);sfc=Math.floor(rn(4)*3);lps=3;DAILY=1;$('menu').hidden=true;sndInit();if(AC&&AC.resume)AC.resume();setMode('race')};
+$('mDay').onclick=()=>{const d=new Date(),s=d.getFullYear()*372+d.getMonth()*31+d.getDate(),rn=k=>((s*9301+k*49297)%233280)/233280;trk=Math.floor(rn(1)*TR.length);thm=Math.floor(rn(2)*4);wxs=Math.floor(rn(3)*3);sfc=Math.floor(rn(4)*3);lps=3;DAILY=1;$('menu').hidden=true;sndInit();setMode('race')};
 $('mAch').onclick=()=>{achUi();shw('sAch',1)};$('cA').onclick=()=>shw('sAch',0);achUi();
 seg('lg',LNM,0,setLang);let l0=1;try{const sv=saves.getItem('sunset-lang'),k=LN.indexOf((navigator.language||'en').slice(0,2));l0=sv!==null?+sv:(k<0?1:k)}catch(e){}if(!(l0>=0&&l0<LN.length))l0=1;setLang(l0);
 const PM=[['#ffd700',300],['#c9d2dc',300],['#ff2ec4',400]],pmUi=()=>[...$('sw2').children].forEach((b,i)=>{b.textContent=S.o.includes(i)?'':'🔒'+PM[i][1]});

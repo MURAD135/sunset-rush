@@ -45,7 +45,7 @@ export class RaceAudio {
     v.gain.gain.exponentialRampToValueAtTime(.0001,t+Math.max(.02,duration));
   }
   silence(){this.target(this.master.gain,0,.01);}
-  resume(){return this.context.resume().catch(()=>{});}
+  async resume(){try{await this.context.resume();return this.context.state==='running';}catch{return false;}}
   dispose(){for(const source of this.sources)source.stop();for(const node of this.nodes)node.disconnect();}
   diagnostics(){return {sources:this.sources.length,nodes:this.nodes.length,state:this.context.state};}
 }
