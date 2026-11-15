@@ -17,7 +17,8 @@
     "profile": "node tests/profile.mjs",
     "test:endurance": "node tests/endurance.mjs",
     "prepare:native": "npm run build && node scripts/prepare-native.mjs",
-    "test:phase3": "node tests/audio-browser.mjs && node tests/driving-browser.mjs && node tests/save-browser.mjs && node tests/profile-browser.mjs && node tests/power-browser.mjs && node tests/recovery-browser.mjs"
+    "test:phase3": "node tests/audio-browser.mjs && node tests/driving-browser.mjs && node tests/save-browser.mjs && node tests/profile-browser.mjs && node tests/power-browser.mjs && node tests/recovery-browser.mjs",
+    "test:offline-save": "node tests/offline-save.mjs"
   },
   "dependencies": {
     "three": "0.128.0",

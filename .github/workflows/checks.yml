@@ -29,3 +29,45 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 # Intentionally no Pages deployment, release, merge or write token permissions.
+  browser:
+    name: Browser saves and race regressions (software WebGL)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - name: Test races, audio, recovery and offline production
+        shell: bash
+        run: |
+          mkdir -p artifacts/phase3
+          export CHROMIUM_PATH="$(node --input-type=module -e 'import {chromium} from "playwright"; process.stdout.write(chromium.executablePath())')"
+          export GAME_URL=http://127.0.0.1:5173
+          export PRODUCTION_URL=http://127.0.0.1:4173/
+          npm run dev -- --host 127.0.0.1 --port 5173 --strictPort > artifacts/dev.log 2>&1 &
+          sunset_dev_pid=$!
+          npm run preview -- --host 127.0.0.1 --port 4173 --strictPort > artifacts/preview.log 2>&1 &
+          sunset_preview_pid=$!
+          trap 'kill "$sunset_dev_pid" "$sunset_preview_pid" || true' EXIT
+          node scripts/wait-test-servers.mjs
+          npm run test:browser
+          npm run test:phase1
+          npm run test:phase3
+          npm run test:production
+          npm run test:offline-save
+      - name: Retain browser evidence (no user profiles)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sunset-rush-browser-${{ github.sha }}
+          path: |
+            artifacts/**/*.json
+            artifacts/**/*.png
+            artifacts/*.log
+            docs/v3/phase3/*browser.json
+          retention-days: 14

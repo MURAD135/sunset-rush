@@ -8,25 +8,25 @@
   "errors": [],
   "before": {
     "power": {
-      "rendered": 7,
-      "skipped": 0,
+      "rendered": 6,
+      "skipped": 1,
       "hidden": 2,
       "nativeBackground": true,
       "pageHidden": false,
       "saveRequests": 3
     },
-    "time": 3
+    "time": 2
   },
   "after": {
     "power": {
-      "rendered": 7,
-      "skipped": 0,
-      "hidden": 293,
+      "rendered": 6,
+      "skipped": 1,
+      "hidden": 290,
       "nativeBackground": true,
       "pageHidden": false,
       "saveRequests": 3
     },
-    "time": 3
+    "time": 2
   },
   "budget": [
     {

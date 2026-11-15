@@ -1,11 +1,15 @@
 # Phase 3 — implementation and validation
 
 Starting point: `382f66a`, branch `feat/sunset-rush-phase3-save-system`.
-No push, deployment, merge, or changes to PR #1/#2.
+Authorized review branch is pushed to Draft PR #3 targeting visual-performance.
+No deployment, merge, or changes to PR #1/#2.
 
-Latest follow-up: 2026-11-14, runtime commit `0675e64`: 51 units passed,
-interrupted-audio recovery, handled save-lock failures and lap-aware Sport traffic.
-Current verification is recorded at the end and in `phase3/nov14-summary.json`.
+Latest checkpoint: 2026-11-15, runtime `5be6d74`: 68 units/build passed.
+Version 2 coverage, optional local guest, guarded mock-cloud review, background
+work reduction and explicit corrupt-save recovery are implemented. New browser
+CI and offline crash coverage are being saved before the requested effects batch.
+See the latest chronological sections and `phase3/` evidence; historical counts
+below describe their original batches rather than current totals.
 
 ## Recovery checkpoint
 
@@ -265,3 +269,25 @@ manual archive export/storage maintenance; it is intentionally not silent loss.
 68 units/build plus two browser recovery checks passed (`phase3/recovery-browser.json`).
 An acknowledged autosave and an exported backup remain the durability boundary;
 this does not protect against OS-wide site-data deletion or physical disk failure.
+
+
+## Production offline/crash and review automation — November 15
+
+At 5be6d74, 68 units/build, 34 baseline browser regressions, 7 audio, 11 save,
+2 profile/crash, 4 power and 2 damaged-recovery checks passed. Four Sport races
+match across 30/60/120/144 Hz; all Classic outcomes match Phase 2 exactly. Four
+endurance races retained bounded resources. Production has no test hooks and no
+external requests, starts offline after precaching, and retains car/upgrade
+purchases, circuit/preferences and guest after a renderer crash without pagehide.
+Three new offline-save assertions cover mobile portrait/landscape access too.
+The additional quality suite was interrupted before a fresh report, so its old
+six-check result is not counted as newly executed here.
+
+GitHub Actions now has a separate Chromium software-WebGL job for the 34
+regressions, Phase 3 checks and production/offline-save tests, alongside the
+existing units/build/downloadable ZIP job. It has read-only repository access
+and no deployment. Remote results for the new browser job are pending its push.
+Native staging: artifacts/native/dbc45a1b0986; unsigned web assets only. Latest
+renderer crash/offline evidence is phase3/offline-save.json. c60381d is a verified
+ancestor, not a missing pending commit. Five working files were actually present
+at the latest resume, not the reported seven; no effects changes were invented.

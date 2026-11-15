@@ -60,9 +60,9 @@
         "geometries": 119,
         "textures": 10,
         "programs": 24,
-        "heapUsedBytes": 28699745,
+        "heapUsedBytes": 24762393,
         "heapLimitBytes": 4395630592,
-        "heapAvailableBytes": 4366930847,
+        "heapAvailableBytes": 4370868199,
         "gpuMemoryBytes": null,
         "quality": "Medium",
         "auto": false,
@@ -77,10 +77,10 @@
         ]
       },
       "heap": {
-        "usedSize": 8108040,
-        "totalSize": 9019392,
-        "embedderHeapUsedSize": 1689392,
-        "backingStorageSize": 8153736
+        "usedSize": 8166596,
+        "totalSize": 9035776,
+        "embedderHeapUsedSize": 1750776,
+        "backingStorageSize": 8220005
       }
     },
     {
@@ -138,9 +138,9 @@
         "geometries": 119,
         "textures": 10,
         "programs": 24,
-        "heapUsedBytes": 17926458,
+        "heapUsedBytes": 17276022,
         "heapLimitBytes": 4395630592,
-        "heapAvailableBytes": 4377704134,
+        "heapAvailableBytes": 4378354570,
         "gpuMemoryBytes": null,
         "quality": "Medium",
         "auto": false,
@@ -155,10 +155,10 @@
         ]
       },
       "heap": {
-        "usedSize": 8142412,
-        "totalSize": 8757248,
-        "embedderHeapUsedSize": 1232560,
-        "backingStorageSize": 8153841
+        "usedSize": 8239204,
+        "totalSize": 8773632,
+        "embedderHeapUsedSize": 1288552,
+        "backingStorageSize": 8220149
       }
     },
     {
@@ -216,9 +216,9 @@
         "geometries": 119,
         "textures": 10,
         "programs": 24,
-        "heapUsedBytes": 18150139,
+        "heapUsedBytes": 17293343,
         "heapLimitBytes": 4395630592,
-        "heapAvailableBytes": 4377480453,
+        "heapAvailableBytes": 4378337249,
         "gpuMemoryBytes": null,
         "quality": "Medium",
         "auto": false,
@@ -233,10 +233,10 @@
         ]
       },
       "heap": {
-        "usedSize": 8209036,
-        "totalSize": 9281536,
-        "embedderHeapUsedSize": 1419288,
-        "backingStorageSize": 8153923
+        "usedSize": 8294416,
+        "totalSize": 8773632,
+        "embedderHeapUsedSize": 1293520,
+        "backingStorageSize": 8220267
       }
     },
     {
@@ -294,9 +294,9 @@
         "geometries": 119,
         "textures": 10,
         "programs": 24,
-        "heapUsedBytes": 17811293,
+        "heapUsedBytes": 17602750,
         "heapLimitBytes": 4395630592,
-        "heapAvailableBytes": 4377819299,
+        "heapAvailableBytes": 4378027842,
         "gpuMemoryBytes": null,
         "quality": "Medium",
         "auto": false,
@@ -311,10 +311,10 @@
         ]
       },
       "heap": {
-        "usedSize": 8275592,
-        "totalSize": 9019392,
-        "embedderHeapUsedSize": 1227856,
-        "backingStorageSize": 8153813
+        "usedSize": 8407180,
+        "totalSize": 9297920,
+        "embedderHeapUsedSize": 1680688,
+        "backingStorageSize": 8220193
       }
     }
   ],

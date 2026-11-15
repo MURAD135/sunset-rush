@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "production offline car/upgrade purchases and settings reach a validated durable generation",
+    "offline renderer crash without pagehide restores wallet, ownership, upgrades, circuit, guest and settings from cached production assets",
+    "restored backup controls remain reachable in portrait and landscape touch emulation"
+  ],
+  "errors": [],
+  "external": [],
+  "environment": "Chromium software SwiftShader, mobile touch emulation; no real Safari/Android device",
+  "crash": "CDP Page.crash without pagehide; acknowledged autosaves only, not physical power loss",
+  "offline": true
+}
