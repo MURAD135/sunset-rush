@@ -31,7 +31,7 @@ jobs:
 # Intentionally no Pages deployment, release, merge or write token permissions.
   browser:
     name: Browser saves and race regressions (software WebGL)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
