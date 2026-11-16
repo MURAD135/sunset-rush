@@ -20,3 +20,18 @@ test('nitro and collision sparks retain distinct lifetimes and bounded projected
  pool.step(.2);assert.equal(pool.opacity[0],0);assert.ok(pool.opacity[1]>0);
  pool.setProjection(600,60);assert.ok(Number.isFinite(pool.mesh.material.uniforms.projectionScale.value));
 });
+
+test('particle sampling is smooth, non-mutating and skips repeated paused uploads',()=>{
+ const pool=new RaceParticles(null,4);pool.emit(0,1,0,12,0,0,1,.3,.55,1,0);pool.step(1/60);
+ const position=Array.from(pool.position),life=Array.from(pool.life),velocity=Array.from(pool.velocity);
+ for(const alpha of [0,.25,.5,.75,1]){pool.present(alpha);assert.ok(Math.abs(pool.display[0]-.2*alpha)<1e-6);assert.deepEqual(Array.from(pool.position),position);assert.deepEqual(Array.from(pool.life),life);assert.deepEqual(Array.from(pool.velocity),velocity);}
+ const version=pool.mesh.geometry.attributes.position.version;pool.present(1);assert.equal(pool.mesh.geometry.attributes.position.version,version);
+ pool.present(NaN);assert.ok(pool.display.every(Number.isFinite));
+});
+test('recycled emissions and quality changes never interpolate from an unrelated old particle',()=>{
+ const pool=new RaceParticles(null,4),geometry=pool.mesh.geometry,material=pool.mesh.material;pool.setBudget(1);
+ pool.emit(-100,1,0,10,0,0,.1,.3,.55,1,0);pool.step(.2);pool.present(1);
+ pool.emit(100,1,0,10,0,0,1,.3,.55,1,0);pool.step(1/60);pool.present(0);assert.equal(pool.display[0],100);assert.equal(pool.displayOpacity[0],0);
+ pool.present(.5);assert.ok(pool.display[0]>=100);pool.clear();for(const alpha of [0,.5,1]){pool.present(alpha);assert.ok(pool.displayOpacity.every(x=>x===0));}
+ for(let i=0;i<100;i++){pool.setDetail(i%2===0);pool.setBudget(i%2?1:4);pool.present(.5);}assert.equal(pool.mesh.geometry,geometry);assert.equal(pool.mesh.material,material);
+});

@@ -294,6 +294,7 @@ function syncPresentation(){
   renderRace(1,0);
 }
 function renderRace(alpha,dt){
+  particles.present(alpha);
   const shown=poses.sample(alpha),lit=!!(TH[thm].night||wxs>0);
   for(let i=0;i<shown.length;i++){
     const p=shown[i],mesh=i===0?car:ai[i-1].m;
@@ -346,7 +347,7 @@ function applyResolution(scale=1){
 }
 function applyQuality(){
   const quality=QUALITY[ql],budget=reducedEffects?.55:1;
-  particles.setBudget(Math.floor(quality.particles*budget));
+  particles.setBudget(Math.floor(quality.particles*budget));particles.setDetail(ql!==2&&!reducedEffects);
   slines.geometry.setDrawRange(0,Math.floor(quality.lines*budget)*2);rain.geometry.setDrawRange(0,Math.floor(quality.rain*budget)*2);
   sun.castShadow=quality.shadow>0&&!!SHD;
   if(sun.shadow.mapSize.x!==quality.shadow&&quality.shadow>0){
@@ -365,7 +366,7 @@ function prepareRender(dt){
   skyClouds.time.value=time;skyClouds.strength.value=rc.visible&&TK.coast?(TH[thm].night?.1:wxs?.3:.85):0;
   const life=rc.userData.coast;
   if(life){life.time.value=time;life.motion.value=reducedEffects?.25:1;life.detail.value=ql===2||reducedEffects?0:1;if(life.birds)life.birds.visible=ql!==2&&!reducedEffects;if(life.traffic)life.traffic.visible=ql!==2&&!reducedEffects;}
-  particles.setProjection(cv.height,cam.fov);
+  particles.present();particles.setProjection(cv.height,cam.fov);
   const quality=QUALITY[ql];ai.forEach(a=>updateCarLOD(a.m,cam,quality.lod));
   shadowTime+=Math.max(0,dt);
   rd.shadowMap.needsUpdate=!!(sun.castShadow&&shadowTime>=1/quality.shadowHz);

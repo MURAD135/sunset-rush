@@ -291,3 +291,25 @@ Native staging: artifacts/native/dbc45a1b0986; unsigned web assets only. Latest
 renderer crash/offline evidence is phase3/offline-save.json. c60381d is a verified
 ancestor, not a missing pending commit. Five working files were actually present
 at the latest resume, not the reported seven; no effects changes were invented.
+
+
+## Particle interpolation and controlled shadow comparison — November 16
+
+See [EFFECTS_REVIEW.md](EFFECTS_REVIEW.md) for actual matched screenshots,
+resources and the CPU-only cost (including its increase). The original pool is
+retained: no new per-frame material/geometry/texture allocations or post-process.
+Particle positions/opacity/diameter now interpolate without mutating gameplay;
+Low/reduced bypasses smoke waves and caps projected sprite diameter at 48px.
+
+70 units/build, seven effects checks, 34 baseline checks and six quality checks
+passed locally on the modified code. Both shadow-refresh and cached-shadow
+captures compare equal before/after, including exact vehicle/camera state and
+resource counts. The earlier 137/105 calls mismatch was different shadow phases,
+not permission to weaken an assertion or remove the shadow cadence.
+
+CI's camera-persistence test now holds a real Web Lock, asserts pending and
+unwritten state, then waits for the acknowledged durable value before reload.
+Its original zero-shake assertion remains. That passed remotely; the next CI
+failure is tiny coordinate rounding from the older bundled browser compared
+with the Chromium 156 historical fixture. A pinned 156 test runtime is under
+validation; no epsilon tolerance or historical-fixture rewrite was introduced.
