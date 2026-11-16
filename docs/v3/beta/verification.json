@@ -1,0 +1,67 @@
+{
+  "runtimeCommit": "28b8da7aa98d75ca634ef4a79239f79b4cdec919",
+  "date": "2026-11-16",
+  "channel": "beta-review",
+  "scopeFrozen": true,
+  "knownCriticalFailures": [],
+  "validation": {
+    "unitTests": 70,
+    "baselineBrowserChecks": 34,
+    "effectsChecks": 7,
+    "qualityChecks": 6,
+    "audioChecks": 7,
+    "saveBrowserChecks": 11,
+    "profileCrashChecks": 2,
+    "damagedRecoveryChecks": 2,
+    "backgroundChecks": 4,
+    "sportRaceCadences": [
+      30,
+      60,
+      120,
+      144
+    ],
+    "productionOffline": true,
+    "offlineCrashChecks": 3,
+    "enduranceRaces": 4,
+    "additionalBetaRaces": 3,
+    "trackStartupChecks": 11,
+    "carModelsRendered": 8
+  },
+  "environment": {
+    "os": "Linux container; CI browser job Ubuntu 24.04",
+    "localNode": "24.22.1",
+    "browsers": [
+      "Chromium Debian 156.0.8078.79",
+      "Chrome for Testing 156.0.8078.80"
+    ],
+    "renderer": "SwiftShader software WebGL",
+    "hardwareGPU": false,
+    "physicalMobile": false,
+    "webkitTested": false
+  },
+  "ciRuntimeRuns": [
+    {
+      "id": 43803313325,
+      "conclusion": "success",
+      "url": "https://github.com/MURAD135/sunset-rush/actions/runs/43803313325"
+    },
+    {
+      "id": 43803318078,
+      "conclusion": "success",
+      "url": "https://github.com/MURAD135/sunset-rush/actions/runs/43803318078"
+    }
+  ],
+  "endurance": {
+    "geometries": 119,
+    "textures": 10,
+    "programs": 24,
+    "warmHeapMiB": 7.898738861083984,
+    "finalHeapMiB": 8.041603088378906
+  },
+  "productionCache": "sunset-rush-b0b398c4c57a",
+  "nativeAssets": "artifacts/native/fbf920e01cff",
+  "cloudSync": "disabled; mocks only",
+  "signedApps": false,
+  "deployments": false,
+  "pullRequest": "https://github.com/MURAD135/sunset-rush/pull/3"
+}

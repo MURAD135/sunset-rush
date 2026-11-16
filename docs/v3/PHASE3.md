@@ -4,12 +4,12 @@ Starting point: `382f66a`, branch `feat/sunset-rush-phase3-save-system`.
 Authorized review branch is pushed to Draft PR #3 targeting visual-performance.
 No deployment, merge, or changes to PR #1/#2.
 
-Latest checkpoint: 2026-11-15, runtime `5be6d74`: 68 units/build passed.
-Version 2 coverage, optional local guest, guarded mock-cloud review, background
-work reduction and explicit corrupt-save recovery are implemented. New browser
-CI and offline crash coverage are being saved before the requested effects batch.
-See the latest chronological sections and `phase3/` evidence; historical counts
-below describe their original batches rather than current totals.
+Latest qualified runtime: `28b8da7`, 2026-11-16. **Beta scope is frozen.**
+70 units/build, 34 baseline browser checks, effects/quality/audio/save/offline
+and endurance checks passed; both GitHub Actions runs on 28b8da7 succeeded.
+[BETA.md](BETA.md) is the current acceptance/limitations report. Historical
+sections below retain their original counts and implementation milestones.
+No additional gameplay features are being developed for this Beta.
 
 ## Recovery checkpoint
 
@@ -40,7 +40,7 @@ bundle were preserved. Baseline: 27 unit tests and production build passed.
   same result ordering/times. Evidence: `phase3/driving.json`,
   `phase3/classic-regression.json`, `phase3/timing.json`.
 
-## Local saves (format 1)
+## Initial local saves (format 1; later expanded to version 2)
 
 Implementation: `src/save-system.js`, `src/save-ui.js`.
 
@@ -55,7 +55,8 @@ Implementation: `src/save-system.js`, `src/save-ui.js`.
   Invalid legacy entries are reported in diagnostics and excluded; raw legacy
   keys remain untouched. Old three-upgrade arrays expand to five.
 - New sound, vibration, auto-throttle, sensitivity and driving mode preferences
-  persist. Car/paint/track selection remains session-only as in Phase 2.
+  persist. At that initial checkpoint car/paint/track selection was session-only;
+  version 2 now persists it, as documented in the later coverage expansion.
 - Debounce 500 ms for mutations; capture live statistics every five seconds,
   after race rewards, and on pagehide/hidden. No localStorage writes in physics
   ticks. Web Locks serializes writers where available; stale revisions/storage

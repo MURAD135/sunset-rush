@@ -19,7 +19,8 @@
     "prepare:native": "npm run build && node scripts/prepare-native.mjs",
     "test:phase3": "node tests/audio-browser.mjs && node tests/driving-browser.mjs && node tests/save-browser.mjs && node tests/profile-browser.mjs && node tests/power-browser.mjs && node tests/recovery-browser.mjs",
     "test:offline-save": "node tests/offline-save.mjs",
-    "test:effects": "node tests/effects.mjs && node tests/effects-comparison.mjs"
+    "test:effects": "node tests/effects.mjs && node tests/effects-comparison.mjs",
+    "test:beta": "node tests/vehicles.mjs && node tests/beta-coverage.mjs"
   },
   "dependencies": {
     "three": "0.128.0",
