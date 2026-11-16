@@ -325,3 +325,20 @@ including an explicit subsequent autosave that must not clear the import error.
 The cross-tab test also now stops its own polling before reload; the previous
 Promise.any left a losing injected predicate alive in the next document. No
 application error is filtered, and both pages' pageerror events are checked.
+
+
+## Pin the browser without weakening numeric regression checks
+
+The Playwright-bundled old Chromium produced tiny last-bit coordinate differences
+against the historical Chromium156 fixture despite identical finish times and
+rankings. The original exact comparison and fixture were retained. Official CFT
+156.0.8078.80, SHA-256 pinned in config/review-browser.json, passed all 16 Phase 1
+checks and that unchanged historical comparison locally. The installer is tested.
+
+The effects fixture for CI was separately recorded from untouched 30b20b4 in
+that same CFT executable, not copied from the new implementation. It passed exact
+vehicle/camera/resource comparisons in both shadow phases. The original Debian
+captures are preserved. Six quality, two damaged-recovery and two profile/crash
+checks also passed with CFT. CI now includes the effects and quality suites.
+See EFFECTS_REVIEW.md for reproduction commands. Remote checks follow the push;
+no result from a pending workflow is represented as a success.

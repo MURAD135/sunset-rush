@@ -54,3 +54,28 @@ Node 24.22.1 على Linux، تجمع 150 جسيمًا، محاكاة 60Hz وعر
 
 الأدلة الخام: [قبل](phase3/effects/before.json)، [بعد](phase3/effects/after.json)،
 [تكلفة CPU](phase3/effects/cpu.json). تشغيل المقارنة: `npm run test:effects`.
+
+
+## تثبيت بيئة CI
+
+تستخدم CI نسخة Chrome for Testing 156.0.8078.80 محددة في
+`config/review-browser.json`، ويُتحقق من SHA-256 قبل استخراجها. صورة المشغل
+Ubuntu 24.04 تدعم مكتبات Playwright المستخدمة. اختبار السباقات التاريخي
+بقي كما هو ونجح على هذا المتصفح؛ لم يُعدل المرجع أو تُضف epsilon.
+
+مرجع المؤثرات الخاص بـCI هو `phase3/effects/before-cft.json`، التُقط فعليًا
+من checkout مستقل لـ30b20b4 بنفس المتصفح. المرجع والصور الأصلية باستخدام
+Chromium Debian 156.0.8078.79 محفوظة أيضًا. يُختار المرجع قبل الاختبار وفق
+بيئة التشغيل، وليس كبديل بعد الفشل. كل مقارنة ما زالت تشترط مساواة حالة
+السيارة والكاميرا وعدادات الرسم في كل طور من الظلال.
+
+لإعادة اختبار CI محليًا على Linux بعد تثبيت حزمة المتصفح:
+
+```bash
+python3 scripts/install-review-browser.py /tmp/sunset-review-browser
+export CHROMIUM_PATH=/tmp/sunset-review-browser/chrome-linux64/chrome
+export EFFECTS_BASELINE=docs/v3/phase3/effects/before-cft.json
+npm run test:effects
+```
+
+يلزم أن يعمل خادم التطوير على 5173 عند تشغيل اختبار المتصفح.

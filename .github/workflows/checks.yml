@@ -40,13 +40,17 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install-deps chromium
+      - name: Install pinned review browser
+        run: python3 scripts/install-review-browser.py "$RUNNER_TEMP/sunset-review-browser" > "$RUNNER_TEMP/sunset-review-browser-path"
       - run: npm run build
       - name: Test races, audio, recovery and offline production
         shell: bash
         run: |
           mkdir -p artifacts/phase3
-          export CHROMIUM_PATH="$(node --input-type=module -e 'import {chromium} from "playwright"; process.stdout.write(chromium.executablePath())')"
+          export CHROMIUM_PATH="$(cat "$RUNNER_TEMP/sunset-review-browser-path")"
+          "$CHROMIUM_PATH" --version
+          export EFFECTS_BASELINE=docs/v3/phase3/effects/before-cft.json
           export GAME_URL=http://127.0.0.1:5173
           export PRODUCTION_URL=http://127.0.0.1:4173/
           npm run dev -- --host 127.0.0.1 --port 5173 --strictPort > artifacts/dev.log 2>&1 &
@@ -57,6 +61,8 @@ jobs:
           node scripts/wait-test-servers.mjs
           npm run test:browser
           npm run test:phase1
+          npm run test:effects
+          npm run test:phase2
           npm run test:phase3
           npm run test:production
           npm run test:offline-save

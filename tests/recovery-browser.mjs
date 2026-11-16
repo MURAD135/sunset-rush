@@ -12,8 +12,8 @@ try{
  assert.deepEqual(JSON.parse(await readFile(await file.path(),'utf8')).slots,['damaged A','damaged B']);checks.push('unreadable local generations are downloadable without overwriting originals');
  let confirmation='';page.on('dialog',d=>{confirmation=d.message();d.accept();});
  const text=encodeSave({'sunset-up':'{"u":[2,0,0,0,0],"c":420}','sunset-st':JSON.stringify({...defaultStats(),r:8,cu:[6]}),'sunset-day':new Date().toDateString()});
- await page.locator('#saveFile').setInputFiles({name:'backup.json',mimeType:'application/json',buffer:Buffer.from(text)});
- await page.waitForEvent('load');await page.waitForFunction(()=>window.__sunset&&__sunset.save().status==='saved');
+ const imported=page.waitForEvent('load');await page.locator('#saveFile').setInputFiles({name:'backup.json',mimeType:'application/json',buffer:Buffer.from(text)});
+ await imported;await page.waitForFunction(()=>window.__sunset&&__sunset.save().status==='saved');
  assert.match(confirmation,/archived first/);const restored=await page.evaluate(()=>({save:__sunset.save(),archive:JSON.parse(localStorage.getItem('sunset-damaged-backup'))}));
  assert.equal(restored.save.coins,420);assert.equal(restored.save.upgrades[0],2);assert.equal(restored.save.stats.r,8);assert.deepEqual(restored.save.stats.cu,[6]);assert.deepEqual(restored.archive.slots,['damaged A','damaged B']);checks.push('explicit validated import archives both corrupt generations and restores coherent progress after reload');
  await page.locator('#mSet').click();assert.equal(await page.locator('#saveDamaged').isVisible(),true);
