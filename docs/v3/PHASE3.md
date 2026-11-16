@@ -313,3 +313,15 @@ Its original zero-shake assertion remains. That passed remotely; the next CI
 failure is tiny coordinate rounding from the older bundled browser compared
 with the Chromium 156 historical fixture. A pinned 156 test runtime is under
 validation; no epsilon tolerance or historical-fixture rewrite was introduced.
+
+
+## Keep failed-import feedback visible
+
+A periodic successful autosave could overwrite the invalid-file message before
+a slow frame exposed it. The backup operation message now persists until the
+next backup operation; the separate saving warning still reflects actual storage
+status. 70 units/build and all 11 save-browser checks passed with pinned CFT156,
+including an explicit subsequent autosave that must not clear the import error.
+The cross-tab test also now stops its own polling before reload; the previous
+Promise.any left a losing injected predicate alive in the next document. No
+application error is filtered, and both pages' pageerror events are checked.

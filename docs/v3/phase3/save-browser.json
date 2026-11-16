@@ -6,7 +6,7 @@
     "confirmed import survives pagehide and reload without stale overwrite",
     "mode and mute restore",
     "optional local guest survives reload/import without a cloud account or credential",
-    "corrupt import leaves profile intact",
+    "corrupt import leaves profile intact and its error remains visible after autosave",
     "quota failure visible and retry succeeds",
     "denied Web Lock reports unsaved state without unhandled rejection and retries safely",
     "second tab makes the stale writer read-only",
