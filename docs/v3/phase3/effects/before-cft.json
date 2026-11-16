@@ -1,0 +1,295 @@
+{
+  "label": "before-cft",
+  "browserVersion": "156.0.8078.80",
+  "source": "30b20b4",
+  "environment": "Chromium / SwiftShader; deterministic seed 135, 960x600 DPR1, Medium, original car, coast, environment time 0; sparks use a test-triggered collision burst",
+  "shots": [
+    {
+      "name": "drift",
+      "race": {
+        "mode": "race",
+        "state": "go",
+        "paused": 0,
+        "car": 0,
+        "track": 10,
+        "time": 2.166666666666664,
+        "speed": 43.31199999999993,
+        "nitro": 100,
+        "x": 194.08194887152075,
+        "z": 34.8654092371044,
+        "heading": -0.3290795964545845,
+        "direction": -0.11107810720369266,
+        "drifting": true,
+        "cum": 0.17774684946494607,
+        "lap": 0,
+        "laps": [],
+        "finish": 0,
+        "results": [
+          {
+            "id": 1,
+            "name": "SOL",
+            "distance": 0.42420601930983887,
+            "finishTime": null
+          },
+          {
+            "id": 2,
+            "name": "NOVA",
+            "distance": 0.40874144804080076,
+            "finishTime": null
+          },
+          {
+            "id": 4,
+            "name": "LUNA",
+            "distance": 0.34674380344002753,
+            "finishTime": null
+          },
+          {
+            "id": 3,
+            "name": "KAI",
+            "distance": 0.3227323738570485,
+            "finishTime": null
+          },
+          {
+            "id": 0,
+            "name": "YOU",
+            "distance": 0.17774684946494607,
+            "finishTime": null
+          }
+        ],
+        "keys": {
+          "l": 0,
+          "r": 1,
+          "g": 1,
+          "b": 0,
+          "h": 1,
+          "n": 0
+        },
+        "contacts": 0
+      },
+      "view": {
+        "position": [
+          196.48439628186708,
+          4.281841370782161,
+          23.615231749311338
+        ],
+        "quaternion": [
+          -0.008654576938908507,
+          0.9910883468804382,
+          0.08196906254339809,
+          0.10464253323369546
+        ],
+        "fov": 59.67038983238238
+      },
+      "resources": {
+        "active": 46,
+        "budget": 100,
+        "geometries": 104,
+        "textures": 9,
+        "programs": 26,
+        "calls": 137,
+        "triangles": 31339
+      },
+      "cachedResources": {
+        "active": 46,
+        "budget": 100,
+        "geometries": 104,
+        "textures": 9,
+        "programs": 26,
+        "calls": 105,
+        "triangles": 24105
+      }
+    },
+    {
+      "name": "nitro",
+      "race": {
+        "mode": "race",
+        "state": "go",
+        "paused": 0,
+        "car": 0,
+        "track": 10,
+        "time": 3.8333333333333246,
+        "speed": 53.99999999999997,
+        "nitro": 82.99999999999955,
+        "x": 171.53836984662223,
+        "z": 69.87805843245118,
+        "heading": -0.3421085024655079,
+        "direction": -0.3421085024655079,
+        "drifting": false,
+        "cum": 0.38683599867434565,
+        "lap": 0,
+        "laps": [],
+        "finish": 0,
+        "results": [
+          {
+            "id": 1,
+            "name": "SOL",
+            "distance": 0.8484435757621179,
+            "finishTime": null
+          },
+          {
+            "id": 2,
+            "name": "NOVA",
+            "distance": 0.7716161658866801,
+            "finishTime": null
+          },
+          {
+            "id": 4,
+            "name": "LUNA",
+            "distance": 0.7435107248823134,
+            "finishTime": null
+          },
+          {
+            "id": 3,
+            "name": "KAI",
+            "distance": 0.7006684872852625,
+            "finishTime": null
+          },
+          {
+            "id": 0,
+            "name": "YOU",
+            "distance": 0.38683599867434565,
+            "finishTime": null
+          }
+        ],
+        "keys": {
+          "l": 0,
+          "r": 0,
+          "g": 1,
+          "b": 0,
+          "h": 0,
+          "n": 1
+        },
+        "contacts": 0
+      },
+      "view": {
+        "position": [
+          175.4696731084419,
+          4.386309240658486,
+          58.83998121497797
+        ],
+        "quaternion": [
+          -0.014335223664601063,
+          0.9819035951012645,
+          0.08297965707112044,
+          0.16962961947153352
+        ],
+        "fov": 65.17621046942382
+      },
+      "resources": {
+        "active": 30,
+        "budget": 100,
+        "geometries": 110,
+        "textures": 9,
+        "programs": 26,
+        "calls": 142,
+        "triangles": 33055
+      },
+      "cachedResources": {
+        "active": 30,
+        "budget": 100,
+        "geometries": 110,
+        "textures": 9,
+        "programs": 26,
+        "calls": 109,
+        "triangles": 25055
+      }
+    },
+    {
+      "name": "sparks",
+      "race": {
+        "mode": "race",
+        "state": "go",
+        "paused": 0,
+        "car": 0,
+        "track": 10,
+        "time": 3.8333333333333246,
+        "speed": 53.99999999999997,
+        "nitro": 82.99999999999955,
+        "x": 171.53836984662223,
+        "z": 69.87805843245118,
+        "heading": -0.3421085024655079,
+        "direction": -0.3421085024655079,
+        "drifting": false,
+        "cum": 0.38683599867434565,
+        "lap": 0,
+        "laps": [],
+        "finish": 0,
+        "results": [
+          {
+            "id": 1,
+            "name": "SOL",
+            "distance": 0.8484435757621179,
+            "finishTime": null
+          },
+          {
+            "id": 2,
+            "name": "NOVA",
+            "distance": 0.7716161658866801,
+            "finishTime": null
+          },
+          {
+            "id": 4,
+            "name": "LUNA",
+            "distance": 0.7435107248823134,
+            "finishTime": null
+          },
+          {
+            "id": 3,
+            "name": "KAI",
+            "distance": 0.7006684872852625,
+            "finishTime": null
+          },
+          {
+            "id": 0,
+            "name": "YOU",
+            "distance": 0.38683599867434565,
+            "finishTime": null
+          }
+        ],
+        "keys": {
+          "l": 0,
+          "r": 0,
+          "g": 1,
+          "b": 0,
+          "h": 0,
+          "n": 1
+        },
+        "contacts": 0
+      },
+      "view": {
+        "position": [
+          175.4696731084419,
+          4.386309240658486,
+          58.83998121497797
+        ],
+        "quaternion": [
+          -0.014335223664601063,
+          0.9819035951012645,
+          0.08297965707112044,
+          0.16962961947153352
+        ],
+        "fov": 65.17621046942382
+      },
+      "resources": {
+        "active": 20,
+        "budget": 100,
+        "geometries": 110,
+        "textures": 9,
+        "programs": 26,
+        "calls": 142,
+        "triangles": 33055
+      },
+      "cachedResources": {
+        "active": 20,
+        "budget": 100,
+        "geometries": 110,
+        "textures": 9,
+        "programs": 26,
+        "calls": 109,
+        "triangles": 25055
+      }
+    }
+  ],
+  "checks": [],
+  "errors": []
+}

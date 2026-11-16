@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-14",
+  "runtimeCommit": "0675e64",
+  "unitTests": 51,
+  "classicBrowserChecks": 18,
+  "interpolationChecks": 9,
+  "timingChecks": 6,
+  "historicalRaceParityChecks": 1,
+  "audioBrowserChecks": 7,
+  "saveBrowserChecks": 10,
+  "sportFullRaces": 4,
+  "cadences": [
+    30,
+    60,
+    120,
+    144
+  ],
+  "enduranceRaces": 4,
+  "productionOffline": true,
+  "productionCache": "sunset-rush-40f4601e229b",
+  "nativeWebAssets": "artifacts/native/9e1a1e02ded4",
+  "environment": "Node 24.22.1, Linux, Chromium 156 with SwiftShader. Functional verification; not physical GPU/iOS/Android profiling.",
+  "cloudBackend": "not configured",
+  "nativeSignedApp": false,
+  "pushMergeDeploy": false
+}

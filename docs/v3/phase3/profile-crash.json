@@ -1,0 +1,32 @@
+{
+  "checks": [
+    "paid car, paint, upgrade, achievements, bests and all session preferences survive a renderer crash without pagehide",
+    "corrupt current generation recovers coherent wallet from previous generation"
+  ],
+  "errors": [],
+  "crash": "Chrome DevTools Page.crash; renderer termination, not a physical power cut",
+  "profile": {
+    "session": {
+      "car": 6,
+      "color": "#ffd700",
+      "track": 3,
+      "difficulty": 2,
+      "weather": 2,
+      "surface": 1,
+      "theme": 1,
+      "laps": 5,
+      "camera": 0,
+      "ghost": false,
+      "lights": false,
+      "opt": {
+        "fin": 2,
+        "wing": 2,
+        "stripe": "#ffffff",
+        "rim": "#ffb547",
+        "glow": "#7cff4f"
+      }
+    },
+    "recentResults": []
+  },
+  "coins": 1750
+}

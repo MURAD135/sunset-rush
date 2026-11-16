@@ -1,0 +1,27 @@
+import {chromium} from 'playwright';import assert from 'node:assert/strict';
+import {mkdir,writeFile,readFile,access} from 'node:fs/promises';
+const label=process.env.EFFECTS_CAPTURE||'after',out='artifacts/phase3/effects';await mkdir(out,{recursive:true});
+const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader']});
+const errors=[],shots=[],checks=[];
+try{
+ const page=await browser.newPage({viewport:{width:960,height:600},deviceScaleFactor:1});page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&/WebGL|shader|THREE/.test(m.text()))errors.push(m.text());});
+ await page.addInitScript(()=>{let seed=135;Math.random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);});
+ await page.route('**/src/game.js*',async route=>{const response=await route.fetch(),source=(await response.text()).replace('  rd.render(sc,cam);','  if(!window.__freezeRender)rd.render(sc,cam);');await route.fulfill({response,body:source+`\nif(window.__sunset){window.__freezeRender=true;__sunset.particles=()=>({active:particles.life.filter(x=>x>0).length,budget:particles.budget,logical:Array.from(particles.position),shown:Array.from(particles.mesh.geometry.attributes.position.array),geometries:rd.info.memory.geometries,textures:rd.info.memory.textures,programs:rd.info.programs.length,calls:rd.info.render.calls,triangles:rd.info.render.triangles});__sunset.effectsDraw=(refresh=true)=>{shadowTime=refresh?Infinity:0;__sunset.render();};__sunset.sparkTest=()=>{burst(P.x,P.z);for(let i=0;i<12;i++)pUpd(1/60);};}`});});
+ await page.goto((process.env.GAME_URL||'http://127.0.0.1:5173')+'/?test=1');await page.waitForFunction(()=>window.__sunset?.particles);await page.addStyleTag({content:'#pp{visibility:hidden}'});
+ await page.evaluate(()=>{__sunset.quality(1);__sunset.start();__sunset.step(190);__sunset.step(80,{g:1});__sunset.step(40,{g:1,h:1,r:1});});
+ for(const name of ['drift','nitro','sparks']){
+  if(name==='nitro')await page.evaluate(()=>{__sunset.recover();__sunset.step(80,{g:1});__sunset.step(20,{g:1,n:1});});
+  if(name==='sparks')await page.evaluate(()=>__sunset.sparkTest());
+  const shot=await page.evaluate(()=>{__sunset.present(1,0);__sunset.environment(0);__sunset.effectsDraw();const{renderer,frameTimes,...race}=__sunset.state();const{logical,shown,...resources}=__sunset.particles();return{race,view:__sunset.view(),resources};});shot.cachedResources=await page.evaluate(()=>{__sunset.effectsDraw(false);const{logical,shown,...resources}=__sunset.particles();return resources;});assert.ok(shot.resources.calls>shot.cachedResources.calls,'refreshing shadows must include its extra draw pass');shots.push({name,...shot});await page.screenshot({path:`${out}/${name}-${label}.png`});
+ }
+ if(label==='after'){
+  const baselinePath=process.env.EFFECTS_BASELINE||await access(`${out}/before.json`).then(()=>`${out}/before.json`,()=> 'docs/v3/phase3/effects/before.json');
+  const baseline=JSON.parse(await readFile(baselinePath,'utf8'));
+  if(baseline.browserVersion)assert.equal(browser.version(),baseline.browserVersion,'Use the same pinned browser as the baseline capture');
+  for(let i=0;i<shots.length;i++){assert.deepEqual(JSON.parse(JSON.stringify(shots[i].race)),baseline.shots[i].race);assert.deepEqual(shots[i].view,baseline.shots[i].view);for(const pass of ['resources','cachedResources'])for(const k of ['calls','triangles','geometries','textures','programs'])assert.equal(shots[i][pass][k],baseline.shots[i][pass][k],`${shots[i].name}/${pass}: ${k}`);}
+  checks.push('matched real captures retain identical car/race/camera and draw calls, triangles, geometries, textures and programs');
+  const motion=await page.evaluate(()=>{const g=__sunset,logical=g.particles().logical;g.present(0,0);const a=g.particles().shown;g.present(.5,0);const b=g.particles().shown;g.present(1,0);return{logical,after:g.particles().logical,a,b,c:g.particles().shown};});assert.deepEqual(motion.logical,motion.after);assert.notDeepEqual(motion.a,motion.c);for(let i=0;i<motion.a.length;i++)assert.ok(Math.abs(motion.b[i]-(motion.a[i]+motion.c[i])/2)<.0001);checks.push('particle interpolation changes rendered positions without mutating authoritative particle or car state');
+  const budgets=await page.evaluate(()=>{const g=__sunset,rows=[];for(let cycle=0;cycle<3;cycle++)for(const reduced of [true,false]){g.quality(reduced?2:1);g.graphics({reduced});g.step(30,{g:1,n:1});g.render();const{logical,shown,...r}=g.particles();rows.push(r);}g.restart();g.render();return{rows,reset:g.particles().active};});assert.equal(budgets.reset,0);for(const r of budgets.rows){assert.ok(r.active<=r.budget);assert.ok([33,100].includes(r.budget));}assert.equal(budgets.rows.at(-1).programs,budgets.rows[1].programs);checks.push('quality/reduced toggles reuse shaders and restart clears all particles');
+ }
+ assert.deepEqual(errors,[]);await writeFile(`${out}/${label}.json`,JSON.stringify({label,browserVersion:browser.version(),source:process.env.EFFECTS_SOURCE||'working-tree',environment:'Chromium / SwiftShader; deterministic seed 135, 960x600 DPR1, Medium, original car, coast, environment time 0; sparks use a test-triggered collision burst',shots,checks,errors},null,2));console.log({label,checks,errors,resources:shots.map(s=>({name:s.name,...s.resources}))});
+}finally{await browser.close();}

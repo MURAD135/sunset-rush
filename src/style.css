@@ -74,3 +74,6 @@ html,body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 .ts{background:var(--panel);backdrop-filter:blur(14px);border:1px solid #ffd27a;border-radius:14px;padding:8px 14px;margin-top:6px;font-weight:700;animation:up .4s both}
 @media (max-height:640px){.logo b{font-size:48px}.spd b{font-size:40px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+#saveNotice{position:fixed;top:env(safe-area-inset-top,0px);left:10%;right:10%;z-index:30;background:#442328;color:#fff;padding:8px;text-align:center;font-size:13px;pointer-events:none}
+#sSet .p{max-height:calc(100dvh - 24px);overflow-y:auto}

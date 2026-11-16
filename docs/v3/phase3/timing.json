@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "Gamepad pause freezes simulation even across a five-second stall",
+    "Gamepad resume inside input polling discards a stale ten-second frame interval",
+    "Gamepad recovery inside input polling resets both poses without advancing race time",
+    "Driving resumes on the next 60 Hz tick",
+    "Gamepad camera switch is smooth; disconnect clears throttle",
+    "WebGL loss notifications pause; restoration clears clock history (synthetic events, not a GPU reset)"
+  ],
+  "errors": []
+}

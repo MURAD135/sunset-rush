@@ -1,0 +1,7 @@
+{
+  "engine": "Playwright WebKit",
+  "installed": false,
+  "launchable": false,
+  "gameTested": false,
+  "reason": "WebKit browser binary is not installed in this environment."
+}

@@ -49,6 +49,7 @@
 <div class="rw2"><span>الصوت</span><button class="tg" id="tgS" role="switch" aria-checked="true" aria-label="الصوت"></button></div>
 <div class="rw2"><span>الاهتزاز</span><button class="tg" id="tgV" role="switch" aria-checked="true" aria-label="الاهتزاز"></button></div>
 <div class="rw2"><span>تسريع تلقائي</span><button class="tg" id="tgA" role="switch" aria-checked="false" aria-label="تسريع تلقائي"></button></div>
+<div class="rw2"><span>نمط القيادة</span><div class="seg" id="driveMode"></div></div>
 <div class="rw2"><span>حساسية التوجيه</span><div class="seg" id="ss"></div></div>
 <div class="rw2"><span>اهتزاز الكاميرا</span><div class="seg" id="cameraShake" role="group" aria-label="Camera shake"></div></div>
 <div class="rw2"><span>جودة الرسوميات</span></div><div class="seg" id="ql" style="margin-bottom:4px"></div>
@@ -60,9 +61,9 @@
 <div class="rw2"><span>عرض الإطارات</span><button class="tg" id="tgFp" role="switch" aria-checked="false" aria-label="FPS"></button></div>
 <div class="rw2"><span>سيارة الشبح</span><button class="tg" id="tgGh" role="switch" aria-checked="true" aria-label="Ghost"></button></div>
 <div class="rw2"><span>التوجيه بإمالة الجهاز</span><button class="tg" id="tgTl" role="switch" aria-checked="false" aria-label="Tilt"></button></div>
-<div class="rw2"><span>اللغة</span></div><div class="seg" id="lg" style="flex-wrap:wrap;margin-top:8px"></div><button class="gh2" id="rst">إعادة ضبط التقدم والعملات</button><button class="go" id="cS" style="margin-top:14px">حسنًا</button></div></div>
-<div id="pp"></div><div id="fp" hidden></div>
-<div class="sheet" id="sAch" hidden><div class="p"><h3>الإنجازات</h3><div class="s" style="margin-top:6px"><b>مهام اليوم</b></div><div id="msn"></div><div id="stg" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0"></div><div id="acl"></div><button class="go" id="cA" style="margin-top:14px">حسنًا</button></div></div>
+<div class="rw2"><span>اللغة</span></div><div class="seg" id="lg" style="flex-wrap:wrap;margin-top:8px"></div><h4>ملف اللاعب</h4><p id="guestStatus" role="status"></p><button class="gh2" id="guestCreate">إنشاء ملف ضيف محلي</button><p>المزامنة السحابية غير مفعّلة</p><h4>حفظ التقدم</h4><p id="saveStatus" role="status" aria-live="polite"></p><div class="seg" style="flex-wrap:wrap"><button id="saveExport">تصدير نسخة</button><button id="saveImport">استيراد نسخة</button><button id="savePrevious">استعادة النسخة السابقة</button><button id="saveDamaged" hidden>تنزيل البيانات المتضررة</button></div><input id="saveFile" type="file" accept="application/json,.json" hidden><button class="gh2" id="rst">إعادة ضبط التقدم والعملات</button><button class="go" id="cS" style="margin-top:14px">حسنًا</button></div></div>
+<div id="saveNotice" role="alert" hidden></div><div id="pp"></div><div id="fp" hidden></div>
+<div class="sheet" id="sAch" hidden><div class="p"><h3>الإنجازات</h3><div class="s" style="margin-top:6px"><b>مهام اليوم</b></div><div id="msn"></div><div id="stg" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0"></div><div id="acl"></div><h4>آخر السباقات</h4><div id="recentRaces"></div><button class="go" id="cA" style="margin-top:14px">حسنًا</button></div></div>
 <div class="sheet" id="sHow" hidden><div class="p"><h3>طريقة اللعب</h3><ol class="hw"><li>اضغط «تسريع» وحرّك السيارة بأزرار اليسار واليمين.</li><li>زر النيترو يعطيك دفعة سرعة، ويتعبّأ بالانجراف وبالمرور على المربعات الزرقاء.</li><li>على الحلبة الطويلة اختر طريق النفق المختصر أو الطريق الخارجي.</li><li>المطر والوحل يقللان التماسك، فخفّف السرعة قبل المنعطفات.</li><li>اكسب العملات من كل سباق وطوّر سيارتك في الورشة.</li></ol><button class="go" id="cH">فهمت</button></div></div>
 <div class="sheet c" id="pz" hidden><div class="p"><h3>إيقاف مؤقت</h3><button class="go" id="pzR">متابعة</button><button class="gh2" id="pzRecover">إعادة السيارة للطريق</button><button class="gh2" id="pzA">إعادة السباق</button><button class="gh2" id="pzG">المرآب</button></div></div>
 <script type="module" src="/src/game.js"></script>

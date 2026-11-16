@@ -32,9 +32,9 @@ export class FrameMetrics {
 export class DynamicResolution {
   constructor(targetFps=60){this.targetFps=targetFps;this.reset();}
   reset(){this.scale=1;this.goal=1;this.mean=1000/this.targetFps;this.over=0;this.under=0;this.cooldown=1;}
-  update(frameMs,elapsed){
+  update(frameMs,elapsed,effectiveTargetFps=this.targetFps){
     if(!Number.isFinite(frameMs)||frameMs<=0||frameMs>3000||!Number.isFinite(elapsed)||elapsed<=0)return this.scale;
-    const dt=Math.min(elapsed,.5),budget=1000/this.targetFps;
+    const dt=Math.min(elapsed,.5),budget=1000/effectiveTargetFps;
     this.mean+=(frameMs-this.mean)*(-Math.expm1(-dt/.65));
     this.cooldown=Math.max(0,this.cooldown-dt);
     this.over=this.mean>budget*1.14?this.over+dt:0;

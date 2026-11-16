@@ -30,6 +30,7 @@ try{
  await page.locator('#back').click();await page.locator('#gm').click();await page.locator('#mSet').click();
  await page.locator('#tgFx').click();await page.locator('#tgFp').click();await page.locator('#targetFps button').nth(2).click();
  assert.equal(await page.evaluate(()=>__sunset.diagnostics().reducedEffects),true);
+ await page.waitForFunction(()=>{const raw=['sunset-profile-a','sunset-profile-b'].map(k=>localStorage.getItem(k)).filter(Boolean).map(JSON.parse).sort((a,b)=>b.revision-a.revision)[0]?.data['sunset-graphics'];const saved=raw&&JSON.parse(raw);return __sunset.save().status==='saved'&&saved?.reduced&&saved.target===120;});
  await page.reload();await page.waitForFunction(()=>window.__sunset);assert.equal(await page.evaluate(()=>__sunset.diagnostics().reducedEffects),true);
  assert.equal(await page.locator('#targetFps button.on').textContent(),'120');
  checks.push('Reduced effects and frame target persist; diagnostics are available in the UI');

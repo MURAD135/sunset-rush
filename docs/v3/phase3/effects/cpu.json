@@ -1,0 +1,20 @@
+{
+  "environment": "v24.22.1 linux; Node CPU only, no browser or GPU",
+  "scenario": "150 capacity, two smoke births per 60 Hz step, 120 Hz presentation, 600 warmup callbacks then 3000 samples",
+  "before": {
+    "samples": 3000,
+    "meanMs": 0.002873330333333532,
+    "p95Ms": 0.014563000000009652,
+    "p99Ms": 0.029876000000001568,
+    "cpuTypedArrayBytes": 9150,
+    "gpuAttributeBytes": 4800
+  },
+  "after": {
+    "samples": 3000,
+    "meanMs": 0.005160019333333091,
+    "p95Ms": 0.007624999999990223,
+    "p99Ms": 0.04433499999998958,
+    "cpuTypedArrayBytes": 16950,
+    "gpuAttributeBytes": 8400
+  }
+}

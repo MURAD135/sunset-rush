@@ -113,7 +113,14 @@ try{
   await page.evaluate(()=>{__sunset.step(190);__sunset.step(50,{g:1});__sunset.poll();dispatchEvent(new Event('blur'));});
   assert.equal(await page.evaluate(()=>__sunset.state().paused),1);await page.locator('#pzR').click();
   await page.locator('#back').click();await page.locator('#gm').click();await page.locator('#mSet').click();
+  // Hold the real save lock: the visual setting changes immediately, durability
+  // waits for the acknowledged transaction. Reload must never race that write.
+  await page.evaluate(async()=>{await new Promise(ready=>{window.__heldSaveLock=navigator.locks.request('sunset-rush-profile',()=>new Promise(release=>{window.__releaseSaveLock=release;ready();}));});});
   await page.locator('#cameraShake button').nth(0).click();assert.equal(await page.evaluate(()=>__sunset.presentation().shake),0);
+  assert.equal(await page.evaluate(()=>__sunset.save().status),'pending');
+  assert.notEqual(await page.evaluate(()=>['sunset-profile-a','sunset-profile-b'].map(k=>localStorage.getItem(k)).filter(Boolean).map(JSON.parse).sort((a,b)=>b.revision-a.revision)[0]?.data['sunset-camera-shake']),'0');
+  await page.evaluate(async()=>{__releaseSaveLock();await __heldSaveLock;});
+  await page.waitForFunction(()=>__sunset.save().status==='saved'&&['sunset-profile-a','sunset-profile-b'].map(k=>localStorage.getItem(k)).filter(Boolean).map(JSON.parse).sort((a,b)=>b.revision-a.revision)[0]?.data['sunset-camera-shake']==='0');
   await page.reload();await page.waitForFunction(()=>window.__sunset);assert.equal(await page.evaluate(()=>__sunset.presentation().shake),0);
   checks.push('Blur pauses and clears inputs; camera shake can be disabled and persists');await page.close();
   const reduced=await open(base,false,{reducedMotion:'reduce'});assert.equal(await reduced.evaluate(()=>__sunset.presentation().shake),0);await reduced.close();
