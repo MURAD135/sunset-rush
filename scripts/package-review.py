@@ -31,8 +31,10 @@ info = {"channel": "beta-review", "sourceCommit": revision, "productionCache": "
         "deviceValidation": "Chromium emulation and offline production passed; physical Safari/iOS and Chrome/Android testing pending",
         "runtimeFiles": runtime_hashes}
 files["BUILD_INFO.json"] = (json.dumps(info, indent=2) + "\n").encode()
-files["REVIEW.md"] = (root / "docs/v3/REVIEW_GUIDE.md").read_bytes()
-files["BETA_REPORT.md"] = (root / "docs/v3/BETA.md").read_bytes()
+review = (root / "docs/v3/REVIEW_GUIDE.md").read_text()
+review = review.replace("](PHASE3.md)", f"](https://github.com/MURAD135/sunset-rush/blob/{revision}/docs/v3/PHASE3.md)")
+files["REVIEW.md"] = review.encode()
+files["BETA.md"] = (root / "docs/v3/BETA.md").read_bytes()
 files["TEST_RESULTS.json"] = (root / "docs/v3/beta/verification.json").read_bytes()
 files["SHA256SUMS"] = "".join(f"{hashlib.sha256(data).hexdigest()}  {name}\n" for name, data in sorted(files.items())).encode()
 output = root / "artifacts/review"
