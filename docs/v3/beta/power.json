@@ -1,0 +1,46 @@
+{
+  "checks": [
+    "native background produces zero rendered frames, periodic save requests or play-time increments during 5.5 seconds",
+    "foreground remains paused and audio resumes only on player gesture",
+    "web visibility suspends rendering/audio and returns without suspended-time catch-up",
+    "muting suspends audio processing without allocating new sources"
+  ],
+  "errors": [],
+  "before": {
+    "power": {
+      "rendered": 7,
+      "skipped": 0,
+      "hidden": 2,
+      "nativeBackground": true,
+      "pageHidden": false,
+      "saveRequests": 3
+    },
+    "time": 3
+  },
+  "after": {
+    "power": {
+      "rendered": 7,
+      "skipped": 0,
+      "hidden": 291,
+      "nativeBackground": true,
+      "pageHidden": false,
+      "saveRequests": 3
+    },
+    "time": 3
+  },
+  "budget": [
+    {
+      "callbackHz": 60,
+      "idleFrames": 30
+    },
+    {
+      "callbackHz": 120,
+      "idleFrames": 30
+    },
+    {
+      "callbackHz": 144,
+      "idleFrames": 30
+    }
+  ],
+  "note": "Synthetic native/web background events in Chromium SwiftShader; scheduler counts, not physical energy or FPS measurements."
+}

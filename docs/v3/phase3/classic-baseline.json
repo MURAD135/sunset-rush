@@ -1,0 +1,12 @@
+{
+  "check": "Current Classic full race states exactly match committed Phase 2 at all four cadences",
+  "baseline": "docs/v3/phase2/final-interpolation-checks.json",
+  "cadences": [
+    30,
+    60,
+    120,
+    144
+  ],
+  "finish": 60.783333333331164,
+  "passed": true
+}

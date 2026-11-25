@@ -26,16 +26,20 @@ digest = hashlib.sha256(b"".join(data for name, data in sorted(files.items()) if
 if not cache or cache.group(1).decode() != digest:
     raise SystemExit("Service-worker cache does not match build contents")
 runtime_hashes = {name: hashlib.sha256(data).hexdigest() for name, data in files.items()}
-info = {"sourceCommit": revision, "productionCache": "sunset-rush-" + digest,
+info = {"channel": "beta-review", "sourceCommit": revision, "productionCache": "sunset-rush-" + digest,
         "format": "Static web/PWA build; serve over HTTPS for mobile review, not file://",
         "deviceValidation": "Chromium emulation and offline production passed; physical Safari/iOS and Chrome/Android testing pending",
         "runtimeFiles": runtime_hashes}
 files["BUILD_INFO.json"] = (json.dumps(info, indent=2) + "\n").encode()
-files["REVIEW.md"] = (root / "docs/v3/REVIEW_GUIDE.md").read_bytes()
+review = (root / "docs/v3/REVIEW_GUIDE.md").read_text()
+review = review.replace("](PHASE3.md)", f"](https://github.com/MURAD135/sunset-rush/blob/{revision}/docs/v3/PHASE3.md)")
+files["REVIEW.md"] = review.encode()
+files["BETA.md"] = (root / "docs/v3/BETA.md").read_bytes()
+files["TEST_RESULTS.json"] = (root / "docs/v3/beta/verification.json").read_bytes()
 files["SHA256SUMS"] = "".join(f"{hashlib.sha256(data).hexdigest()}  {name}\n" for name, data in sorted(files.items())).encode()
 output = root / "artifacts/review"
 output.mkdir(parents=True, exist_ok=True)
-archive = output / f"sunset-rush-3-review-{revision[:7]}.zip"
+archive = output / f"sunset-rush-3-beta-{revision[:7]}.zip"
 with ZipFile(archive, "w", compression=ZIP_DEFLATED, compresslevel=9) as package:
     for name, data in sorted(files.items()):
         entry = ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))

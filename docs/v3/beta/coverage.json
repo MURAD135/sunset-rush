@@ -1,0 +1,248 @@
+{
+  "checks": [
+    "All 11 tracks start and accept acceleration with five racers; all eight car models are exercised",
+    "Three complete three-lap races cover coast/oval/classic, three cars and Classic/Sport with all five finish times",
+    "Rewards and three distinct track results survive reload"
+  ],
+  "browser": "156.0.8078.80",
+  "tracks": [
+    {
+      "track": 0,
+      "car": 0,
+      "state": "go",
+      "speed": 38.99999999999996,
+      "x": 111.8979218555929,
+      "z": 21.25991404610822,
+      "racers": 5
+    },
+    {
+      "track": 1,
+      "car": 1,
+      "state": "go",
+      "speed": 45,
+      "x": 162.22222608777662,
+      "z": 21.981876126936303,
+      "racers": 5
+    },
+    {
+      "track": 2,
+      "car": 2,
+      "state": "go",
+      "speed": 35.999999999999936,
+      "x": 163.05198648139586,
+      "z": 14.982408182374247,
+      "racers": 5
+    },
+    {
+      "track": 3,
+      "car": 3,
+      "state": "go",
+      "speed": 43.500000000000036,
+      "x": 160.4703046946854,
+      "z": 20.567845569288238,
+      "racers": 5
+    },
+    {
+      "track": 4,
+      "car": 4,
+      "state": "go",
+      "speed": 47.999999999999986,
+      "x": 172.2495404238031,
+      "z": 23.55962274291817,
+      "racers": 5
+    },
+    {
+      "track": 5,
+      "car": 5,
+      "state": "go",
+      "speed": 39.89121061269257,
+      "x": 76.97801382626741,
+      "z": 24.65466986309412,
+      "racers": 5
+    },
+    {
+      "track": 6,
+      "car": 6,
+      "state": "go",
+      "speed": 45,
+      "x": 264.07113475770353,
+      "z": 13.728930370377059,
+      "racers": 5
+    },
+    {
+      "track": 7,
+      "car": 7,
+      "state": "go",
+      "speed": 31.0569678831677,
+      "x": 170.95810148328107,
+      "z": 15.632943671552782,
+      "racers": 5
+    },
+    {
+      "track": 8,
+      "car": 0,
+      "state": "go",
+      "speed": 38.99999999999996,
+      "x": 243.87013527064974,
+      "z": 11.02274207355347,
+      "racers": 5
+    },
+    {
+      "track": 9,
+      "car": 1,
+      "state": "go",
+      "speed": 45,
+      "x": 332.9419731260198,
+      "z": 9.140164188763064,
+      "racers": 5
+    },
+    {
+      "track": 10,
+      "car": 2,
+      "state": "go",
+      "speed": 35.999999999999936,
+      "x": 193.3448092520169,
+      "z": 12.778345996679299,
+      "racers": 5
+    }
+  ],
+  "races": [
+    {
+      "track": 10,
+      "car": 0,
+      "sport": false,
+      "state": "done",
+      "finish": 60.783333333331164,
+      "laps": [
+        21.083333333333417,
+        19.849999999998875,
+        19.84999999999887
+      ],
+      "rank": 1,
+      "results": [
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 18.852179368461265,
+          "finishTime": 60.783333333331164
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 30.081489087837628,
+          "finishTime": 70.96832219805624
+        },
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 30.002407408346965,
+          "finishTime": 70.98229682439538
+        },
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 29.499630784148962,
+          "finishTime": 72.59218708262122
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 29.1080975442148,
+          "finishTime": 73.56406067571531
+        }
+      ]
+    },
+    {
+      "track": 0,
+      "car": 2,
+      "sport": true,
+      "state": "done",
+      "finish": 42.93333333333218,
+      "laps": [
+        14.800000000000315,
+        14.216666666665985,
+        13.91666666666588
+      ],
+      "rank": 1,
+      "results": [
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 18.850744276972883,
+          "finishTime": 42.93333333333218
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 46.26171780522658,
+          "finishTime": 45.46786119550843
+        },
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 46.186818369391084,
+          "finishTime": 45.88101032379815
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 43.49890170046038,
+          "finishTime": 47.01822917581553
+        },
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 45.898971048913126,
+          "finishTime": 47.46883433040847
+        }
+      ]
+    },
+    {
+      "track": 1,
+      "car": 7,
+      "sport": false,
+      "state": "done",
+      "finish": 48.4666666666652,
+      "laps": [
+        17.06666666666698,
+        15.799999999999105,
+        15.599999999999113
+      ],
+      "rank": 1,
+      "results": [
+        {
+          "id": 0,
+          "name": "YOU",
+          "distance": 18.85163249756417,
+          "finishTime": 48.4666666666652
+        },
+        {
+          "id": 1,
+          "name": "SOL",
+          "distance": 37.896501237391035,
+          "finishTime": 55.891454718494344
+        },
+        {
+          "id": 3,
+          "name": "KAI",
+          "distance": 37.817467552990855,
+          "finishTime": 56.51007349578307
+        },
+        {
+          "id": 2,
+          "name": "NOVA",
+          "distance": 37.089767098284334,
+          "finishTime": 58.069352046566564
+        },
+        {
+          "id": 4,
+          "name": "LUNA",
+          "distance": 36.732142984516514,
+          "finishTime": 58.158221495324554
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "note": "Smoke coverage is not a full race on all 11 tracks or every weather/difficulty combination. Software WebGL only."
+}

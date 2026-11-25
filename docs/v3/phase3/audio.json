@@ -1,0 +1,13 @@
+{
+  "checks": 4,
+  "audio": {
+    "sources": 6,
+    "nodes": 18,
+    "state": "running"
+  },
+  "offlineSound": {
+    "rms": 0.019132794288741838,
+    "peak": 0.05976315960288048
+  },
+  "errors": []
+}

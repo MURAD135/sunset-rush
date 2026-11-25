@@ -27,3 +27,7 @@ test('quality presets retain saved IDs and offer all five menu choices',()=>{
   assert.deepEqual(QUALITY.map(q=>q.name),['High','Medium','Low','Ultra']);
   assert.deepEqual(QUALITY_MENU,[null,2,1,0,3]);assert.equal(QUALITY[2].shadow,0);assert.ok(QUALITY[3].shadow>QUALITY[0].shadow);
 });
+test('intentional 30 Hz menu pacing does not reduce resolution for a saved 60 FPS race target',()=>{
+ const resolution=new DynamicResolution(60);for(let i=0;i<600;i++)resolution.update(1000/30,1/30,30);assert.equal(resolution.scale,1);assert.equal(resolution.targetFps,60);
+ for(let i=0;i<300;i++)resolution.update(100, .1,30);assert.ok(resolution.scale<.8);
+});
